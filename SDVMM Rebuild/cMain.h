@@ -31,6 +31,11 @@ public:
 	wxListBox* m_listc_xMods = nullptr;
 	wxBoxSizer* m_sizer_nTab2a = nullptr;
 	wxBoxSizer* m_sizer_nTab2 = nullptr;
+	wxPanel* m_panel_nTab3 = nullptr;
+	wxListBox* m_listc_loadOrder = nullptr;
+	wxBoxSizer* m_sizer_nTab3a = nullptr;
+	wxBoxSizer* m_sizer_nTab3 = nullptr;
+
 
 	wxMenuBar* menubar = nullptr;
 	wxMenu* file = nullptr;

@@ -68,7 +68,7 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	// Tab 2 - Horizontal Sizer
 	m_sizer_nTab2a = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_nTab2a->AddStretchSpacer(1);
-	m_sizer_nTab2a->Add(m_listc_xMods, 1, wxEXPAND, 0);
+	m_sizer_nTab2a->Add(m_listc_xMods, 2, wxEXPAND, 0);
 	m_sizer_nTab2a->AddStretchSpacer(1);
 
 
@@ -79,16 +79,28 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	m_sizer_nTab2->AddSpacer(10);
 	m_panel_nTab2->SetSizer(m_sizer_nTab2);
 
-	// tab 3
-	wxPanel* m_panel_nTab3 = new wxPanel(m_notebook, wxID_ANY);
-	wxBoxSizer* m_sizer_nTab3 = new wxBoxSizer(wxVERTICAL);
-	wxPanel* test_panel2 = new wxPanel(m_panel_nTab3, wxID_ANY);
-	test_panel2->SetBackgroundColour(*wxRED);
-	m_sizer_nTab3->AddSpacer(5);
-	m_sizer_nTab3->Add(test_panel2, 1, wxEXPAND, 0);
-	m_sizer_nTab3->AddSpacer(30);
+	// Tab 3
+	m_panel_nTab3 = new wxPanel(m_notebook, wxID_ANY);
+
+	// Tab 3 - List Box
+	m_listc_loadOrder = new wxListBox(m_panel_nTab3, wxID_ANY);
+	m_listc_loadOrder->Append(wxT("Not Implemented"));  // TODO
+
+	// Tab 3 - Horizontal Sizer
+	m_sizer_nTab3a = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_nTab3a->AddStretchSpacer(1);
+	m_sizer_nTab3a->Add(m_listc_loadOrder, 2, wxEXPAND, 0);
+	m_sizer_nTab3a->AddStretchSpacer(1);
+
+
+	// Tab 3 - Vertical Sizer
+	m_sizer_nTab3 = new wxBoxSizer(wxVERTICAL);
+	m_sizer_nTab3->AddSpacer(10);
+	m_sizer_nTab3->Add(m_sizer_nTab3a, 1, wxEXPAND, 0);
+	m_sizer_nTab3->AddSpacer(10);
 	m_panel_nTab3->SetSizer(m_sizer_nTab3);
 
+	// Notebook Tabs
 	m_notebook->AddPage(m_panel_nTab1, "SMAPI Mods", true);
 	m_notebook->AddPage(m_panel_nTab2, "XNB Mods", false);
 	m_notebook->AddPage(m_panel_nTab3, "Load Order", false);
