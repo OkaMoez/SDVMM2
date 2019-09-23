@@ -11,22 +11,21 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	//---------------------------
 	//  Notebook Implementation
 	//---------------------------
-	wxNotebook* m_notebook = new wxNotebook(this, -1);
+	m_notebook = new wxNotebook(this, -1);
 
 	// Tab 1
-	wxPanel* test_panelX = new wxPanel(m_notebook, wxID_ANY);
-	wxBoxSizer* m_sizer_nTab1 = new wxBoxSizer(wxVERTICAL);
+	m_panel_nTab1 = new wxPanel(m_notebook, wxID_ANY);
 
 	// Tab 1 - List Boxes - Creation
-	wxListBox* m_listc_aMods = new wxListBox(test_panelX, wxID_ANY);
-	wxListBox* m_listc_iMods = new wxListBox(test_panelX, wxID_ANY);
+	m_listc_aMods = new wxListBox(m_panel_nTab1, wxID_ANY);
+	m_listc_iMods = new wxListBox(m_panel_nTab1, wxID_ANY);
 
-	// Tab 1 - List Boxes - Vertical Lists + Title Text
-	wxBoxSizer* m_sizer_nTab1a_aMods = new wxBoxSizer(wxVERTICAL);
-	wxBoxSizer* m_sizer_nTab1a_iMods = new wxBoxSizer(wxVERTICAL);
-	wxStaticText* m_sText_aMod = new wxStaticText(test_panelX, wxID_ANY, "Active Mods");
-	wxStaticText* m_sText_iMod = new wxStaticText(test_panelX, wxID_ANY, "Inactive Mods");
-	wxFont m_font = m_sText_aMod->GetFont();
+	// Tab 1 - List Boxes - Vertical Sizers + Title Text
+	m_sizer_nTab1a_aMods = new wxBoxSizer(wxVERTICAL);
+	m_sizer_nTab1a_iMods = new wxBoxSizer(wxVERTICAL);
+	m_sText_aMod = new wxStaticText(m_panel_nTab1, wxID_ANY, "Active Mods");
+	m_sText_iMod = new wxStaticText(m_panel_nTab1, wxID_ANY, "Inactive Mods");
+	m_font = m_sText_aMod->GetFont();
 	m_font.SetWeight(wxFONTWEIGHT_BOLD);
 	m_sText_aMod->SetFont(m_font);
 	m_sText_iMod->SetFont(m_font);
@@ -35,17 +34,17 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	m_sizer_nTab1a_iMods->Add(m_sText_iMod, 0, 0, 0);
 	m_sizer_nTab1a_iMods->Add(m_listc_iMods, 1, wxEXPAND, 0);
 
-	// Tab 1 - List Boxes - Horizontal List Sizer
-	wxBoxSizer* m_sizer_nTab1a = new wxBoxSizer(wxHORIZONTAL);
+	// Tab 1 - List Boxes - Horizontal Sizer
+	m_sizer_nTab1a = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_nTab1a->Add(m_sizer_nTab1a_aMods, 1, wxEXPAND | wxLEFT, 8);
 	m_sizer_nTab1a->AddSpacer(10);
 	m_sizer_nTab1a->Add(m_sizer_nTab1a_iMods, 1, wxEXPAND | wxRIGHT, 10);
 
-	// tab 1 - bottom buttons 
-	wxBoxSizer* m_sizer_nTab1b = new wxBoxSizer(wxHORIZONTAL);
-	m_btn_openAMods = new wxButton(test_panelX, 10001, "Open Folder", wxDefaultPosition, wxSize(80, 21));
-	m_btn_openIMods = new wxButton(test_panelX, 10001, "Open Folder", wxDefaultPosition, wxSize(80, 21));
-	m_btn_refreshMods = new wxButton(test_panelX, 10001, "Refresh", wxDefaultPosition, wxSize(80, 21));
+	// tab 1 - Bottom Buttons 
+	m_sizer_nTab1b = new wxBoxSizer(wxHORIZONTAL);
+	m_btn_openAMods = new wxButton(m_panel_nTab1, 10001, "Open Folder", wxDefaultPosition, wxSize(80, 21));
+	m_btn_openIMods = new wxButton(m_panel_nTab1, 10001, "Open Folder", wxDefaultPosition, wxSize(80, 21));
+	m_btn_refreshMods = new wxButton(m_panel_nTab1, 10001, "Refresh", wxDefaultPosition, wxSize(80, 21));
 	m_sizer_nTab1b->Add(m_btn_openAMods, 1,  wxLEFT, 7);
 	m_sizer_nTab1b->AddStretchSpacer(1);
 	m_sizer_nTab1b->Add(m_btn_refreshMods, 1, wxLEFT | wxRIGHT, 5);
@@ -53,36 +52,48 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	m_sizer_nTab1b->Add(m_btn_openIMods, 1, wxRIGHT, 9);
 
 	// Tab 1 - Top-level Vertical Sizer
+	m_sizer_nTab1 = new wxBoxSizer(wxVERTICAL);
 	m_sizer_nTab1->AddSpacer(5);
 	m_sizer_nTab1->Add(m_sizer_nTab1a, 1, wxEXPAND, 0);
 	m_sizer_nTab1->Add(m_sizer_nTab1b, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
-	test_panelX->SetSizer(m_sizer_nTab1);
+	m_panel_nTab1->SetSizer(m_sizer_nTab1);
 
-	// tab 2
-	wxPanel* test_panelY = new wxPanel(m_notebook, wxID_ANY);
-	wxBoxSizer* m_sizer_nTab2 = new wxBoxSizer(wxVERTICAL);
-	wxPanel* test_panel1 = new wxPanel(test_panelY, wxID_ANY);
-	test_panel1->SetBackgroundColour(*wxRED);
-	m_sizer_nTab2->AddSpacer(5);
-	m_sizer_nTab2->Add(test_panel1, 1, wxEXPAND, 0);
-	m_sizer_nTab2->AddSpacer(30);
-	test_panelY->SetSizer(m_sizer_nTab2);
+	// Tab 2
+	m_panel_nTab2 = new wxPanel(m_notebook, wxID_ANY);
+
+	// Tab 2 - List Box
+	m_listc_xMods = new wxListBox(m_panel_nTab2, wxID_ANY);
+	m_listc_xMods->Append(wxT("Not Implemented"));  // TODO
+
+	// Tab 2 - Horizontal Sizer
+	m_sizer_nTab2a = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_nTab2a->AddStretchSpacer(1);
+	m_sizer_nTab2a->Add(m_listc_xMods, 1, wxEXPAND, 0);
+	m_sizer_nTab2a->AddStretchSpacer(1);
+
+
+	// Tab 2 - Vertical Sizer
+	m_sizer_nTab2 = new wxBoxSizer(wxVERTICAL);
+	m_sizer_nTab2->AddSpacer(10);
+	m_sizer_nTab2->Add(m_sizer_nTab2a, 1, wxEXPAND, 0);
+	m_sizer_nTab2->AddSpacer(10);
+	m_panel_nTab2->SetSizer(m_sizer_nTab2);
 
 	// tab 3
-	wxPanel* test_panelZ = new wxPanel(m_notebook, wxID_ANY);
+	wxPanel* m_panel_nTab3 = new wxPanel(m_notebook, wxID_ANY);
 	wxBoxSizer* m_sizer_nTab3 = new wxBoxSizer(wxVERTICAL);
-	wxPanel* test_panel2 = new wxPanel(test_panelZ, wxID_ANY);
+	wxPanel* test_panel2 = new wxPanel(m_panel_nTab3, wxID_ANY);
 	test_panel2->SetBackgroundColour(*wxRED);
 	m_sizer_nTab3->AddSpacer(5);
 	m_sizer_nTab3->Add(test_panel2, 1, wxEXPAND, 0);
 	m_sizer_nTab3->AddSpacer(30);
-	test_panelZ->SetSizer(m_sizer_nTab3);
+	m_panel_nTab3->SetSizer(m_sizer_nTab3);
 
-	m_notebook->AddPage(test_panelX, "SMAPI Mods", true);
-	m_notebook->AddPage(test_panelY, "XNB Mods", false);
-	m_notebook->AddPage(test_panelZ, "Load Order", false);
+	m_notebook->AddPage(m_panel_nTab1, "SMAPI Mods", true);
+	m_notebook->AddPage(m_panel_nTab2, "XNB Mods", false);
+	m_notebook->AddPage(m_panel_nTab3, "Load Order", false);
 
-	// Band-aid fix for intial render issues
+	// Band-aid fix for intial render issues (flips pages once)
 	m_notebook->SetSelection(1);
 	m_notebook->SetSelection(0);
 	
@@ -110,7 +121,7 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	// Right side button - sizer
 	int prop_rBtns = 15;
 	int prop_rSpace = 4;
-	wxBoxSizer* m_sizer_rBtns = new wxBoxSizer(wxVERTICAL);
+	m_sizer_rBtns = new wxBoxSizer(wxVERTICAL);
 	m_sizer_rBtns->Add(m_btn_launchSMAPI, prop_rBtns, wxEXPAND, 0);
 	m_sizer_rBtns->AddStretchSpacer(prop_rSpace);
 	m_sizer_rBtns->Add(m_btn_launchSDV, prop_rBtns, wxEXPAND, 0);
@@ -122,34 +133,34 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	m_sizer_rBtns->Add(m_btn_delMod, prop_rBtns, wxEXPAND, 0);
 
 	// Window layout horizontal
-	wxBoxSizer* m_sizer_Hmain = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_Hmain = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_Hmain->Add(m_notebook, 2, wxEXPAND | wxLEFT | wxRIGHT, 10);
 	m_sizer_Hmain->Add(m_sizer_rBtns, 1, wxEXPAND | wxRIGHT, 10);
 
 	// Banner
 	wxImage::AddHandler(new wxPNGHandler);
-	wxStaticBitmap* m_sbmp_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG));
+	m_sbmp_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG));
 	wxImage::CleanUpHandlers();
 
 	// Version info
 	std::string m_version_SMAPI = "1.1.1";
 	std::string m_version_SDVMM2 = "1.0.0";
-	wxStaticText* m_sText_APIversion = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_version_SMAPI);
-	wxStaticText* m_sText_MMversion = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_version_SDVMM2);
-	wxBoxSizer* m_sizer_vInfo = new wxBoxSizer(wxHORIZONTAL);
+	m_sText_APIversion = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_version_SMAPI);
+	m_sText_MMversion = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_version_SDVMM2);
+	m_sizer_vInfo = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_vInfo->Add(m_sText_MMversion, 1, wxEXPAND | wxLEFT, 15);
 	m_sizer_vInfo->Add(m_sText_APIversion, 1, wxEXPAND | wxLEFT, 5);
 	m_sizer_vInfo->AddStretchSpacer(1);
 
 	// Window layout Vertical + insert banner
-	wxBoxSizer* m_sizer_Vmain = new wxBoxSizer(wxVERTICAL);
+	m_sizer_Vmain = new wxBoxSizer(wxVERTICAL);
 	m_sizer_Vmain->Add(m_sbmp_banner, 16, wxEXPAND | wxALL, 10);
 	m_sizer_Vmain->Add(m_sizer_Hmain, 40, wxEXPAND, 0);
 	m_sizer_Vmain->Add(m_sizer_vInfo, 3, wxEXPAND, 0); // for static text
 	SetSizer(m_sizer_Vmain);
 
 	// Setting background colour as needed
-	wxPanel* panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500));
+	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500));
 	wxColour* m_colour_grey = new wxColour(240, 240, 240, wxALPHA_OPAQUE);
 	panel->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_sText_APIversion->SetBackgroundColour(wxColour(*m_colour_grey));
