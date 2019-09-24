@@ -11,6 +11,11 @@ cMod::cMod(string name, string auth, string ver, string desc, string uId)
 	modUniqueID_ = uId;
 	set_intVersion();
 }
+cMod::cMod(json manifest)
+{
+	cMod(manifest["Name"], manifest["Author"], manifest["Version"],
+		manifest["Description"], manifest["ContentPackFor"]["UniqueId"]);
+}
 
 void cMod::set_intVersion()
 {

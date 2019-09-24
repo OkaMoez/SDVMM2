@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "json.hpp"
+using json = nlohmann::json;
 using std::string;
 using std::stoi;
 
@@ -20,7 +22,7 @@ private:
 public:
 	cMod();
 	cMod(string name, string auth, string ver, string desc, string uId);
-	cMod();
+	cMod(json manifest);
 
 	string modName() { return modName_;	}
 	string modAuthor() { return modAuthor_; }
