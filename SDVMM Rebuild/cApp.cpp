@@ -44,14 +44,24 @@ bool cApp::StartCheck(cMain* m_frame)
 	{
 		if (FILE * iniFile = fopen(file_name.c_str(), "r")) {
 			m_frame->set_gamepath(getDirectory(iniFile));
-			fs::path temp_path = (m_frame->gamepath());
-			temp_path += "\\Mods";
+			fs::path temp_dir = (m_frame->gamepath());
+			temp_dir += "\\Mods";
+			fs::path temp_path = temp_dir;
+			fs::path temp_stop = temp_dir +="\\";
 			//temp_path += "\\AutoGate\\manifest.json";
 			
 			json json_manifest;
-			for (auto& p : fs::directory_iterator(temp_path))
+			for (auto& p : fs::directory_iterator(temp_dir))
 			{
+				
 				temp_path = p.path();
+				/*
+				wxMessageDialog* m_pBox6 = new wxMessageDialog(NULL, //test
+					(temp_path.string()), wxT("Path Check"),
+					wxOK, wxDefaultPosition);
+				m_pBox6->ShowModal();
+				delete m_pBox6;
+				*/
 				temp_path += "\\manifest.json";
 
 				ifstream i(temp_path);
@@ -61,16 +71,32 @@ bool cApp::StartCheck(cMain* m_frame)
 				catch (json::type_error& e) {
 					std::cerr << e.what() << std::endl;
 				}
-				if (fileExists(temp_path.string()))
+
+				if (json_manifest.find("MajorVersion") != json_manifest.end())
 				{
 					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL, //test
-						(string(json_manifest["Name"]) + " exists"), wxT("File Check"),
+						wxT("Gotcha"), wxT("File Check"),
 						wxOK, wxDefaultPosition);
 					m_pBox2->ShowModal();
 					delete m_pBox2;
 
-					cMod* test_mod = new cMod(json_manifest);
-					delete test_mod;
+					string temp_v = string(json_manifest["Version"]["MajorVersion"]) +
+						+"." + string(json_manifest["Version"]["MinorVersion"]) +
+						+"." + string(json_manifest["Version"]["PatchVersion"]);
+					json_manifest.erase("Version");
+					json_manifest["Version"] = temp_v;
+				}
+
+				if (fileExists(temp_path.string()))
+				{
+					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL, //test
+						(string(json_manifest["Name"]) + " exists, " + string(json_manifest["Version"])),
+						wxT("File Check"), wxOK, wxDefaultPosition);
+					m_pBox2->ShowModal();
+					delete m_pBox2;
+
+					//cMod* test_mod = new cMod(json_manifest);
+					//delete test_mod;
 				}
 			}
 			fclose(iniFile);
