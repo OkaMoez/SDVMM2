@@ -58,32 +58,52 @@ bool cApp::StartCheck(cMain* m_frame)
 				temp_path = p.path();
 				temp_path += "\\manifest.json";
 				
+				/*
 				wxMessageDialog* m_pBox6 = new wxMessageDialog(NULL, //test
 					(temp_path.string()), wxT("Path Check"),
 					wxOK, wxDefaultPosition);
 				m_pBox6->ShowModal();
 				delete m_pBox6;
+				*/
 
 				ifstream i(temp_path.c_str());
 				try {
-					json_manifest = json::parse(i);
+					json_manifest = json::parse(i); // TODO prompt user to handle trailing commas
 				}
-				catch (json::type_error& e) {
-					std::cerr << e.what() << std::endl;
+				catch (std::exception& e) {
+					string temp_exc = e.what();
+
+					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL, //test
+						temp_exc, wxT("Exception Report"),
+						wxOK, wxDefaultPosition);
+					m_pBox2->ShowModal();
+					delete m_pBox2;
 				}
 
 				string temp_v = "";
 				try {
+					if (json_manifest.at("Version").is_object()) { throw std::exception("obj not str"); }
+					else
 					json_manifest.at("Version").get_to(temp_v);
-				}
-				catch (std::exception & e) {
-					std::cerr << e.what() << std::endl;
 
+					/*
 					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL, //test
-						wxT("Gotcha"), wxT("File Check"),
+						temp_v, wxT("File Check"),
 						wxOK, wxDefaultPosition);
 					m_pBox2->ShowModal();
 					delete m_pBox2;
+					*/
+				}
+				catch (std::exception& e) {
+					string temp_exc = e.what();
+
+					
+					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL, //test
+						temp_exc, wxT("Exception Report"),
+						wxOK, wxDefaultPosition);
+					m_pBox2->ShowModal();
+					delete m_pBox2;
+					
 
 					int temp_v1 = NULL;
 					int temp_v2 = NULL;
@@ -100,8 +120,12 @@ bool cApp::StartCheck(cMain* m_frame)
 
 				if (fileExists(temp_path.string()))
 				{
+					string temp_msg1 = "";
+					string temp_msg2 = "";
+					json_manifest["Name"].get_to(temp_msg1);
+					json_manifest["Version"].get_to(temp_msg2);
 					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL, //test
-						(string(json_manifest["Name"]) + " exists, " + string(json_manifest["Version"])),
+						(temp_msg1 + " exists, " + temp_msg2),
 						wxT("File Check"), wxOK, wxDefaultPosition);
 					m_pBox2->ShowModal();
 					delete m_pBox2;
