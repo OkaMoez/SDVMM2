@@ -11,3 +11,4 @@ const bool report_parse_exception = true;
 const bool report_got_version = false;
 const bool report_version_exception = true;
 const bool report_parsed_mod_data = true;
+const bool report_mod_object_data = true;
