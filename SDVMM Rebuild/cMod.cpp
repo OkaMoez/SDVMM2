@@ -11,6 +11,18 @@ cMod::cMod(string name, string auth, string ver, string desc, string uId)
 	modUniqueID_ = uId;
 }
 
+void cMod::set_intVersion()
+{
+	string temp_version = modVersion_;
+	size_t temp_pos = temp_version.find('.');
+	majorVersion_ = stoi(temp_version.substr(0, temp_pos));
+	temp_version = temp_version.erase(0, temp_pos+1);
+	temp_pos = temp_version.find('.');
+	minorVersion_ = stoi(temp_version.substr(0, temp_pos));
+	temp_version = temp_version.erase(0, temp_pos + 1);
+	patchVersion_ = stoi(temp_version.substr(0, temp_version.size()));
+}
+
 void cMod::set_modName(string name)
 {
 	modName_ = name;

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 using std::string;
+using std::stoi;
 
 class cMod
 {
@@ -8,8 +9,13 @@ private:
 	string modName_ = "";
 	string modAuthor_ = "";
 	string modVersion_ = "";
+	int majorVersion_ = NULL;
+	int minorVersion_ = NULL;
+	int patchVersion_ = NULL;
 	string modDescription_ = "";
 	string modUniqueID_ = "";
+
+	void set_intVersion();
 
 public:
 	cMod();
@@ -17,6 +23,9 @@ public:
 	string modName() { return modName_;	}
 	string modAuthor() { return modAuthor_; }
 	string modVersion() { return modVersion_; }
+	int majorVersion() { return majorVersion_; }
+	int minorVersion() { return minorVersion_; }
+	int patchVersion() { return patchVersion_; }
 	string modDescription() { return modDescription_; }
 	string modUniqueID() { return modUniqueID_; }
 
