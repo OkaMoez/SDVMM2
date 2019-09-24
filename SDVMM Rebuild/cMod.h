@@ -23,8 +23,9 @@ public:
 	cMod();
 	cMod(string name, string auth, string ver, string desc, string uId);
 	cMod(json manifest);
+	~cMod();
 
-	string modName() { return modName_;	}
+	string modName() { return modName_; }
 	string modAuthor() { return modAuthor_; }
 	string modVersion() { return modVersion_; }
 	int majorVersion() { return majorVersion_; }

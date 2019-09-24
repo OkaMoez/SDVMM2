@@ -17,6 +17,11 @@ cMod::cMod(json manifest)
 		manifest["Description"], manifest["ContentPackFor"]["UniqueId"]);
 }
 
+cMod::~cMod()
+{
+
+}
+
 void cMod::set_intVersion()
 {
 	string temp_version = modVersion_;
