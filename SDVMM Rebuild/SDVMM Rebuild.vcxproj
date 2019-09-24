@@ -28,6 +28,7 @@
     <ClInclude Include="cApp.h" />
     <ClInclude Include="cMain.h" />
     <ClInclude Include="cMod.h" />
+    <ClInclude Include="ioFunctions.h" />
     <ClInclude Include="json.hpp" />
   </ItemGroup>
   <ItemGroup>
