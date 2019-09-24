@@ -20,6 +20,8 @@ private:
 public:
 	cMod();
 	cMod(string name, string auth, string ver, string desc, string uId);
+	cMod();
+
 	string modName() { return modName_;	}
 	string modAuthor() { return modAuthor_; }
 	string modVersion() { return modVersion_; }

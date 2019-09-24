@@ -9,6 +9,7 @@ cMod::cMod(string name, string auth, string ver, string desc, string uId)
 	modVersion_ = ver;
 	modDescription_ = desc;
 	modUniqueID_ = uId;
+	set_intVersion();
 }
 
 void cMod::set_intVersion()
