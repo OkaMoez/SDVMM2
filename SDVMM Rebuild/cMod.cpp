@@ -13,8 +13,9 @@ cMod::cMod(string name, string auth, string ver, string desc, string uId)
 }
 cMod::cMod(json manifest)
 {
-	cMod(manifest["Name"], manifest["Author"], manifest["Version"],
-		manifest["Description"], manifest["ContentPackFor"]["UniqueId"]);
+	cMod(string(manifest["Name"]), string(manifest["Author"]),
+		string(manifest["Version"]), string(manifest["Description"]), 
+			string(manifest["UniqueID"]));
 }
 
 cMod::~cMod()

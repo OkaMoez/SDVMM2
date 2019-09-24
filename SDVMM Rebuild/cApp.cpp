@@ -16,7 +16,7 @@ bool cApp::OnInit()
 {
 	m_frame1 = new cMain();
 	m_frame1->Show(true);
-	if (!IniExists(m_frame1))
+	if (!StartCheck(m_frame1))
 	{
 		wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
 			wxT("No .ini file was found."), wxT("File Not Found"),
@@ -37,22 +37,52 @@ bool cApp::OnInit()
 	return true;
 }
 
-bool cApp::IniExists(cMain* m_frame)
+bool cApp::StartCheck(cMain* m_frame)
 {
-	string iniName = "SDVMM2.ini";
-	char iniBuffer[100];
-	if (FILE* iniFile = fopen(iniName.c_str(), "r")) {
-		fgets(iniBuffer, 100, iniFile);
-		string temp_string = string(iniBuffer);
-		size_t temp_pos = temp_string.find('=');
-		temp_string = temp_string.substr(temp_pos+1,temp_string.size());
-		temp_string.erase(std::remove(temp_string.begin(), temp_string.end(), '"'), temp_string.end());
-		string iniString = temp_string;
-		m_frame->set_gamepath(temp_string);
-		fclose(iniFile);
-		return true;
+	string file_name = "SDVMM2.ini";
+	if (fileExists(file_name))
+	{
+		if (FILE * iniFile = fopen(file_name.c_str(), "r")) {
+			m_frame->set_gamepath(getDirectory(iniFile));
+			fs::path temp_path = (m_frame->gamepath());
+			temp_path += "\\Mods";
+			//temp_path += "\\AutoGate\\manifest.json";
+			
+			json json_manifest;
+			for (auto& p : fs::directory_iterator(temp_path))
+			{
+				temp_path = p.path();
+				temp_path += "\\manifest.json";
+
+				ifstream i(temp_path);
+				try {
+					json_manifest = json::parse(i);
+				}
+				catch (json::type_error& e) {
+					std::cerr << e.what() << std::endl;
+				}
+				if (fileExists(temp_path.string()))
+				{
+					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL, //test
+						(string(json_manifest["Name"]) + " exists"), wxT("File Check"),
+						wxOK, wxDefaultPosition);
+					m_pBox2->ShowModal();
+					delete m_pBox2;
+
+					cMod* test_mod = new cMod(json_manifest);
+					delete test_mod;
+				}
+			}
+			fclose(iniFile);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	else {
+	else
+	{
 		return false;
 	}
 }
