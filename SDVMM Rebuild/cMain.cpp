@@ -1,4 +1,4 @@
-#include "cMain.h"
+#include "cApp.h"
 
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
 	//EVT_BUTTON(10001, OnButtonClicked)
@@ -11,6 +11,8 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	//---------------------------
 	//  Notebook Implementation
 	//---------------------------
+	// Tab 1, 2, 3 = Active/Inactive Mods, XNB Mods, Drag/Drop Load Order
+	//
 	m_notebook = new wxNotebook(this, -1);
 
 	// Tab 1
@@ -155,8 +157,8 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	wxImage::CleanUpHandlers();
 
 	// Version info
-	std::string m_version_SMAPI = "1.1.1";
-	std::string m_version_SDVMM2 = "1.0.0";
+	string m_version_SMAPI = "1.1.1";
+	string m_version_SDVMM2 = "1.0.0";
 	m_sText_APIversion = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_version_SMAPI);
 	m_sText_MMversion = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_version_SDVMM2);
 	m_sizer_vInfo = new wxBoxSizer(wxHORIZONTAL);
@@ -184,8 +186,23 @@ cMain::~cMain()
 {
 }
 
+void cMain::set_gamepath(string filepath)
+{
+	gamepath_ = filepath;
+}
+
+void cMain::popModLists()
+{
+
+}
+
 void cMain::OnButtonClicked(wxCommandEvent& evt)
 {
 	//m_list1->AppendString(m_txt1->GetValue());
 	//evt.Skip();
+}
+
+void cMain::RefreshModList()
+{
+
 }

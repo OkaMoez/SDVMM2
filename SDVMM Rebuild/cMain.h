@@ -4,14 +4,20 @@
 #include <wx/menu.h>
 #include <wx/notebook.h>
 #include <wx/listctrl.h>
-#include <string>
+#include "cMod.h"
 
 
 class cMain : public wxFrame
 {
+private:
+	string gamepath_ = "";
+	void popModLists();
+
 public:
 	cMain();
 	~cMain();
+	string gamepath() { return gamepath_; }
+	void set_gamepath(string);
 
 public:
 	// Notebook
@@ -67,6 +73,7 @@ public:
 
 
 	void OnButtonClicked(wxCommandEvent& evt);
+	void RefreshModList();
 
 	wxDECLARE_EVENT_TABLE();
 };
