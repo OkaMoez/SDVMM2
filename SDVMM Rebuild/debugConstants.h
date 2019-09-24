@@ -2,12 +2,12 @@
 
 // Debug Toggles
 // cApp
-bool report_ini_exists = true;
-bool report_game_directory = true;
-bool report_filepath = true;
-bool report_json_name = true;
-bool report_looped_path = true;
-bool report_parse_exception = true;
-bool report_got_version = true;
-bool report_version_exception = true;
-bool report_parsed_mod_data = true;
+const bool report_ini_exists = false;
+const bool report_game_directory = false;
+const bool report_filepath = false;
+const bool report_json_name = false;
+const bool report_looped_path = false;
+const bool report_parse_exception = true;
+const bool report_got_version = false;
+const bool report_version_exception = true;
+const bool report_parsed_mod_data = true;
