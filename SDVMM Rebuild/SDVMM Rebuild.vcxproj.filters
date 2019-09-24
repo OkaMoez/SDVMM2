@@ -27,6 +27,9 @@
     <ClCompile Include="cMod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="wxDirectoriesEnumerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cApp.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="debugConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wxDirectoriesEnumerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

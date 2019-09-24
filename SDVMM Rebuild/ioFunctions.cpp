@@ -75,3 +75,18 @@ void formatOldVersion(json& manifest)
 		manifest["Version"] = temp_v;
 	}
 }
+
+void printModDir(wxListBox* ListBox1, string modDir)
+{
+	wxArrayString dirList;
+	wxDirectoriesEnumerator traverser(&dirList);
+	wxDir dir(modDir);
+	if (dir.IsOpened()) {
+		dir.Traverse(traverser);
+		ListBox1->Clear();
+		for (unsigned int i = 0; i < dirList.GetCount(); i++) {
+			//The name is what follows the last \ or /
+			ListBox1->Append(dirList.Item(i).AfterLast('\\').AfterLast('/'));
+		}
+	}
+}

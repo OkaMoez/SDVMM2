@@ -23,12 +23,14 @@
     <ClCompile Include="cMain.cpp" />
     <ClCompile Include="cMod.cpp" />
     <ClCompile Include="ioFunctions.cpp" />
+    <ClCompile Include="wxDirectoriesEnumerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cApp.h" />
     <ClInclude Include="cMain.h" />
     <ClInclude Include="cMod.h" />
     <ClInclude Include="debugConstants.h" />
+    <ClInclude Include="wxDirectoriesEnumerator.h" />
     <ClInclude Include="ioFunctions.h" />
     <ClInclude Include="json.hpp" />
   </ItemGroup>
