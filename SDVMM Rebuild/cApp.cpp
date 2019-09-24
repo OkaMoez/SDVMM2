@@ -122,7 +122,19 @@ bool cApp::StartCheck(cMain* m_frame)
 						}
 						else {}
 					)
-					
+
+					cMod aMod(json_manifest);
+					D(
+						if (report_mod_object_data) {
+							wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
+								(aMod.infoString()),
+								wxT("Mod Object"), wxOK, wxDefaultPosition);
+							m_pBox2->ShowModal();
+							delete m_pBox2;
+						}
+						else {}
+					)
+
 					//cMod* test_mod = new cMod(json_manifest);
 					//delete test_mod;
 				}

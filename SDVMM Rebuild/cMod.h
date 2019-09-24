@@ -8,35 +8,39 @@ using std::stoi;
 class cMod
 {
 private:
-	string modName_ = "";
-	string modAuthor_ = "";
-	string modVersion_ = "";
-	int majorVersion_ = NULL;
-	int minorVersion_ = NULL;
-	int patchVersion_ = NULL;
-	string modDescription_ = "";
-	string modUniqueID_ = "";
+	string mod_name_;
+	string mod_author_;
+	string mod_version_;
+	int major_version_;
+	int minor_version_;
+	int patch_version_;
+	string mod_description_;
+	string mod_unique_id_;
 
 	void set_intVersion();
 
 public:
 	cMod();
 	cMod(string name, string auth, string ver, string desc, string uId);
-	cMod(json manifest);
-	~cMod();
+	cMod(json& manifest);
+	~cMod() {}
 
-	string modName() { return modName_; }
-	string modAuthor() { return modAuthor_; }
-	string modVersion() { return modVersion_; }
-	int majorVersion() { return majorVersion_; }
-	int minorVersion() { return minorVersion_; }
-	int patchVersion() { return patchVersion_; }
-	string modDescription() { return modDescription_; }
-	string modUniqueID() { return modUniqueID_; }
+	string mod_name() const { return mod_name_; }
+	string mod_author() const { return mod_author_; }
+	string mod_version() const { return mod_version_; }
+	int major_version() const { return major_version_; }
+	int minor_version() const { return minor_version_; }
+	int patch_version() const { return patch_version_; }
+	string mod_description() const { return mod_description_; }
+	string mod_unique_id() const { return mod_unique_id_; }
+	string infoString() const {
+		return (mod_name_ + " / " + mod_author_ + " / "
+			+ mod_version_ + " / " + mod_description_ + " / "
+			+ mod_unique_id_); }
 
-	void set_modName(string name);
-	void set_modAuthor(string auth);
-	void set_modVersion(string ver);
-	void set_modDescription(string desc);
-	void set_modUniqueID(string uId);
+	void set_mod_name(string name);
+	void set_mod_author(string auth);
+	void set_mod_version(string ver);
+	void set_mod_description(string desc);
+	void set_mod_unique_id(string uId);
 };
