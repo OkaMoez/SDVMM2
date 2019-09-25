@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <wx/listctrl.h>
 #include "json.hpp"
 using json = nlohmann::json;
 using std::string;

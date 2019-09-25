@@ -50,7 +50,6 @@ void formatOldVersion(json& manifest)
 	}
 	catch (std::exception & e) {
 		string temp_exc = e.what();
-
 		D(
 			if (report_version_exception) {
 				wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
@@ -62,7 +61,7 @@ void formatOldVersion(json& manifest)
 			else {}
 		)
 
-			int temp_v1 = NULL;
+		int temp_v1 = NULL;
 		int temp_v2 = NULL;
 		int temp_v3 = NULL;
 		manifest["Version"]["MajorVersion"].get_to(temp_v1);
@@ -76,12 +75,14 @@ void formatOldVersion(json& manifest)
 	}
 }
 
-void printModDir(wxListBox* ListBox1, string modDir)
+void printDir(wxListBox* ListBox1, fs::path modDir)
 {
+	string temp_path = modDir.string();
 	wxArrayString dirList;
-	wxDirectoriesEnumerator traverser(&dirList);
-	wxDir dir(modDir);
-	if (dir.IsOpened()) {
+	myDirectoriesEnumerator traverser(&dirList);
+	wxDir dir(temp_path);
+	if (dir.IsOpened()) 
+	{
 		dir.Traverse(traverser);
 		ListBox1->Clear();
 		for (unsigned int i = 0; i < dirList.GetCount(); i++) {

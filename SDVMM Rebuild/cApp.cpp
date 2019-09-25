@@ -51,6 +51,10 @@ bool cApp::OnInit()
 		)
 	}
 
+	fs::path temp_path = m_frame1->gamepath();
+	temp_path += "\\Mods\\";
+	//printDir(m_frame1->m_list_activeMods, temp_path);
+	m_frame1->Show(true);
 	return true;
 }
 
@@ -91,9 +95,9 @@ bool cApp::StartCheck(cMain* m_frame)
 					json_manifest = json::parse(i); // TODO prompt user to handle trailing commas
 				}
 				catch (std::exception & e) {
+					string temp_exc = e.what();
 					D(
 						if (report_parse_exception) {
-							string temp_exc = e.what();
 							wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
 								temp_exc, wxT("Exception Report"),
 								wxOK, wxDefaultPosition);
