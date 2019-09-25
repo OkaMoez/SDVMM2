@@ -11,7 +11,7 @@ cMod::cMod(string name, string auth, string ver, string desc, string uId) :  wxL
 	set_mod_unique_id(uId);
 	set_intVersion();
 }
-cMod::cMod(json& manifest)
+cMod::cMod(json& manifest) : wxListItem()
 {
 	string name, auth, ver, desc, uId;
 	manifest["Name"].get_to(name);
