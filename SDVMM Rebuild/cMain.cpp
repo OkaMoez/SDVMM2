@@ -20,9 +20,9 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	// Tab 1 - List Control - Creation w/ Columns
 	m_dvlc_Mods = new wxDataViewListCtrl(m_panel_nTab1, wxID_ANY, wxDefaultPosition, wxSize(465, 200), wxLC_REPORT);
 	m_dvlc_Mods->AppendToggleColumn("Active",wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, 0);
-	m_dvlc_Mods->AppendTextColumn("Name", wxDATAVIEW_CELL_INERT, 210, wxALIGN_LEFT, 0);
+	m_dvlc_Mods->AppendTextColumn("Name", wxDATAVIEW_CELL_INERT, 200, wxALIGN_LEFT, 0);
 	m_dvlc_Mods->AppendTextColumn("Author", wxDATAVIEW_CELL_INERT, 135, wxALIGN_LEFT, 0);
-	m_dvlc_Mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 70, wxALIGN_LEFT, 0);
+	m_dvlc_Mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
 	
 
 	// Tab 1 - List - Vertical Sizers + Title Text
