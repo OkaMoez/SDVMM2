@@ -19,14 +19,15 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	m_panel_nTab1 = new wxPanel(m_notebook, wxID_ANY);
 
 	// Tab 1 - List Control - Creation
-	m_listc_Mods = new wxListCtrl(m_panel_nTab1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_LIST);
+	m_listv_Mods = new wxListView(m_panel_nTab1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_LIST);
 	cMod aMod("Test Mod", "Bob", "1.1.1", "A mod.", "a.Mod");
-	m_listc_Mods->InsertItem(aMod);
+	aMod.SetId(0);
+	m_listv_Mods->InsertItem(aMod);
 
 	// Tab 1 - List - Vertical Sizers + Title Text
 	m_sizer_nTab1a_Mods = new wxBoxSizer(wxVERTICAL);
 	m_sizer_nTab1a_Mods->AddSpacer(5);
-	m_sizer_nTab1a_Mods->Add(m_listc_Mods, 1, wxEXPAND, 0);
+	m_sizer_nTab1a_Mods->Add(m_listv_Mods, 1, wxEXPAND, 0);
 	m_sizer_nTab1a_Mods->AddSpacer(2);
 
 	// Tab 1 - List - Horizontal Sizer
@@ -78,13 +79,13 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	m_panel_nTab3 = new wxPanel(m_notebook, wxID_ANY);
 
 	// Tab 3 - List Box
-	m_listc_loadOrder = new wxListBox(m_panel_nTab3, wxID_ANY);
-	m_listc_loadOrder->Append(wxT("Not Implemented"));  // TODO
+	m_list_loadOrder = new wxListBox(m_panel_nTab3, wxID_ANY);
+	m_list_loadOrder->Append(wxT("Not Implemented"));  // TODO
 
 	// Tab 3 - Horizontal Sizer
 	m_sizer_nTab3a = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_nTab3a->AddStretchSpacer(1);
-	m_sizer_nTab3a->Add(m_listc_loadOrder, 2, wxEXPAND, 0);
+	m_sizer_nTab3a->Add(m_list_loadOrder, 2, wxEXPAND, 0);
 	m_sizer_nTab3a->AddStretchSpacer(1);
 
 

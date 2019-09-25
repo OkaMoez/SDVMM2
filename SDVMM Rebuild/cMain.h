@@ -23,7 +23,7 @@ public:
 	wxNotebook* m_notebook = nullptr;
 	// Tab 1
 	wxPanel* m_panel_nTab1 = nullptr;
-	wxListCtrl* m_listc_Mods = nullptr;
+	wxListView* m_listv_Mods = nullptr;
 	wxBoxSizer* m_sizer_nTab1a_Mods = nullptr;
 	wxStaticText* m_sText_aMod = nullptr;
 	wxStaticText* m_sText_iMod = nullptr;
@@ -41,7 +41,7 @@ public:
 	wxBoxSizer* m_sizer_nTab2 = nullptr;
 	// Tab 3
 	wxPanel* m_panel_nTab3 = nullptr;
-	wxListBox* m_listc_loadOrder = nullptr;
+	wxListBox* m_list_loadOrder = nullptr;
 	wxBoxSizer* m_sizer_nTab3a = nullptr;
 	wxBoxSizer* m_sizer_nTab3 = nullptr;
 

@@ -1,9 +1,14 @@
 #pragma once
 
 #include <filesystem>
+#include <fstream>
+#include <iomanip>
+#include <fileapi.h>
 #include "cMain.h"
 #include "wxDirectoriesEnumerator.h"
 namespace fs = std::filesystem;
+using std::istream;
+using std::ifstream;
 
 string getDirectory(FILE* ini);
 bool fileExists(string file_name);
