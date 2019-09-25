@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <fileapi.h>
+#include <wx/wupdlock.h>
 #include "cMain.h"
 #include "wxDirectoriesEnumerator.h"
 namespace fs = std::filesystem;
