@@ -41,14 +41,16 @@ void cMod::set_intVersion() // TODO Handle Short Version Nums w/ minimal technic
 	temp_version = temp_version.erase(0, temp_pos+1);
 	temp_pos = temp_version.find('.');
 	minor_version_ = stoi(temp_version.substr(0, temp_pos));
-	if (temp_pos = temp_version.size()) // Short version number "x.x"? kinda dumb
+	if (temp_pos != string::npos) // regular length x.x.x
 	{
-		patch_version_ = 0;
-	}
-	else // regular length x.x.x
-	{
-		temp_version = temp_version.erase(0, temp_pos + 1);
+		temp_version = temp_version.erase(0, temp_pos+1);
 		patch_version_ = stoi(temp_version.substr(0, temp_version.size()));
+	}
+	else // Short version number "x.x"? kinda dumb
+	{
+		mod_version_ = (std::to_string(major_version_)
+			+ "." + std::to_string(minor_version_)
+			+ ".0");
 	}
 }
 

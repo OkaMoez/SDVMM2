@@ -92,7 +92,7 @@ void printDir(wxListBox* ListBox1, fs::path modDir)
 	}
 }
 
-void loadModsFromDir(fs::path path_in, wxListView* mod_list)
+void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 {
 	fs::path temp_dir = (path_in);
 	temp_dir += "\\Mods";
@@ -101,6 +101,7 @@ void loadModsFromDir(fs::path path_in, wxListView* mod_list)
 	temp_dir += "\\";
 
 	json json_manifest;
+	mod_list->Freeze();
 	for (auto& p : fs::directory_iterator(temp_dir))
 	{
 
@@ -162,6 +163,12 @@ void loadModsFromDir(fs::path path_in, wxListView* mod_list)
 			*/
 
 			cMod aMod(json_manifest);
+			wxVector<wxVariant> thisMod;
+			thisMod.push_back(wxVariant(true));
+			thisMod.push_back(wxVariant(aMod.mod_name()));
+			thisMod.push_back(wxVariant(aMod.mod_author()));
+			thisMod.push_back(wxVariant(aMod.mod_version()));
+			mod_list->AppendItem(thisMod);
 			/*
 			D(
 				if (report_mod_object_data) {
@@ -179,4 +186,5 @@ void loadModsFromDir(fs::path path_in, wxListView* mod_list)
 			//delete test_mod;
 		}
 	}
+	mod_list->Thaw();
 }

@@ -70,8 +70,7 @@ bool cApp::StartCheck(cMain* m_frame)
 		if (FILE * iniFile = fopen(file_name.c_str(), "r")) {
 			m_frame->set_gamepath(getDirectory(iniFile));
 			fclose(iniFile);
-
-			loadModsFromDir(m_frame->gamepath(), m_frame1->m_listv_Mods);
+			loadModsFromDir(m_frame->gamepath(), m_frame1->m_dvlc_Mods);
 			
 			return true;
 		}
