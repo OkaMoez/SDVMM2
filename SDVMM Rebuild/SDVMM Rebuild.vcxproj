@@ -23,16 +23,15 @@
     <ClCompile Include="cMain.cpp" />
     <ClCompile Include="cMod.cpp" />
     <ClCompile Include="ioFunctions.cpp" />
-    <ClCompile Include="wxDirectoriesEnumerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cApp.h" />
     <ClInclude Include="cMain.h" />
     <ClInclude Include="cMod.h" />
     <ClInclude Include="debugConstants.h" />
-    <ClInclude Include="wxDirectoriesEnumerator.h" />
     <ClInclude Include="ioFunctions.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="wxDirectoriesEnumerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="E:\Image Edits\SDVMM\SDVMM2.png">
@@ -113,7 +112,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Dev Library\wxWidgets-3.1.2\include; D:\Dev Library\wxWidgets-3.1.2\include\msvc</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -149,9 +148,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Dev Library\wxWidgets-3.1.2\include; D:\Dev Library\wxWidgets-3.1.2\include\msvc</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

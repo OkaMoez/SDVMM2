@@ -27,9 +27,6 @@
     <ClCompile Include="cMod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wxDirectoriesEnumerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cApp.h">
