@@ -18,29 +18,21 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	// Tab 1
 	m_panel_nTab1 = new wxPanel(m_notebook, wxID_ANY);
 
-	// Tab 1 - List Boxes - Creation
-	m_listc_aMods = new wxListBox(m_panel_nTab1, wxID_ANY);
-	m_listc_iMods = new wxListBox(m_panel_nTab1, wxID_ANY);
+	// Tab 1 - List Control - Creation
+	m_listc_Mods = new wxListCtrl(m_panel_nTab1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_LIST);
+	m_listc_Mods->
 
-	// Tab 1 - List Boxes - Vertical Sizers + Title Text
-	m_sizer_nTab1a_aMods = new wxBoxSizer(wxVERTICAL);
-	m_sizer_nTab1a_iMods = new wxBoxSizer(wxVERTICAL);
-	m_sText_aMod = new wxStaticText(m_panel_nTab1, wxID_ANY, "Active Mods");
-	m_sText_iMod = new wxStaticText(m_panel_nTab1, wxID_ANY, "Inactive Mods");
-	m_font = m_sText_aMod->GetFont();
-	m_font.SetWeight(wxFONTWEIGHT_BOLD);
-	m_sText_aMod->SetFont(m_font);
-	m_sText_iMod->SetFont(m_font);
-	m_sizer_nTab1a_aMods->Add(m_sText_aMod, 0, 0, 0);
-	m_sizer_nTab1a_aMods->Add(m_listc_aMods, 1, wxEXPAND, 0);
-	m_sizer_nTab1a_iMods->Add(m_sText_iMod, 0, 0, 0);
-	m_sizer_nTab1a_iMods->Add(m_listc_iMods, 1, wxEXPAND, 0);
+	// Tab 1 - List - Vertical Sizers + Title Text
+	m_sizer_nTab1a_Mods = new wxBoxSizer(wxVERTICAL);
+	m_sizer_nTab1a_Mods->AddSpacer(5);
+	m_sizer_nTab1a_Mods->Add(m_listc_Mods, 1, wxEXPAND, 0);
+	m_sizer_nTab1a_Mods->AddSpacer(2);
 
-	// Tab 1 - List Boxes - Horizontal Sizer
+	// Tab 1 - List - Horizontal Sizer
 	m_sizer_nTab1a = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_nTab1a->Add(m_sizer_nTab1a_aMods, 1, wxEXPAND | wxLEFT, 8);
+	m_sizer_nTab1a->AddSpacer(8);
+	m_sizer_nTab1a->Add(m_sizer_nTab1a_Mods, 1, wxEXPAND, 0);
 	m_sizer_nTab1a->AddSpacer(10);
-	m_sizer_nTab1a->Add(m_sizer_nTab1a_iMods, 1, wxEXPAND | wxRIGHT, 10);
 
 	// tab 1 - Bottom Buttons 
 	m_sizer_nTab1b = new wxBoxSizer(wxHORIZONTAL);
@@ -64,13 +56,13 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	m_panel_nTab2 = new wxPanel(m_notebook, wxID_ANY);
 
 	// Tab 2 - List Box
-	m_listc_xMods = new wxListBox(m_panel_nTab2, wxID_ANY);
-	m_listc_xMods->Append(wxT("Not Implemented"));  // TODO
+	m_list_xMods = new wxListBox(m_panel_nTab2, wxID_ANY);
+	m_list_xMods->Append(wxT("Not Implemented"));  // TODO
 
 	// Tab 2 - Horizontal Sizer
 	m_sizer_nTab2a = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_nTab2a->AddStretchSpacer(1);
-	m_sizer_nTab2a->Add(m_listc_xMods, 2, wxEXPAND, 0);
+	m_sizer_nTab2a->Add(m_list_xMods, 2, wxEXPAND, 0);
 	m_sizer_nTab2a->AddStretchSpacer(1);
 
 
@@ -174,9 +166,9 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	SetSizer(m_sizer_Vmain);
 
 	// Setting background colour as needed
-	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500));
+	m_bg_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500));
 	wxColour* m_colour_grey = new wxColour(240, 240, 240, wxALPHA_OPAQUE);
-	panel->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_bg_panel->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_sText_APIversion->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_sText_MMversion->SetBackgroundColour(wxColour(*m_colour_grey));
 	delete m_colour_grey;
