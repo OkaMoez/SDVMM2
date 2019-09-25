@@ -101,14 +101,14 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 	temp_dir += "\\";
 
 	json json_manifest;
-	mod_list->Freeze();
+	wxWindowUpdateLocker noUpdates(mod_list);
 	for (auto& p : fs::directory_iterator(temp_dir))
 	{
 
 		temp_path = p.path();
 		temp_path += "\\manifest.json";
 
-		/*
+		
 		D(
 			if (report_looped_path) {
 				wxMessageDialog* m_pBox6 = new wxMessageDialog(NULL,
@@ -119,7 +119,7 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 			}
 			else {}
 		)
-		*/
+		
 
 		ifstream i(temp_path.c_str());
 		try {
@@ -127,7 +127,7 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 		}
 		catch (std::exception& e) {
 			string temp_exc = e.what();
-			/*
+			
 			D(
 				if (report_parse_exception) {
 					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
@@ -138,14 +138,14 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 				}
 				else {}
 			)
-			*/
+			
 		}
 
 		formatOldVersion(json_manifest);
 
 		if (fileExists(temp_path.string()))
 		{
-			/*
+			
 			D(
 				if (report_parsed_mod_data) {
 					string temp_msg1 = "";
@@ -160,7 +160,7 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 				}
 				else {}
 			)
-			*/
+			
 
 			cMod aMod(json_manifest);
 			wxVector<wxVariant> thisMod;
@@ -169,7 +169,8 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 			thisMod.push_back(wxVariant(aMod.mod_author()));
 			thisMod.push_back(wxVariant(aMod.mod_version()));
 			mod_list->AppendItem(thisMod);
-			/*
+			thisMod.clear();
+			
 			D(
 				if (report_mod_object_data) {
 					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
@@ -180,11 +181,10 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 				}
 				else {}
 			)
-			*/
+			
 
 			//cMod* test_mod = new cMod(json_manifest);
 			//delete test_mod;
 		}
 	}
-	mod_list->Thaw();
 }
