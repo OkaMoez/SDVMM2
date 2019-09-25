@@ -20,7 +20,8 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 
 	// Tab 1 - List Control - Creation
 	m_listc_Mods = new wxListCtrl(m_panel_nTab1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_LIST);
-	m_listc_Mods->
+	cMod aMod("Test Mod", "Bob", "1.1.1", "A mod.", "a.Mod");
+	m_listc_Mods->InsertItem(aMod);
 
 	// Tab 1 - List - Vertical Sizers + Title Text
 	m_sizer_nTab1a_Mods = new wxBoxSizer(wxVERTICAL);

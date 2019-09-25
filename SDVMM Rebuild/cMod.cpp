@@ -2,7 +2,7 @@
 
 
 cMod::cMod() : cMod("Empty Mod", "No Author", "0.0.0", "An empty mod.", "No ID") {}
-cMod::cMod(string name, string auth, string ver, string desc, string uId)
+cMod::cMod(string name, string auth, string ver, string desc, string uId) :  wxListItem()
 {
 	set_mod_name(name);
 	set_mod_author(auth);
