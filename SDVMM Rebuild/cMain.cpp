@@ -12,14 +12,26 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	//  Notebook Implementation
 	//---------------------------
 	// Tab 1, 2, 3 = Active/Inactive Mods, XNB Mods, Drag/Drop Load Order
-	//
 	m_notebook = new wxNotebook(this, -1);
 
 	// Tab 1
 	m_panel_nTab1 = new wxPanel(m_notebook, wxID_ANY);
+	m_frame_nTab1 = new wxFrame(m_panel_nTab1, wxID_ANY, "",
+		wxDefaultPosition, wxDefaultSize, wxFRAME_FLOAT_ON_PARENT);
 
-	// Tab 1 - List Control - Creation
-	m_listv_Mods = new wxListView(m_panel_nTab1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_LIST);
+	// Tab 1 - List Control - Creation w/ Columns
+	m_listv_Mods = new wxListView(m_frame_nTab1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+	m_listv_Mods->InsertColumn(m_listv_Mods->GetColumnCount(), "Active", wxLIST_FORMAT_LEFT, 50);
+	m_listv_Mods->InsertColumn(m_listv_Mods->GetColumnCount(), "Name", wxLIST_FORMAT_LEFT, 220);
+	m_listv_Mods->InsertColumn(m_listv_Mods->GetColumnCount(), "Author", wxLIST_FORMAT_LEFT, 100);
+	m_listv_Mods->InsertColumn(m_listv_Mods->GetColumnCount(), "Version", wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE);
+	//m_listv_Mods->SetScrollbar(wxHORIZONTAL, 0, 0, 0, false);
+
+	wxBoxSizer* m_sizer_Mods = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_Mods->Add(m_listv_Mods, 1, wxEXPAND, 0);
+	m_frame_nTab1->SetSizer();
+
+	// TESTING ONLY
 	cMod aMod("Test Mod", "Bob", "1.1.1", "A mod.", "a.Mod");
 	aMod.SetId(0);
 	m_listv_Mods->InsertItem(aMod);
@@ -27,7 +39,7 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	// Tab 1 - List - Vertical Sizers + Title Text
 	m_sizer_nTab1a_Mods = new wxBoxSizer(wxVERTICAL);
 	m_sizer_nTab1a_Mods->AddSpacer(5);
-	m_sizer_nTab1a_Mods->Add(m_listv_Mods, 1, wxEXPAND, 0);
+	m_sizer_nTab1a_Mods->Add(m_frame_nTab1, 1, wxEXPAND, 0);
 	m_sizer_nTab1a_Mods->AddSpacer(2);
 
 	// Tab 1 - List - Horizontal Sizer

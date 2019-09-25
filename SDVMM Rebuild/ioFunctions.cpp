@@ -92,12 +92,13 @@ void printDir(wxListBox* ListBox1, fs::path modDir)
 	}
 }
 
-void loadModsFromDir(fs::path path_in, )
+void loadModsFromDir(fs::path path_in, wxListView* mod_list)
 {
 	fs::path temp_dir = (path_in);
 	temp_dir += "\\Mods";
 	fs::path temp_path = temp_dir;
-	fs::path temp_stop = temp_dir += "\\";
+	fs::path temp_stop = temp_dir;
+	temp_dir += "\\";
 
 	json json_manifest;
 	for (auto& p : fs::directory_iterator(temp_dir))

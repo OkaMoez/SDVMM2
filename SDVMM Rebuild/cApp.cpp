@@ -71,7 +71,7 @@ bool cApp::StartCheck(cMain* m_frame)
 			m_frame->set_gamepath(getDirectory(iniFile));
 			fclose(iniFile);
 
-			loadModsFromDir();
+			loadModsFromDir(m_frame->gamepath(), m_frame1->m_listv_Mods);
 			
 			return true;
 		}

@@ -23,6 +23,7 @@ public:
 	wxNotebook* m_notebook = nullptr;
 	// Tab 1
 	wxPanel* m_panel_nTab1 = nullptr;
+	wxFrame* m_frame_nTab1 = nullptr;
 	wxListView* m_listv_Mods = nullptr;
 	wxBoxSizer* m_sizer_nTab1a_Mods = nullptr;
 	wxStaticText* m_sText_aMod = nullptr;
