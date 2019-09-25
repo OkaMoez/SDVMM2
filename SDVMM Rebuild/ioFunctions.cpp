@@ -75,7 +75,7 @@ void formatOldVersion(json& manifest)
 	}
 }
 
-void printDir(wxListBox* ListBox1, fs::path modDir)
+void printDir(wxListBox* ListBox1, fs::path modDir) // TODO Remake or Remove
 {
 	string temp_path = modDir.string();
 	wxArrayString dirList;
@@ -92,23 +92,28 @@ void printDir(wxListBox* ListBox1, fs::path modDir)
 	}
 }
 
-void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
+void refreshModLists(fs::path path_in, wxDataViewListCtrl* mod_list)
 {
-	fs::path temp_dir = (path_in);
-	temp_dir += "\\Mods";
-	fs::path temp_path = temp_dir;
-	fs::path temp_stop = temp_dir;
-	temp_dir += "\\";
-
-	json json_manifest;
 	wxWindowUpdateLocker noUpdates(mod_list);
+	loadModsFromDir(path_in, "\\Mods\\", mod_list);
+	loadModsFromDir(path_in, "\\Mods_disabled\\", mod_list);
+}
+
+void loadModsFromDir(fs::path path_in, string folder_name, wxDataViewListCtrl* mod_list)
+{
+	json json_manifest;
+	bool is_good_json = false;
+	bool is_active = (folder_name == "\\Mods\\");
+	fs::path temp_dir = (path_in);
+	temp_dir += folder_name;
+	fs::path temp_path;
 	for (auto& p : fs::directory_iterator(temp_dir))
 	{
-
+		is_good_json = false;
 		temp_path = p.path();
 		temp_path += "\\manifest.json";
 
-		
+
 		D(
 			if (report_looped_path) {
 				wxMessageDialog* m_pBox6 = new wxMessageDialog(NULL,
@@ -119,15 +124,24 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 			}
 			else {}
 		)
-		
 
+			int json_problem = NULL;
 		ifstream i(temp_path.c_str());
 		try {
 			json_manifest = json::parse(i); // TODO prompt user to handle trailing commas
+			is_good_json = true;
 		}
-		catch (std::exception& e) {
+		catch (json::parse_error & e) {
+			is_good_json = false;
 			string temp_exc = e.what();
-			
+
+			if (e.id == 101) { // TODO use exception id
+				json_problem = 1;
+			}
+			else {
+				json_problem = 2;
+			}
+
 			D(
 				if (report_parse_exception) {
 					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
@@ -138,14 +152,13 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 				}
 				else {}
 			)
-			
+
 		}
 
 		formatOldVersion(json_manifest);
 
-		if (fileExists(temp_path.string()))
+		if (fileExists(temp_path.string()) and is_good_json == true) // TODO Review
 		{
-			
 			D(
 				if (report_parsed_mod_data) {
 					string temp_msg1 = "";
@@ -160,17 +173,16 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 				}
 				else {}
 			)
-			
 
 			cMod aMod(json_manifest);
 			wxVector<wxVariant> thisMod;
-			thisMod.push_back(wxVariant(true));
+			thisMod.push_back(wxVariant(is_active));
 			thisMod.push_back(wxVariant(aMod.mod_name()));
 			thisMod.push_back(wxVariant(aMod.mod_author()));
 			thisMod.push_back(wxVariant(aMod.mod_version()));
 			mod_list->AppendItem(thisMod);
 			thisMod.clear();
-			
+
 			D(
 				if (report_mod_object_data) {
 					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
@@ -181,10 +193,26 @@ void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list)
 				}
 				else {}
 			)
-			
-
-			//cMod* test_mod = new cMod(json_manifest);
-			//delete test_mod;
+		}
+		else if (is_good_json == false)
+		{
+			if (json_problem == 1)
+			{
+				wxMessageDialog* init_eBox1 = new wxMessageDialog(NULL,
+					wxT("Bad Format: Illegal trailing comma at:\n" + temp_path.string()),
+					wxT("manifest.json error"),	wxOK, wxDefaultPosition);
+				init_eBox1->ShowModal();
+				delete init_eBox1;
+			}
+			else if (json_problem)
+			{
+				wxMessageDialog* init_eBox2 = new wxMessageDialog(NULL,
+					wxT("Bad Format: I dunno yet."), wxT("manifest.json error"),
+					wxOK, wxDefaultPosition);
+				init_eBox2->ShowModal();
+				delete init_eBox2;
+			}
+			else {}
 		}
 	}
 }

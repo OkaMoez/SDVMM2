@@ -16,4 +16,5 @@ string getDirectory(FILE* ini);
 bool fileExists(string file_name);
 void formatOldVersion(json& manifest);
 void printDir(wxListBox* ListBox1, fs::path modDir);
-void loadModsFromDir(fs::path path_in, wxDataViewListCtrl* mod_list);
+void refreshModLists(fs::path path_in, wxDataViewListCtrl* mod_list);
+void loadModsFromDir(fs::path path_in, string folder_name, wxDataViewListCtrl* mod_list);
