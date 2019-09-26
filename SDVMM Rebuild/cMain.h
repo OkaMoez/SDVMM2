@@ -4,6 +4,7 @@
 #include <wx/menu.h>
 #include <wx/notebook.h>
 #include <wx/dataview.h>
+#include <wx/event.h>
 #include "cMod.h"
 
 
@@ -71,10 +72,10 @@ public:
 	wxBoxSizer* m_sizer_Vmain = nullptr;
 
 private:
-	void toggleMod();// TODO use or delete
 	void OnButtonClicked(wxCommandEvent& evt);
 public:
 	void RefreshModList(); // TODO Make primary method or remove
+	void toggleMod(wxDataViewEvent& event);// TODO use or delete
 
 	wxDECLARE_EVENT_TABLE();
 };

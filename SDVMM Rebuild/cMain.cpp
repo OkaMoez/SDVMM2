@@ -25,11 +25,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_dvlc_Mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
 	m_dvlc_Mods->AppendTextColumn("Location", wxDATAVIEW_CELL_INERT, 500, wxALIGN_LEFT, 0);
 	// TODO Either hide scroll bar or hid location data
-	m_dvlc_Mods->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, [&](wxDataViewEvent& event) 
-		{
-			event.Skip();
-			// TODO swap directories
-		});
+	m_dvlc_Mods->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &cMain::toggleMod, this);
 	
 
 	// Tab 1 - List - Vertical Sizers + Title Text
@@ -208,7 +204,18 @@ void cMain::RefreshModList()
 
 }
 
-void toggleMod()
+void cMain::toggleMod(wxDataViewEvent& event)
 {
-
+	event.Skip();
+	
+	D(
+		if (report_cbox_event) {
+			wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
+				wxT("Mod toggled."), wxT("Event captured"),
+				wxOK, wxDefaultPosition);
+			init_mdBox1->ShowModal();
+			delete init_mdBox1;
+		}
+		else {}
+	)
 }
