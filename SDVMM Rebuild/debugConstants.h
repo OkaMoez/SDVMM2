@@ -26,7 +26,8 @@ myREPORT(
 	const bool report_parsed_mod_data = true;
 	const bool report_mod_object_data = true;
 	const bool report_mod_directories = true;
-	const bool report_cbox_event = true;
+	const bool report_cbox_event = false;
+	const bool report_file_move_event = true;
 )
 
 myQUIET(
@@ -35,11 +36,12 @@ myQUIET(
 	const bool report_filepath = false;
 	const bool report_json_name = false;
 	const bool report_looped_path = false;
-	const bool report_parse_exception = false;
+	const bool report_parse_exception = true;
 	const bool report_got_version = false;
 	const bool report_version_exception = false;
 	const bool report_parsed_mod_data = false;
 	const bool report_mod_object_data = false;
 	const bool report_mod_directories = false;
 	const bool report_cbox_event = false;
+	const bool report_file_move_event = false;
 )

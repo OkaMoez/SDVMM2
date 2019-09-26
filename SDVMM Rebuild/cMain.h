@@ -74,9 +74,11 @@ public:
 private:
 	void OnButtonClicked(wxCommandEvent& evt);
 public:
-	void RefreshModList(); // TODO Make primary method or remove
 	void toggleMod(wxDataViewEvent& event);// TODO use or delete
-
+	void formatOldVersion(json& manifest);
+	void refreshModLists();
+	void loadModsFromDir(string folder_name);
+	bool existsModFolders(); //TODO
 	wxDECLARE_EVENT_TABLE();
 };
 

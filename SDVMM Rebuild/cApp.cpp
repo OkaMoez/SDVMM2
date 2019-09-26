@@ -65,9 +65,9 @@ bool cApp::StartCheck(cMain* m_frame)
 		if (FILE* iniFile = fopen(ini_name.c_str(), "r")) {
 			m_frame->set_gamepath(getDirectory(iniFile));
 			fclose(iniFile);
-			if (existsModFolders(m_frame->gamepath()))
+			if (m_frame->existsModFolders())
 			{
-				refreshModLists(m_frame->gamepath(), m_frame1->m_dvlc_Mods);
+				m_frame->refreshModLists();
 			}
 			return true;
 		}
