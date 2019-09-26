@@ -25,7 +25,6 @@ bool cApp::OnInit()
 	m_frame1->Show(true);
 	if (!StartCheck(m_frame1))
 	{
-		/*
 		D(
 			if (report_ini_exists) {
 				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
@@ -36,12 +35,10 @@ bool cApp::OnInit()
 			}
 			else {}
 		)
-		*/
 	}
 	else
 	{
 		string myPath = m_frame1->gamepath();
-		/*
 		D(
 			if (report_game_directory) {
 				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
@@ -52,27 +49,26 @@ bool cApp::OnInit()
 			}
 			else {}
 		)
-		*/
 	}
 
 	fs::path temp_path = m_frame1->gamepath();
 	temp_path += "\\Mods\\";
-	//printDir(m_frame1->m_list_activeMods, temp_path);
 	m_frame1->Show(true);
 	return true;
 }
 
 bool cApp::StartCheck(cMain* m_frame)
 {
-	string file_name = "SDVMM2.ini";
-	if (existsFile(file_name))
+	string ini_name = "SDVMM2.ini";
+	if (existsFile(ini_name))
 	{
-		if (FILE * iniFile = fopen(file_name.c_str(), "r")) {
+		if (FILE* iniFile = fopen(ini_name.c_str(), "r")) {
 			m_frame->set_gamepath(getDirectory(iniFile));
 			fclose(iniFile);
-			existsModFolders(m_frame->gamepath());
-			refreshModLists(m_frame->gamepath(), m_frame1->m_dvlc_Mods);
-			
+			if (existsModFolders(m_frame->gamepath()))
+			{
+				refreshModLists(m_frame->gamepath(), m_frame1->m_dvlc_Mods);
+			}
 			return true;
 		}
 		else

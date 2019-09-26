@@ -1,4 +1,10 @@
 #pragma once
+#ifdef _DEBUG 
+#define D(x) x
+#include "debugConstants.h"
+#else 
+#define D(x)
+#endif
 
 #include <windows.h>
 #include <filesystem>

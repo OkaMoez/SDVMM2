@@ -1,10 +1,3 @@
-#ifdef _DEBUG 
-#define D(x) x
-#include "debugConstants.h"
-#else 
-#define D(x)
-#endif
-
 #include "ioFunctions.h"
 
 string getDirectory(FILE* ini)
@@ -212,9 +205,35 @@ bool existsModFolders(fs::path path_in)
 		{
 			fs::create_directory(mod_path);
 		}
+		else
+		{
+			D(
+				if (report_mod_directories) {
+					wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
+						mod_path.string(), wxT("Mods Directory Found"),
+						wxOK, wxDefaultPosition);
+					init_mdBox1->ShowModal();
+					delete init_mdBox1;
+				}
+				else {}
+			)
+		}
 		if (!(fs::exists(mod_d_path) and fs::is_directory(mod_d_path)))
 		{
 			fs::create_directory(mod_d_path);
+		}
+		else
+		{
+			D(
+				if (report_mod_directories) {
+					wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
+						mod_d_path.string(), wxT("Mods_d Directory Found"),
+						wxOK, wxDefaultPosition);
+					init_mdBox1->ShowModal();
+					delete init_mdBox1;
+				}
+				else {}
+			)
 		}
 	}
 	return true;
