@@ -42,14 +42,17 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 
 	// tab 1 - Bottom Buttons 
 	m_sizer_nTab1b = new wxBoxSizer(wxHORIZONTAL);
-	m_btn_openAMods = new wxButton(m_panel_nTab1, 10001, "Open Folder", wxDefaultPosition, wxSize(80, 21));
-	m_btn_openIMods = new wxButton(m_panel_nTab1, 10001, "Open Folder", wxDefaultPosition, wxSize(80, 21));
-	m_btn_refreshMods = new wxButton(m_panel_nTab1, 10001, "Refresh", wxDefaultPosition, wxSize(80, 21));
-	m_sizer_nTab1b->Add(m_btn_openAMods, 1,  wxLEFT, 7);
-	m_sizer_nTab1b->AddStretchSpacer(1);
-	m_sizer_nTab1b->Add(m_btn_refreshMods, 1, wxLEFT | wxRIGHT, 5);
-	m_sizer_nTab1b->AddStretchSpacer(1);
-	m_sizer_nTab1b->Add(m_btn_openIMods, 1, wxRIGHT, 9);
+	m_btn_openAMods = new wxButton(m_panel_nTab1, 10001, "Open Mods", wxDefaultPosition, wxSize(80, 21));
+	m_btn_openIMods = new wxButton(m_panel_nTab1, 10001, "Disabled Mods", wxDefaultPosition, wxSize(80, 21));
+	m_btn_refreshMods = new wxButton(m_panel_nTab1, 10001, "Refresh", wxDefaultPosition, wxSize(60, 21));
+	m_btn_openAMods->Bind(wxEVT_BUTTON, &cMain::OnModsClick, this);
+	m_btn_openIMods->Bind(wxEVT_BUTTON, &cMain::OnDisabledClick, this);
+	m_btn_refreshMods->Bind(wxEVT_BUTTON, &cMain::OnRefreshClick, this);
+	m_sizer_nTab1b->Add(m_btn_openAMods, 5,  wxLEFT, 7);
+	m_sizer_nTab1b->AddStretchSpacer(3);
+	m_sizer_nTab1b->Add(m_btn_refreshMods, 4, wxLEFT | wxRIGHT, 5);
+	m_sizer_nTab1b->AddStretchSpacer(3);
+	m_sizer_nTab1b->Add(m_btn_openIMods, 5, wxRIGHT, 9);
 
 	// Tab 1 - Top-level Vertical Sizer
 	m_sizer_nTab1 = new wxBoxSizer(wxVERTICAL);
@@ -103,7 +106,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	// Notebook Tabs
 	m_notebook->AddPage(m_panel_nTab1, "SMAPI Mods", true);
 	m_notebook->AddPage(m_panel_nTab2, "XNB Mods", false);
-	m_notebook->AddPage(m_panel_nTab3, "Load Order", false);
+	m_notebook->AddPage(m_panel_nTab3, "Load Order", false); // TODO Delete
 
 	// Band-aid fix for intial render issues (flips pages once)
 	m_notebook->SetSelection(1);
@@ -124,10 +127,12 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	int r_btn_width = 200;
 	int r_btn_height = 50;
 	m_btn_launchSMAPI = new wxButton(this, 10001, "Launch SMAPI");
-	m_btn_launchSDV = new wxButton(this, 10001, "Launch Stardew Valley");
+	m_btn_launchVanilla = new wxButton(this, 10001, "Launch Stardew Valley");
 	m_btn_addMod = new wxButton(this, 10001, "Add Mod from File");
 	m_btn_dlMod = new wxButton(this, 10001, "Download Mod from Nexus");
 	m_btn_delMod = new wxButton(this, 10001, "Delete Mod");
+	m_btn_launchSMAPI->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
+	m_btn_launchVanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 
 	// Right side button - sizer
 	int prop_rBtns = 15;
@@ -135,7 +140,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_sizer_rBtns = new wxBoxSizer(wxVERTICAL);
 	m_sizer_rBtns->Add(m_btn_launchSMAPI, prop_rBtns, wxEXPAND, 0);
 	m_sizer_rBtns->AddStretchSpacer(prop_rSpace);
-	m_sizer_rBtns->Add(m_btn_launchSDV, prop_rBtns, wxEXPAND, 0);
+	m_sizer_rBtns->Add(m_btn_launchVanilla, prop_rBtns, wxEXPAND, 0);
 	m_sizer_rBtns->AddStretchSpacer(prop_rSpace);
 	m_sizer_rBtns->Add(m_btn_addMod, prop_rBtns, wxEXPAND, 0);
 	m_sizer_rBtns->AddStretchSpacer(prop_rSpace);
@@ -188,10 +193,51 @@ void cMain::set_gamepath(string filepath)
 	gamepath_ = filepath;
 }
 
-void cMain::OnButtonClicked(wxCommandEvent& evt)
+void cMain::OnLaunchSMAPIClick(wxCommandEvent& event)
 {
-	//m_list1->AppendString(m_txt1->GetValue());
-	//evt.Skip();
+	event.Skip();
+	string test_str = ((this->gamepath() + "\\StardewModdingAPI"));
+	const char* open_command = (test_str.c_str());
+	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+
+}
+
+void cMain::OnLaunchVanillaClick(wxCommandEvent& event)
+{
+	event.Skip();
+	string test_str = ((this->gamepath() + "\\Stardew Valley"));
+	const char* open_command = (test_str.c_str());
+	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+
+}
+
+void cMain::OnModsClick(wxCommandEvent& event)
+{
+	event.Skip();
+	string test_str = ("explorer " + (this->gamepath() + "\\Mods\\"));
+	const char* open_command = (test_str.c_str());
+	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+
+
+	/*
+	Windows - explorer
+	mac - open
+	linux - konqueror or whatever gnome uses (nautilus?)
+	*/
+}
+
+void cMain::OnDisabledClick(wxCommandEvent& event)
+{
+	event.Skip();
+	string test_str = ("explorer " + (this->gamepath() + "\\Mods_disabled"));
+	const char* open_command = (test_str.c_str());
+	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+}
+
+void cMain::OnRefreshClick(wxCommandEvent& event)
+{
+	event.Skip();
+	this->refreshModLists();
 }
 
 void cMain::toggleMod(wxDataViewEvent& event)
@@ -438,7 +484,7 @@ bool cMain::existsModFolders()
 	fs::path game_file_path = this->gamepath();
 	mod_path += "\\Mods";
 	mod_d_path += "\\Mods_disabled";
-	game_file_path += "\\Stardew Valley.exe"; // TODO Make crossplatform
+	game_file_path += "\\Stardew Valley.exe"; // TODO Make crossplatform?
 
 	if (!(fs::exists(game_file_path) and fs::is_regular_file(game_file_path)))
 	{

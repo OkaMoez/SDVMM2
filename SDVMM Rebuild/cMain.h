@@ -8,11 +8,10 @@
 #include "cMod.h"
 
 
-class cMain : public wxFrame
+class cMain : public wxFrame // TODO Organize privacy
 {
 private:
 	string gamepath_ = "";
-	void popModLists();
 
 public:
 	cMain();
@@ -54,7 +53,7 @@ public:
 
 	// Right side buttons
 	wxButton* m_btn_launchSMAPI = nullptr;
-	wxButton* m_btn_launchSDV = nullptr;
+	wxButton* m_btn_launchVanilla = nullptr;
 	wxButton* m_btn_addMod = nullptr;
 	wxButton* m_btn_dlMod = nullptr;
 	wxButton* m_btn_delMod = nullptr;
@@ -72,13 +71,17 @@ public:
 	wxBoxSizer* m_sizer_Vmain = nullptr;
 
 private:
-	void OnButtonClicked(wxCommandEvent& evt);
+	void OnLaunchSMAPIClick(wxCommandEvent& event);
+	void OnLaunchVanillaClick(wxCommandEvent& event);
+	void OnModsClick(wxCommandEvent& event); // TODO Make cross platform
+	void OnDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
+	void OnRefreshClick(wxCommandEvent& event);
 public:
-	void toggleMod(wxDataViewEvent& event);// TODO use or delete
+	void toggleMod(wxDataViewEvent& event);
 	void formatOldVersion(json& manifest);
 	void refreshModLists();
 	void loadModsFromDir(string folder_name);
-	bool existsModFolders(); //TODO
-	wxDECLARE_EVENT_TABLE();
+	bool existsModFolders();
+	wxDECLARE_EVENT_TABLE();  // TODO Use or delete
 };
 
