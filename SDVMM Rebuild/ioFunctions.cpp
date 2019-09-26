@@ -206,5 +206,16 @@ bool existsModFolders(fs::path path_in)
 		)
 		return false;
 	}
+	else
+	{
+		if (!(fs::exists(mod_path) and fs::is_directory(mod_path)))
+		{
+			fs::create_directory(mod_path);
+		}
+		if (!(fs::exists(mod_d_path) and fs::is_directory(mod_d_path)))
+		{
+			fs::create_directory(mod_d_path);
+		}
+	}
 	return true;
 }
