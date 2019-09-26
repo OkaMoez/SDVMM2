@@ -204,6 +204,16 @@ bool existsModFolders(fs::path path_in)
 		if (!(fs::exists(mod_path) and fs::is_directory(mod_path)))
 		{
 			fs::create_directory(mod_path);
+			D(
+				if (report_mod_directories) {
+					wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
+						mod_path.string(), wxT("Mods Directory Created"),
+						wxOK, wxDefaultPosition);
+					init_mdBox1->ShowModal();
+					delete init_mdBox1;
+				}
+				else {}
+			)
 		}
 		else
 		{
@@ -221,6 +231,16 @@ bool existsModFolders(fs::path path_in)
 		if (!(fs::exists(mod_d_path) and fs::is_directory(mod_d_path)))
 		{
 			fs::create_directory(mod_d_path);
+			D(
+				if (report_mod_directories) {
+					wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
+						mod_d_path.string(), wxT("Mods_d Directory Created"),
+						wxOK, wxDefaultPosition);
+					init_mdBox1->ShowModal();
+					delete init_mdBox1;
+				}
+				else {}
+			)
 		}
 		else
 		{
