@@ -126,9 +126,9 @@ void loadModsFromDir(fs::path path_in, string folder_name, wxDataViewListCtrl* m
 		)
 
 			int json_problem = NULL;
-		ifstream i(temp_path.c_str());
+		ifstream json_stream(temp_path.c_str());
 		try {
-			json_manifest = json::parse(i); // TODO prompt user to handle trailing commas
+			json_manifest = json::parse(json_stream); // TODO prompt user to handle trailing commas
 			is_good_json = true;
 		}
 		catch (json::parse_error & e) {
