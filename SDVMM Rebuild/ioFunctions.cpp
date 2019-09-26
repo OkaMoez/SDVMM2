@@ -18,9 +18,9 @@ string getDirectory(FILE* ini)
 	return temp_string;
 }
 
-bool existsFile(string file_name)
+bool existsFile(string file_path)
 {
-	if (FILE * iniFile = fopen(file_name.c_str(), "r")) {
+	if (FILE * iniFile = fopen(file_path.c_str(), "r")) {
 		fclose(iniFile);
 		return true;
 	}
@@ -32,35 +32,8 @@ bool existsFile(string file_name)
 void formatOldVersion(json& manifest)
 {
 	string temp_v = "";
-	try {
-		if (manifest.at("Version").is_object()) { throw std::exception("obj not str"); }
-		else
-			manifest.at("Version").get_to(temp_v);
-
-		D(
-			if (report_got_version) {
-				wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-					("got version: " + temp_v), wxT("File Check"),
-					wxOK, wxDefaultPosition);
-				m_pBox2->ShowModal();
-				delete m_pBox2;
-			}
-			else {}
-		)
-	}
-	catch (std::exception & e) {
-		string temp_exc = e.what();
-		D(
-			if (report_version_exception) {
-				wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-					temp_exc, wxT("Exception Report"),
-					wxOK, wxDefaultPosition);
-				m_pBox2->ShowModal();
-				delete m_pBox2;
-			}
-			else {}
-		)
-
+	if (manifest.at("Version").is_object())
+	{
 		int temp_v1 = NULL;
 		int temp_v2 = NULL;
 		int temp_v3 = NULL;
@@ -73,6 +46,19 @@ void formatOldVersion(json& manifest)
 		manifest.erase("Version");
 		manifest["Version"] = temp_v;
 	}
+	else
+		manifest.at("Version").get_to(temp_v);
+
+	D(
+		if (report_got_version) {
+			wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
+				("got version: " + temp_v), wxT("File Check"),
+				wxOK, wxDefaultPosition);
+			m_pBox2->ShowModal();
+			delete m_pBox2;
+		}
+		else {}
+	)
 }
 
 void refreshModLists(fs::path path_in, wxDataViewListCtrl* mod_list)
@@ -198,4 +184,27 @@ void loadModsFromDir(fs::path path_in, string folder_name, wxDataViewListCtrl* m
 			else {}
 		}
 	}
+}
+
+bool existsModFolders(fs::path path_in)
+{
+	fs::path mod_path = path_in;
+	fs::path mod_d_path = path_in;
+	fs::path game_file_path = path_in;
+	mod_path += "\\Mods";
+	mod_d_path += "\\Mods_disabled";
+	game_file_path += "\\Stardew Valley.exe"; // TODO Make crossplatform
+
+	if (!(fs::exists(game_file_path) and fs::is_regular_file(game_file_path)))
+	{
+		D(
+			wxMessageDialog * init_mfBox1 = new wxMessageDialog(NULL,
+				wxT("Game executable not found on path:\n" + game_file_path.string()),
+				wxT("wrong directory"), wxOK, wxDefaultPosition);
+			init_mfBox1->ShowModal();
+			delete init_mfBox1;
+		)
+		return false;
+	}
+	return true;
 }
