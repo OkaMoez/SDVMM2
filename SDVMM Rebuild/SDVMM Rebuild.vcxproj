@@ -42,7 +42,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="README.md" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
