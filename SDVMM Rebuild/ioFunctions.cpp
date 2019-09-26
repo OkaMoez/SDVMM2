@@ -18,7 +18,7 @@ string getDirectory(FILE* ini)
 	return temp_string;
 }
 
-bool fileExists(string file_name)
+bool existsFile(string file_name)
 {
 	if (FILE * iniFile = fopen(file_name.c_str(), "r")) {
 		fclose(iniFile);
@@ -72,23 +72,6 @@ void formatOldVersion(json& manifest)
 			+ "." + std::to_string(temp_v3);
 		manifest.erase("Version");
 		manifest["Version"] = temp_v;
-	}
-}
-
-void printDir(wxListBox* ListBox1, fs::path modDir) // TODO Remake or Remove
-{
-	string temp_path = modDir.string();
-	wxArrayString dirList;
-	myDirectoriesEnumerator traverser(&dirList);
-	wxDir dir(temp_path);
-	if (dir.IsOpened()) 
-	{
-		dir.Traverse(traverser);
-		ListBox1->Clear();
-		for (unsigned int i = 0; i < dirList.GetCount(); i++) {
-			//The name is what follows the last \ or /
-			ListBox1->Append(dirList.Item(i).AfterLast('\\').AfterLast('/'));
-		}
 	}
 }
 
@@ -157,7 +140,7 @@ void loadModsFromDir(fs::path path_in, string folder_name, wxDataViewListCtrl* m
 
 		formatOldVersion(json_manifest);
 
-		if (fileExists(temp_path.string()) and is_good_json == true) // TODO Review
+		if (existsFile(temp_path.string()) and is_good_json == true) // TODO Review
 		{
 			D(
 				if (report_parsed_mod_data) {

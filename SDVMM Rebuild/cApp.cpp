@@ -65,11 +65,12 @@ bool cApp::OnInit()
 bool cApp::StartCheck(cMain* m_frame)
 {
 	string file_name = "SDVMM2.ini";
-	if (fileExists(file_name))
+	if (existsFile(file_name))
 	{
 		if (FILE * iniFile = fopen(file_name.c_str(), "r")) {
 			m_frame->set_gamepath(getDirectory(iniFile));
 			fclose(iniFile);
+			existsModFolders(m_frame->gamepath());
 			refreshModLists(m_frame->gamepath(), m_frame1->m_dvlc_Mods);
 			
 			return true;
