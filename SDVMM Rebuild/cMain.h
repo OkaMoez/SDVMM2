@@ -70,9 +70,11 @@ public:
 	wxBoxSizer* m_sizer_Hmain = nullptr;
 	wxBoxSizer* m_sizer_Vmain = nullptr;
 
-
+private:
+	void toggleMod();// TODO use or delete
 	void OnButtonClicked(wxCommandEvent& evt);
-	void RefreshModList();
+public:
+	void RefreshModList(); // TODO Make primary method or remove
 
 	wxDECLARE_EVENT_TABLE();
 };

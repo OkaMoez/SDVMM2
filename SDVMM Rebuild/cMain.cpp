@@ -1,10 +1,10 @@
 #include "cApp.h"
 
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
-	//EVT_BUTTON(10001, OnButtonClicked)
+	// Obsolete?
 wxEND_EVENT_TABLE()
 
-cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
+cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	wxDefaultPosition, wxSize(750,500),
 	wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX))
 {
@@ -23,6 +23,13 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	m_dvlc_Mods->AppendTextColumn("Name", wxDATAVIEW_CELL_INERT, 200, wxALIGN_LEFT, 0);
 	m_dvlc_Mods->AppendTextColumn("Author", wxDATAVIEW_CELL_INERT, 135, wxALIGN_LEFT, 0);
 	m_dvlc_Mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
+	m_dvlc_Mods->AppendTextColumn("Location", wxDATAVIEW_CELL_INERT, 500, wxALIGN_LEFT, 0);
+	// TODO Either hide scroll bar or hid location data
+	m_dvlc_Mods->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, [&](wxDataViewEvent& event) 
+		{
+			event.Skip();
+			// TODO swap directories
+		});
 	
 
 	// Tab 1 - List - Vertical Sizers + Title Text
@@ -105,7 +112,6 @@ cMain::cMain() : wxFrame(nullptr, 1, "SDVMM 2",
 	// Band-aid fix for intial render issues (flips pages once)
 	m_notebook->SetSelection(1);
 	m_notebook->SetSelection(0);
-	
 	
 	//---------------------------------
 	//  Additional GUI Implementation
@@ -202,3 +208,7 @@ void cMain::RefreshModList()
 
 }
 
+void toggleMod()
+{
+
+}

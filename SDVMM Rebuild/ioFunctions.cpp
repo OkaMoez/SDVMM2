@@ -69,10 +69,10 @@ void loadModsFromDir(fs::path path_in, string folder_name, wxDataViewListCtrl* m
 	fs::path temp_dir = (path_in);
 	temp_dir += folder_name;
 	fs::path temp_path;
-	for (auto& p : fs::directory_iterator(temp_dir))
+	for (auto& dir_iter : fs::directory_iterator(temp_dir))
 	{
 		is_good_json = false;
-		temp_path = p.path();
+		temp_path = dir_iter.path();
 		temp_path += "\\manifest.json";
 
 
@@ -142,8 +142,18 @@ void loadModsFromDir(fs::path path_in, string folder_name, wxDataViewListCtrl* m
 			thisMod.push_back(wxVariant(aMod.mod_name()));
 			thisMod.push_back(wxVariant(aMod.mod_author()));
 			thisMod.push_back(wxVariant(aMod.mod_version()));
+			thisMod.push_back(wxVariant((dir_iter.path()).string()));
 			mod_list->AppendItem(thisMod);
 			thisMod.clear();
+
+			/*
+			wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
+			m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
+
+			wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
+				if(!pStrData)
+			wxString id = pStrData->GetData();
+			*/
 
 			D(
 				if (report_mod_object_data) {

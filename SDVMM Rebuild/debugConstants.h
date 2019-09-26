@@ -39,5 +39,5 @@ myQUIET(
 	const bool report_version_exception = false;
 	const bool report_parsed_mod_data = false;
 	const bool report_mod_object_data = false;
-	const bool report_mod_directories = true;
+	const bool report_mod_directories = false;
 )
