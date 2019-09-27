@@ -41,7 +41,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_sizer_nTab1a->AddSpacer(10);
 
 	// tab 1 - Bottom Buttons 
-	m_sizer_nTab1b = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_nTab1b = new wxBoxSizer(wxHORIZONTAL); // TODO Move
 	m_btn_openAMods = new wxButton(m_panel_nTab1, 10001, "Open Mods", wxDefaultPosition, wxSize(80, 21));
 	m_btn_openIMods = new wxButton(m_panel_nTab1, 10001, "Disabled Mods", wxDefaultPosition, wxSize(80, 21));
 	m_btn_refreshMods = new wxButton(m_panel_nTab1, 10001, "Refresh", wxDefaultPosition, wxSize(60, 21));
@@ -66,7 +66,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 
 	// Tab 2 - List Box
 	m_list_xMods = new wxListBox(m_panel_nTab2, wxID_ANY);
-	m_list_xMods->Append(wxT("Not Implemented"));  // TODO
+	m_list_xMods->Append(wxT("Not Implemented"));  // TODO XNB support
 
 	// Tab 2 - Horizontal Sizer
 	m_sizer_nTab2a = new wxBoxSizer(wxHORIZONTAL);
@@ -87,7 +87,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 
 	// Tab 3 - List Box
 	m_list_loadOrder = new wxListBox(m_panel_nTab3, wxID_ANY);
-	m_list_loadOrder->Append(wxT("Not Implemented"));  // TODO
+	m_list_loadOrder->Append(wxT("Not Implemented"));  // TODO Load Order tomfoolery?
 
 	// Tab 3 - Horizontal Sizer
 	m_sizer_nTab3a = new wxBoxSizer(wxHORIZONTAL);
@@ -106,7 +106,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	// Notebook Tabs
 	m_notebook->AddPage(m_panel_nTab1, "SMAPI Mods", true);
 	m_notebook->AddPage(m_panel_nTab2, "XNB Mods", false);
-	m_notebook->AddPage(m_panel_nTab3, "Load Order", false); // TODO Delete
+	m_notebook->AddPage(m_panel_nTab3, "Load Order", false); // TODO Delete?
 
 	// Band-aid fix for intial render issues (flips pages once)
 	m_notebook->SetSelection(1);
@@ -116,7 +116,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	//  Additional GUI Implementation
 	//---------------------------------
 	// Menubar - File, Help, etc
-	menubar = new wxMenuBar;
+	menubar = new wxMenuBar; // TODO Implement
 	file = new wxMenu;
 	help = new wxMenu;
 	menubar->Append(file, wxT("&File"));
@@ -127,10 +127,10 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	int r_btn_width = 200;
 	int r_btn_height = 50;
 	m_btn_launchSMAPI = new wxButton(this, 10001, "Launch SMAPI");
-	m_btn_launchVanilla = new wxButton(this, 10001, "Launch Stardew Valley");
-	m_btn_addMod = new wxButton(this, 10001, "Add Mod from File");
-	m_btn_dlMod = new wxButton(this, 10001, "Download Mod from Nexus");
-	m_btn_delMod = new wxButton(this, 10001, "Delete Mod");
+	m_btn_launchVanilla = new wxButton(this, 10001, "Launch Stardew Valley"); // TODO FIX
+	m_btn_addMod = new wxButton(this, 10001, "Add Mod from File"); // TODO
+	m_btn_dlMod = new wxButton(this, 10001, "Download Mod from Nexus"); // TODO
+	m_btn_delMod = new wxButton(this, 10001, "Delete Mod"); // TODO Remove?
 	m_btn_launchSMAPI->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 	m_btn_launchVanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 
@@ -155,13 +155,13 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 
 	// Banner
 	wxImage::AddHandler(new wxPNGHandler);
-	m_sbmp_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG));
+	m_sbmp_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG)); // TODO save in code?
 	wxImage::CleanUpHandlers();
 
 	// Version info
-	string m_version_SMAPI = "1.1.1";
+	string m_version_SMAPI = "1.1.1"; // TODO Fetch
 	string m_version_SDVMM2 = "1.0.0";
-	m_sText_APIversion = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_version_SMAPI);
+	m_sText_APIversion = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_version_SMAPI); // TODO Fetch
 	m_sText_MMversion = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_version_SDVMM2);
 	m_sizer_vInfo = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_vInfo->Add(m_sText_MMversion, 1, wxEXPAND | wxLEFT, 15);

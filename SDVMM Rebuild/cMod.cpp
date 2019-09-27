@@ -2,7 +2,7 @@
 
 
 cMod::cMod() : cMod("Empty Mod", "No Author", "0.0.0", "An empty mod.", "No ID") {}
-cMod::cMod(string name, string auth, string ver, string desc, string uId) :  wxListItem()
+cMod::cMod(string name, string auth, string ver, string desc, string uId)
 {
 	set_mod_name(name);
 	set_mod_author(auth);
@@ -11,7 +11,7 @@ cMod::cMod(string name, string auth, string ver, string desc, string uId) :  wxL
 	set_mod_unique_id(uId);
 	set_intVersion();
 }
-cMod::cMod(json& manifest) : wxListItem()
+cMod::cMod(json& manifest)
 {
 	string name, auth, ver, desc, uId;
 	manifest["Name"].get_to(name);

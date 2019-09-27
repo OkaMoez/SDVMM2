@@ -6,7 +6,7 @@ using json = nlohmann::json;
 using std::string;
 using std::stoi;
 
-class cMod : public wxListItem
+class cMod
 {
 private:
 	string mod_name_;
