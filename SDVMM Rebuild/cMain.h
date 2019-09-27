@@ -25,13 +25,7 @@ public:
 	// Tab 1
 	wxPanel* m_panel_notebook_tab1 = nullptr;
 	wxDataViewListCtrl* m_dataviewlistctrl_mods = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab1a_Mods = nullptr;
-	wxStaticText* m_sText_aMod = nullptr;
-	wxStaticText* m_sText_iMod = nullptr;
-	wxButton* m_button_open_mods = nullptr;
-	wxButton* m_button_open_mods_disabled = nullptr;
-	wxButton* m_button_refresh_mods  = nullptr;
-	wxFont m_font;
+	wxBoxSizer* m_sizer_notebook_tab1a_mods = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab1 = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab1a = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab1b = nullptr;
@@ -46,17 +40,17 @@ public:
 	wxBoxSizer* m_sizer_notebook_tab3a = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab3 = nullptr;
 
-	// Menubar
-	wxMenuBar* menubar = nullptr;
-	wxMenu* file = nullptr;
-	wxMenu* help = nullptr;
+	// m_menubar
+	wxMenuBar* m_menubar = nullptr;
+	wxMenu* m_menubar_file = nullptr;
+	wxMenu* m_menubar_help = nullptr;
 
 	// Right side buttons
 	wxButton* m_button_launch_smapi = nullptr;
 	wxButton* m_button_launch_vanilla = nullptr;
-	wxButton* m_button_addMod = nullptr;
-	wxButton* m_button_dlMod = nullptr;
-	wxButton* m_button_delMod = nullptr;
+	wxButton* m_button_add_mod = nullptr;
+	wxButton* m_button_download_mod = nullptr;
+	wxButton* m_button_refresh_mods = nullptr;
 	wxBoxSizer* m_sizer_buttons_right = nullptr;
 
 	// Other Layout
@@ -73,13 +67,13 @@ public:
 private:
 	void OnLaunchSMAPIClick(wxCommandEvent& event);
 	void OnLaunchVanillaClick(wxCommandEvent& event);
-	void OnModsClick(wxCommandEvent& event); // TODO Make cross platform
-	void OnDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
+	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
+	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
 	void OnRefreshClick(wxCommandEvent& event);
 public:
 	void ToggleMod(wxDataViewEvent& event);
 	void FormatOldVersion(json& manifest);
-	void RefreshModLists();
+	void RefreshModLists(); // TODO give some indication of the refresh
 	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();
 	wxDECLARE_EVENT_TABLE();  // TODO Use or delete

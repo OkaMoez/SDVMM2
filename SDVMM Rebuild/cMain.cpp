@@ -24,41 +24,25 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_dataviewlistctrl_mods->AppendTextColumn("Author", wxDATAVIEW_CELL_INERT, 135, wxALIGN_LEFT, 0);
 	m_dataviewlistctrl_mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
 	m_dataviewlistctrl_mods->AppendTextColumn("Location", wxDATAVIEW_CELL_INERT, 500, wxALIGN_LEFT, 0);
-	// TODO Either hide scroll bar or hid location data
+	// TODO Either hide scroll bar or hide location data?
 	m_dataviewlistctrl_mods->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &cMain::ToggleMod, this);
 	
-
 	// Tab 1 - List - Vertical Sizers + Title Text
-	m_sizer_notebook_tab1a_Mods = new wxBoxSizer(wxVERTICAL);
-	m_sizer_notebook_tab1a_Mods->AddSpacer(5);
-	m_sizer_notebook_tab1a_Mods->Add(m_dataviewlistctrl_mods, 1, 0, 0);
-	m_sizer_notebook_tab1a_Mods->AddSpacer(2);
+	m_sizer_notebook_tab1a_mods = new wxBoxSizer(wxVERTICAL);
+	m_sizer_notebook_tab1a_mods->AddSpacer(5);
+	m_sizer_notebook_tab1a_mods->Add(m_dataviewlistctrl_mods, 1, 0, 0);
+	m_sizer_notebook_tab1a_mods->AddSpacer(2);
 
 	// Tab 1 - List - Horizontal Sizer
 	m_sizer_notebook_tab1a = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab1a->AddSpacer(8);
-	m_sizer_notebook_tab1a->Add(m_sizer_notebook_tab1a_Mods, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab1a->Add(m_sizer_notebook_tab1a_mods, 1, wxEXPAND, 0);
 	m_sizer_notebook_tab1a->AddSpacer(10);
-
-	// tab 1 - Bottom Buttons 
-	m_sizer_notebook_tab1b = new wxBoxSizer(wxHORIZONTAL); // TODO Move
-	m_button_open_mods = new wxButton(m_panel_notebook_tab1, 10001, "Open Mods", wxDefaultPosition, wxSize(80, 21));
-	m_button_open_mods_disabled = new wxButton(m_panel_notebook_tab1, 10001, "Disabled Mods", wxDefaultPosition, wxSize(80, 21));
-	m_button_refresh_mods  = new wxButton(m_panel_notebook_tab1, 10001, "Refresh", wxDefaultPosition, wxSize(60, 21));
-	m_button_open_mods->Bind(wxEVT_BUTTON, &cMain::OnModsClick, this);
-	m_button_open_mods_disabled->Bind(wxEVT_BUTTON, &cMain::OnDisabledClick, this);
-	m_button_refresh_mods ->Bind(wxEVT_BUTTON, &cMain::OnRefreshClick, this);
-	m_sizer_notebook_tab1b->Add(m_button_open_mods, 5,  wxLEFT, 7);
-	m_sizer_notebook_tab1b->AddStretchSpacer(3);
-	m_sizer_notebook_tab1b->Add(m_button_refresh_mods , 4, wxLEFT | wxRIGHT, 5);
-	m_sizer_notebook_tab1b->AddStretchSpacer(3);
-	m_sizer_notebook_tab1b->Add(m_button_open_mods_disabled, 5, wxRIGHT, 9);
 
 	// Tab 1 - Top-level Vertical Sizer
 	m_sizer_notebook_tab1 = new wxBoxSizer(wxVERTICAL);
 	m_sizer_notebook_tab1->AddSpacer(5);
-	m_sizer_notebook_tab1->Add(m_sizer_notebook_tab1a, 1, wxEXPAND, 0);
-	m_sizer_notebook_tab1->Add(m_sizer_notebook_tab1b, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
+	m_sizer_notebook_tab1->Add(m_sizer_notebook_tab1a, 1, wxEXPAND| wxBOTTOM, 3);
 	m_panel_notebook_tab1->SetSizer(m_sizer_notebook_tab1);
 
 	// Tab 2
@@ -115,24 +99,29 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	//---------------------------------
 	//  Additional GUI Implementation
 	//---------------------------------
-	// Menubar - File, Help, etc
-	menubar = new wxMenuBar; // TODO Implement
-	file = new wxMenu;
-	help = new wxMenu;
-	menubar->Append(file, wxT("&File"));
-	menubar->Append(help, wxT("&Help"));
-	SetMenuBar(menubar);
+	// m_menubar - m_menubar_file, m_menubar_help, etc
+	m_menubar = new wxMenuBar; // TODO Implement
+	m_menubar_file = new wxMenu;
+	m_menubar_help = new wxMenu;
+	m_menubar->Append(m_menubar_file, wxT("File"));
+	m_menubar_file->Append(wxID_ANY, "Open Mods Folder", wxEmptyString, wxITEM_NORMAL);
+	m_menubar_file->Append(wxID_ANY, "Open Disabled Mods Folder", wxEmptyString, wxITEM_NORMAL);
+	m_menubar->Append(m_menubar_help, wxT("&Help"));
+	SetMenuBar(m_menubar);
+	//m_menubar->Bind(wxEVT_COMMAND_MENU_SELECTED, &cMain::SomeFunction, this, I_DUNNO_YET);
 
 	// Right side buttons
 	int r_btn_width = 200;
 	int r_btn_height = 50;
-	m_button_launch_smapi = new wxButton(this, 10001, "Launch SMAPI");
-	m_button_launch_vanilla = new wxButton(this, 10001, "Launch Stardew Valley"); // TODO FIX
-	m_button_addMod = new wxButton(this, 10001, "Add Mod from File"); // TODO
-	m_button_dlMod = new wxButton(this, 10001, "Download Mod from Nexus"); // TODO
-	m_button_delMod = new wxButton(this, 10001, "Delete Mod"); // TODO Remove?
+	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
+	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley"); // TODO FIX
+	m_button_add_mod = new wxButton(this, wxID_ANY, "Add Mod from File"); // TODO
+	m_button_download_mod = new wxButton(this, wxID_ANY, "Download Mod from Nexus"); // TODO
+	m_button_refresh_mods = new wxButton(this, wxID_ANY, "Refresh Mod List"); // TODO Remove?
 	m_button_launch_smapi->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchVanillaClick, this);
+
+	m_button_refresh_mods->Bind(wxEVT_BUTTON, &cMain::OnRefreshClick, this);
 
 	// Right side button - sizer
 	int prop_rBtns = 15;
@@ -142,11 +131,11 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
 	m_sizer_buttons_right->Add(m_button_launch_vanilla, prop_rBtns, wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_addMod, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_add_mod, prop_rBtns, wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_dlMod, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_download_mod, prop_rBtns, wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_delMod, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_refresh_mods, prop_rBtns, wxEXPAND, 0);
 
 	// Window layout horizontal
 	m_sizer_main_horizontal = new wxBoxSizer(wxHORIZONTAL);
@@ -178,9 +167,17 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	// Setting background colour as needed
 	m_bg_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500));
 	wxColour* m_colour_grey = new wxColour(240, 240, 240, wxALPHA_OPAQUE);
-	m_bg_panel->SetBackgroundColour(wxColour(*m_colour_grey));
+	//m_bg_panel->SetBackgroundColour(wxColour(*m_colour_grey));
+	//m_notebook->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_stext_smapi_version->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_stext_this_version->SetBackgroundColour(wxColour(*m_colour_grey));
+	/*
+	m_button_launch_smapi->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_button_launch_vanilla->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_button_add_mod->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_button_download_mod->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_button_refresh_mods->SetBackgroundColour(wxColour(*m_colour_grey));
+	*/
 	delete m_colour_grey;
 }
 
@@ -211,7 +208,7 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event)
 
 }
 
-void cMain::OnModsClick(wxCommandEvent& event)
+void cMain::OnMenuModsClick(wxCommandEvent& event)
 {
 	event.Skip();
 	string test_str = ("explorer " + (this->gamepath() + "\\Mods\\"));
@@ -226,7 +223,7 @@ void cMain::OnModsClick(wxCommandEvent& event)
 	*/
 }
 
-void cMain::OnDisabledClick(wxCommandEvent& event)
+void cMain::OnMenuModsDisabledClick(wxCommandEvent& event)
 {
 	event.Skip();
 	string test_str = ("explorer " + (this->gamepath() + "\\Mods_disabled"));
@@ -234,7 +231,7 @@ void cMain::OnDisabledClick(wxCommandEvent& event)
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 }
 
-void cMain::OnRefreshClick(wxCommandEvent& event)
+void cMain::OnRefreshClick(wxCommandEvent& event) // TODO give some indication of the refresh
 {
 	event.Skip();
 	this->RefreshModLists();
