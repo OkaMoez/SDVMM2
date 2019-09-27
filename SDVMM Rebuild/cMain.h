@@ -11,7 +11,9 @@
 class cMain : public wxFrame // TODO Organize privacy
 {
 private:
-	string gamepath_ = "";
+	string gamepath_;
+	int ID_MENU_MODS;
+	int ID_MENU_DMODS;
 
 public:
 	cMain();

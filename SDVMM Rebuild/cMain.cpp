@@ -99,19 +99,18 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	//---------------------------------
 	//  Additional GUI Implementation
 	//---------------------------------
-	// m_menubar - m_menubar_file, m_menubar_help, etc
+	// Menubar - File, Help, etc
 	m_menubar = new wxMenuBar; // TODO Implement
 	m_menubar_file = new wxMenu;
 	m_menubar_help = new wxMenu;
 	m_menubar->Append(m_menubar_file, wxT("File"));
-	int id_file_open_mods = wxID_ANY;
-	int id_file_open_disabled_mods = wxID_ANY;
-	m_menubar_file->Append(id_file_open_mods, "Open Mods Folder", wxEmptyString, wxITEM_NORMAL);
-	m_menubar_file->Append(id_file_open_disabled_mods, "Open Disabled Mods Folder", wxEmptyString, wxITEM_NORMAL);
+	ID_MENU_MODS = wxNewId();
+	ID_MENU_DMODS = wxNewId();
+	m_menubar_file->Append(ID_MENU_MODS, "Open Mods Folder", wxEmptyString, wxITEM_NORMAL);
+	m_menubar_file->Append(ID_MENU_DMODS, "Open Disabled Mods Folder", wxEmptyString, wxITEM_NORMAL);
 	m_menubar->Append(m_menubar_help, wxT("&Help"));
 	SetMenuBar(m_menubar);
-	//m_menubar_file->Bind(wxEVT_MENU, &cMain::OnLaunchSMAPIClick, this, id_file_open_mods);
-	//m_menubar_file->Bind(wxEVT_MENU, &cMain::OnLaunchVanillaClick, this, id_file_open_disabled_mods);
+	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS);
 
 	// Right side buttons
 	int r_btn_width = 200;
@@ -211,9 +210,17 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event)
 
 }
 
-void OnMenuClick(wxCommandEvent& event) // TODO complete
+void cMain::OnMenuClick(wxCommandEvent& event) // TODO complete
 {
-
+	if (event.GetId() == (ID_MENU_MODS))
+	{
+		OnMenuModsClick(event);
+	}
+	else if (event.GetId() == (ID_MENU_DMODS))
+	{
+		OnMenuModsDisabledClick(event);
+	}
+	else {}
 }
 
 void cMain::OnMenuModsClick(wxCommandEvent& event)
