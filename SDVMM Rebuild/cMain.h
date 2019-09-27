@@ -67,6 +67,7 @@ public:
 private:
 	void OnLaunchSMAPIClick(wxCommandEvent& event);
 	void OnLaunchVanillaClick(wxCommandEvent& event);
+	void OnMenuClick(wxCommandEvent& event); // TODO complete
 	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
 	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
 	void OnRefreshClick(wxCommandEvent& event);

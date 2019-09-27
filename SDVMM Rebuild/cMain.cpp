@@ -104,11 +104,14 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_menubar_file = new wxMenu;
 	m_menubar_help = new wxMenu;
 	m_menubar->Append(m_menubar_file, wxT("File"));
-	m_menubar_file->Append(wxID_ANY, "Open Mods Folder", wxEmptyString, wxITEM_NORMAL);
-	m_menubar_file->Append(wxID_ANY, "Open Disabled Mods Folder", wxEmptyString, wxITEM_NORMAL);
+	int id_file_open_mods = wxID_ANY;
+	int id_file_open_disabled_mods = wxID_ANY;
+	m_menubar_file->Append(id_file_open_mods, "Open Mods Folder", wxEmptyString, wxITEM_NORMAL);
+	m_menubar_file->Append(id_file_open_disabled_mods, "Open Disabled Mods Folder", wxEmptyString, wxITEM_NORMAL);
 	m_menubar->Append(m_menubar_help, wxT("&Help"));
 	SetMenuBar(m_menubar);
-	//m_menubar->Bind(wxEVT_COMMAND_MENU_SELECTED, &cMain::SomeFunction, this, I_DUNNO_YET);
+	//m_menubar_file->Bind(wxEVT_MENU, &cMain::OnLaunchSMAPIClick, this, id_file_open_mods);
+	//m_menubar_file->Bind(wxEVT_MENU, &cMain::OnLaunchVanillaClick, this, id_file_open_disabled_mods);
 
 	// Right side buttons
 	int r_btn_width = 200;
@@ -205,6 +208,11 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event)
 	string test_str = ((this->gamepath() + "\\Stardew Valley"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+
+}
+
+void OnMenuClick(wxCommandEvent& event) // TODO complete
+{
 
 }
 
