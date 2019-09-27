@@ -23,28 +23,28 @@ public:
 	// Notebook
 	wxNotebook* m_notebook = nullptr;
 	// Tab 1
-	wxPanel* m_panel_nTab1 = nullptr;
-	wxDataViewListCtrl* m_dvlc_Mods = nullptr;
-	wxBoxSizer* m_sizer_nTab1a_Mods = nullptr;
+	wxPanel* m_panel_notebook_tab1 = nullptr;
+	wxDataViewListCtrl* m_dataviewlistctrl_mods = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab1a_Mods = nullptr;
 	wxStaticText* m_sText_aMod = nullptr;
 	wxStaticText* m_sText_iMod = nullptr;
-	wxButton* m_btn_openAMods = nullptr;
-	wxButton* m_btn_openIMods = nullptr;
-	wxButton* m_btn_refreshMods = nullptr;
+	wxButton* m_button_open_mods = nullptr;
+	wxButton* m_button_open_mods_disabled = nullptr;
+	wxButton* m_button_refresh_mods  = nullptr;
 	wxFont m_font;
-	wxBoxSizer* m_sizer_nTab1 = nullptr;
-	wxBoxSizer* m_sizer_nTab1a = nullptr;
-	wxBoxSizer* m_sizer_nTab1b = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab1 = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab1a = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab1b = nullptr;
 	// Tab 2
-	wxPanel* m_panel_nTab2 = nullptr;
-	wxListBox* m_list_xMods = nullptr;
-	wxBoxSizer* m_sizer_nTab2a = nullptr;
-	wxBoxSizer* m_sizer_nTab2 = nullptr;
+	wxPanel* m_panel_notebook_tab2 = nullptr;
+	wxListBox* m_list_xnb_mods = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab2a = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab2 = nullptr;
 	// Tab 3
-	wxPanel* m_panel_nTab3 = nullptr;
-	wxListBox* m_list_loadOrder = nullptr;
-	wxBoxSizer* m_sizer_nTab3a = nullptr;
-	wxBoxSizer* m_sizer_nTab3 = nullptr;
+	wxPanel* m_panel_notebook_tab3 = nullptr;
+	wxListBox* m_list_loadorder = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3a = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3 = nullptr;
 
 	// Menubar
 	wxMenuBar* menubar = nullptr;
@@ -52,23 +52,23 @@ public:
 	wxMenu* help = nullptr;
 
 	// Right side buttons
-	wxButton* m_btn_launchSMAPI = nullptr;
-	wxButton* m_btn_launchVanilla = nullptr;
-	wxButton* m_btn_addMod = nullptr;
-	wxButton* m_btn_dlMod = nullptr;
-	wxButton* m_btn_delMod = nullptr;
-	wxBoxSizer* m_sizer_rBtns = nullptr;
+	wxButton* m_button_launch_smapi = nullptr;
+	wxButton* m_button_launch_vanilla = nullptr;
+	wxButton* m_button_addMod = nullptr;
+	wxButton* m_button_dlMod = nullptr;
+	wxButton* m_button_delMod = nullptr;
+	wxBoxSizer* m_sizer_buttons_right = nullptr;
 
 	// Other Layout
-	wxStaticBitmap* m_sbmp_banner = nullptr;
-	wxStaticText* m_sText_APIversion = nullptr;
-	wxStaticText* m_sText_MMversion = nullptr;
-	wxBoxSizer* m_sizer_vInfo = nullptr;
+	wxStaticBitmap* m_bitmap_banner = nullptr;
+	wxStaticText* m_stext_smapi_version = nullptr;
+	wxStaticText* m_stext_this_version = nullptr;
+	wxBoxSizer* m_sizer_version_info = nullptr;
 	wxPanel* m_bg_panel = nullptr;
 
 	// Main Layout Sizers
-	wxBoxSizer* m_sizer_Hmain = nullptr;
-	wxBoxSizer* m_sizer_Vmain = nullptr;
+	wxBoxSizer* m_sizer_main_horizontal = nullptr;
+	wxBoxSizer* m_sizer_main_vertical = nullptr;
 
 private:
 	void OnLaunchSMAPIClick(wxCommandEvent& event);
@@ -77,11 +77,11 @@ private:
 	void OnDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
 	void OnRefreshClick(wxCommandEvent& event);
 public:
-	void toggleMod(wxDataViewEvent& event);
-	void formatOldVersion(json& manifest);
-	void refreshModLists();
-	void loadModsFromDir(string folder_name);
-	bool existsModFolders();
+	void ToggleMod(wxDataViewEvent& event);
+	void FormatOldVersion(json& manifest);
+	void RefreshModLists();
+	void LoadModsFromDir(string folder_name);
+	bool ExistsModFolders();
 	wxDECLARE_EVENT_TABLE();  // TODO Use or delete
 };
 

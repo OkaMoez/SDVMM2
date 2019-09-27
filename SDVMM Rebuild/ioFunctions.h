@@ -17,5 +17,5 @@ namespace fs = std::filesystem;
 using std::istream;
 using std::ifstream;
 
-string getDirectory(FILE* ini);
+string GetIniDirectory(FILE* ini);
 bool existsFile(string file_path);

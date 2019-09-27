@@ -9,7 +9,7 @@ cMod::cMod(string name, string auth, string ver, string desc, string uId)
 	set_mod_version(ver);
 	set_mod_description(desc);
 	set_mod_unique_id(uId);
-	set_intVersion();
+	set_int_version();
 }
 cMod::cMod(json& manifest)
 {
@@ -24,7 +24,7 @@ cMod::cMod(json& manifest)
 	set_mod_version(ver);
 	set_mod_description(desc);
 	set_mod_unique_id(uId);
-	set_intVersion();	
+	set_int_version();	
 }
 
 void cMod::set_mod_name(string name) { mod_name_ = name; }
@@ -33,7 +33,7 @@ void cMod::set_mod_version(string ver) { mod_version_ = ver; }
 void cMod::set_mod_description(string desc) { mod_description_ = desc; }
 void cMod::set_mod_unique_id(string uId) { mod_unique_id_ = uId; }
 
-void cMod::set_intVersion() // TODO Handle Short Version Nums w/ minimal technical debt
+void cMod::set_int_version() // TODO Handle Short Version Nums w/ minimal technical debt
 {
 	string temp_version = mod_version_;
 	size_t temp_pos = temp_version.find('.');

@@ -18,7 +18,7 @@ private:
 	string mod_description_;
 	string mod_unique_id_;
 
-	void set_intVersion();
+	void set_int_version();
 
 public:
 	cMod();

@@ -63,11 +63,11 @@ bool cApp::StartCheck(cMain* m_frame)
 	if (existsFile(ini_name))
 	{
 		if (FILE* iniFile = fopen(ini_name.c_str(), "r")) {
-			m_frame->set_gamepath(getDirectory(iniFile));
+			m_frame->set_gamepath(GetIniDirectory(iniFile));
 			fclose(iniFile);
-			if (m_frame->existsModFolders())
+			if (m_frame->ExistsModFolders())
 			{
-				m_frame->refreshModLists();
+				m_frame->RefreshModLists();
 			}
 			return true;
 		}

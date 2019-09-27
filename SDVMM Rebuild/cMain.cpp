@@ -15,98 +15,98 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_notebook = new wxNotebook(this, -1);
 
 	// Tab 1
-	m_panel_nTab1 = new wxPanel(m_notebook, wxID_ANY);
+	m_panel_notebook_tab1 = new wxPanel(m_notebook, wxID_ANY);
 
 	// Tab 1 - List Control - Creation w/ Columns
-	m_dvlc_Mods = new wxDataViewListCtrl(m_panel_nTab1, wxID_ANY, wxDefaultPosition, wxSize(465, 200), wxLC_REPORT);
-	m_dvlc_Mods->AppendToggleColumn("Active",wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, 0);
-	m_dvlc_Mods->AppendTextColumn("Name", wxDATAVIEW_CELL_INERT, 200, wxALIGN_LEFT, 0);
-	m_dvlc_Mods->AppendTextColumn("Author", wxDATAVIEW_CELL_INERT, 135, wxALIGN_LEFT, 0);
-	m_dvlc_Mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
-	m_dvlc_Mods->AppendTextColumn("Location", wxDATAVIEW_CELL_INERT, 500, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods = new wxDataViewListCtrl(m_panel_notebook_tab1, wxID_ANY, wxDefaultPosition, wxSize(465, 200), wxLC_REPORT);
+	m_dataviewlistctrl_mods->AppendToggleColumn("Active",wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendTextColumn("Name", wxDATAVIEW_CELL_INERT, 200, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendTextColumn("Author", wxDATAVIEW_CELL_INERT, 135, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendTextColumn("Location", wxDATAVIEW_CELL_INERT, 500, wxALIGN_LEFT, 0);
 	// TODO Either hide scroll bar or hid location data
-	m_dvlc_Mods->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &cMain::toggleMod, this);
+	m_dataviewlistctrl_mods->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &cMain::ToggleMod, this);
 	
 
 	// Tab 1 - List - Vertical Sizers + Title Text
-	m_sizer_nTab1a_Mods = new wxBoxSizer(wxVERTICAL);
-	m_sizer_nTab1a_Mods->AddSpacer(5);
-	m_sizer_nTab1a_Mods->Add(m_dvlc_Mods, 1, 0, 0);
-	m_sizer_nTab1a_Mods->AddSpacer(2);
+	m_sizer_notebook_tab1a_Mods = new wxBoxSizer(wxVERTICAL);
+	m_sizer_notebook_tab1a_Mods->AddSpacer(5);
+	m_sizer_notebook_tab1a_Mods->Add(m_dataviewlistctrl_mods, 1, 0, 0);
+	m_sizer_notebook_tab1a_Mods->AddSpacer(2);
 
 	// Tab 1 - List - Horizontal Sizer
-	m_sizer_nTab1a = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_nTab1a->AddSpacer(8);
-	m_sizer_nTab1a->Add(m_sizer_nTab1a_Mods, 1, wxEXPAND, 0);
-	m_sizer_nTab1a->AddSpacer(10);
+	m_sizer_notebook_tab1a = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab1a->AddSpacer(8);
+	m_sizer_notebook_tab1a->Add(m_sizer_notebook_tab1a_Mods, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab1a->AddSpacer(10);
 
 	// tab 1 - Bottom Buttons 
-	m_sizer_nTab1b = new wxBoxSizer(wxHORIZONTAL); // TODO Move
-	m_btn_openAMods = new wxButton(m_panel_nTab1, 10001, "Open Mods", wxDefaultPosition, wxSize(80, 21));
-	m_btn_openIMods = new wxButton(m_panel_nTab1, 10001, "Disabled Mods", wxDefaultPosition, wxSize(80, 21));
-	m_btn_refreshMods = new wxButton(m_panel_nTab1, 10001, "Refresh", wxDefaultPosition, wxSize(60, 21));
-	m_btn_openAMods->Bind(wxEVT_BUTTON, &cMain::OnModsClick, this);
-	m_btn_openIMods->Bind(wxEVT_BUTTON, &cMain::OnDisabledClick, this);
-	m_btn_refreshMods->Bind(wxEVT_BUTTON, &cMain::OnRefreshClick, this);
-	m_sizer_nTab1b->Add(m_btn_openAMods, 5,  wxLEFT, 7);
-	m_sizer_nTab1b->AddStretchSpacer(3);
-	m_sizer_nTab1b->Add(m_btn_refreshMods, 4, wxLEFT | wxRIGHT, 5);
-	m_sizer_nTab1b->AddStretchSpacer(3);
-	m_sizer_nTab1b->Add(m_btn_openIMods, 5, wxRIGHT, 9);
+	m_sizer_notebook_tab1b = new wxBoxSizer(wxHORIZONTAL); // TODO Move
+	m_button_open_mods = new wxButton(m_panel_notebook_tab1, 10001, "Open Mods", wxDefaultPosition, wxSize(80, 21));
+	m_button_open_mods_disabled = new wxButton(m_panel_notebook_tab1, 10001, "Disabled Mods", wxDefaultPosition, wxSize(80, 21));
+	m_button_refresh_mods  = new wxButton(m_panel_notebook_tab1, 10001, "Refresh", wxDefaultPosition, wxSize(60, 21));
+	m_button_open_mods->Bind(wxEVT_BUTTON, &cMain::OnModsClick, this);
+	m_button_open_mods_disabled->Bind(wxEVT_BUTTON, &cMain::OnDisabledClick, this);
+	m_button_refresh_mods ->Bind(wxEVT_BUTTON, &cMain::OnRefreshClick, this);
+	m_sizer_notebook_tab1b->Add(m_button_open_mods, 5,  wxLEFT, 7);
+	m_sizer_notebook_tab1b->AddStretchSpacer(3);
+	m_sizer_notebook_tab1b->Add(m_button_refresh_mods , 4, wxLEFT | wxRIGHT, 5);
+	m_sizer_notebook_tab1b->AddStretchSpacer(3);
+	m_sizer_notebook_tab1b->Add(m_button_open_mods_disabled, 5, wxRIGHT, 9);
 
 	// Tab 1 - Top-level Vertical Sizer
-	m_sizer_nTab1 = new wxBoxSizer(wxVERTICAL);
-	m_sizer_nTab1->AddSpacer(5);
-	m_sizer_nTab1->Add(m_sizer_nTab1a, 1, wxEXPAND, 0);
-	m_sizer_nTab1->Add(m_sizer_nTab1b, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
-	m_panel_nTab1->SetSizer(m_sizer_nTab1);
+	m_sizer_notebook_tab1 = new wxBoxSizer(wxVERTICAL);
+	m_sizer_notebook_tab1->AddSpacer(5);
+	m_sizer_notebook_tab1->Add(m_sizer_notebook_tab1a, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab1->Add(m_sizer_notebook_tab1b, 0, wxEXPAND | wxTOP | wxBOTTOM, 3);
+	m_panel_notebook_tab1->SetSizer(m_sizer_notebook_tab1);
 
 	// Tab 2
-	m_panel_nTab2 = new wxPanel(m_notebook, wxID_ANY);
+	m_panel_notebook_tab2 = new wxPanel(m_notebook, wxID_ANY);
 
 	// Tab 2 - List Box
-	m_list_xMods = new wxListBox(m_panel_nTab2, wxID_ANY);
-	m_list_xMods->Append(wxT("Not Implemented"));  // TODO XNB support
+	m_list_xnb_mods = new wxListBox(m_panel_notebook_tab2, wxID_ANY);
+	m_list_xnb_mods->Append(wxT("Not Implemented"));  // TODO XNB support
 
 	// Tab 2 - Horizontal Sizer
-	m_sizer_nTab2a = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_nTab2a->AddStretchSpacer(1);
-	m_sizer_nTab2a->Add(m_list_xMods, 2, wxEXPAND, 0);
-	m_sizer_nTab2a->AddStretchSpacer(1);
+	m_sizer_notebook_tab2a = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab2a->AddStretchSpacer(1);
+	m_sizer_notebook_tab2a->Add(m_list_xnb_mods, 2, wxEXPAND, 0);
+	m_sizer_notebook_tab2a->AddStretchSpacer(1);
 
 
 	// Tab 2 - Vertical Sizer
-	m_sizer_nTab2 = new wxBoxSizer(wxVERTICAL);
-	m_sizer_nTab2->AddSpacer(10);
-	m_sizer_nTab2->Add(m_sizer_nTab2a, 1, wxEXPAND, 0);
-	m_sizer_nTab2->AddSpacer(10);
-	m_panel_nTab2->SetSizer(m_sizer_nTab2);
+	m_sizer_notebook_tab2 = new wxBoxSizer(wxVERTICAL);
+	m_sizer_notebook_tab2->AddSpacer(10);
+	m_sizer_notebook_tab2->Add(m_sizer_notebook_tab2a, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab2->AddSpacer(10);
+	m_panel_notebook_tab2->SetSizer(m_sizer_notebook_tab2);
 
 	// Tab 3
-	m_panel_nTab3 = new wxPanel(m_notebook, wxID_ANY);
+	m_panel_notebook_tab3 = new wxPanel(m_notebook, wxID_ANY);
 
 	// Tab 3 - List Box
-	m_list_loadOrder = new wxListBox(m_panel_nTab3, wxID_ANY);
-	m_list_loadOrder->Append(wxT("Not Implemented"));  // TODO Load Order tomfoolery?
+	m_list_loadorder = new wxListBox(m_panel_notebook_tab3, wxID_ANY);
+	m_list_loadorder->Append(wxT("Not Implemented"));  // TODO Load Order tomfoolery?
 
 	// Tab 3 - Horizontal Sizer
-	m_sizer_nTab3a = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_nTab3a->AddStretchSpacer(1);
-	m_sizer_nTab3a->Add(m_list_loadOrder, 2, wxEXPAND, 0);
-	m_sizer_nTab3a->AddStretchSpacer(1);
+	m_sizer_notebook_tab3a = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab3a->AddStretchSpacer(1);
+	m_sizer_notebook_tab3a->Add(m_list_loadorder, 2, wxEXPAND, 0);
+	m_sizer_notebook_tab3a->AddStretchSpacer(1);
 
 
 	// Tab 3 - Vertical Sizer
-	m_sizer_nTab3 = new wxBoxSizer(wxVERTICAL);
-	m_sizer_nTab3->AddSpacer(10);
-	m_sizer_nTab3->Add(m_sizer_nTab3a, 1, wxEXPAND, 0);
-	m_sizer_nTab3->AddSpacer(10);
-	m_panel_nTab3->SetSizer(m_sizer_nTab3);
+	m_sizer_notebook_tab3 = new wxBoxSizer(wxVERTICAL);
+	m_sizer_notebook_tab3->AddSpacer(10);
+	m_sizer_notebook_tab3->Add(m_sizer_notebook_tab3a, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab3->AddSpacer(10);
+	m_panel_notebook_tab3->SetSizer(m_sizer_notebook_tab3);
 
 	// Notebook Tabs
-	m_notebook->AddPage(m_panel_nTab1, "SMAPI Mods", true);
-	m_notebook->AddPage(m_panel_nTab2, "XNB Mods", false);
-	m_notebook->AddPage(m_panel_nTab3, "Load Order", false); // TODO Delete?
+	m_notebook->AddPage(m_panel_notebook_tab1, "SMAPI Mods", true);
+	m_notebook->AddPage(m_panel_notebook_tab2, "XNB Mods", false);
+	m_notebook->AddPage(m_panel_notebook_tab3, "Load Order", false); // TODO Delete?
 
 	// Band-aid fix for intial render issues (flips pages once)
 	m_notebook->SetSelection(1);
@@ -126,61 +126,61 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	// Right side buttons
 	int r_btn_width = 200;
 	int r_btn_height = 50;
-	m_btn_launchSMAPI = new wxButton(this, 10001, "Launch SMAPI");
-	m_btn_launchVanilla = new wxButton(this, 10001, "Launch Stardew Valley"); // TODO FIX
-	m_btn_addMod = new wxButton(this, 10001, "Add Mod from File"); // TODO
-	m_btn_dlMod = new wxButton(this, 10001, "Download Mod from Nexus"); // TODO
-	m_btn_delMod = new wxButton(this, 10001, "Delete Mod"); // TODO Remove?
-	m_btn_launchSMAPI->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
-	m_btn_launchVanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
+	m_button_launch_smapi = new wxButton(this, 10001, "Launch SMAPI");
+	m_button_launch_vanilla = new wxButton(this, 10001, "Launch Stardew Valley"); // TODO FIX
+	m_button_addMod = new wxButton(this, 10001, "Add Mod from File"); // TODO
+	m_button_dlMod = new wxButton(this, 10001, "Download Mod from Nexus"); // TODO
+	m_button_delMod = new wxButton(this, 10001, "Delete Mod"); // TODO Remove?
+	m_button_launch_smapi->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
+	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 
 	// Right side button - sizer
 	int prop_rBtns = 15;
 	int prop_rSpace = 4;
-	m_sizer_rBtns = new wxBoxSizer(wxVERTICAL);
-	m_sizer_rBtns->Add(m_btn_launchSMAPI, prop_rBtns, wxEXPAND, 0);
-	m_sizer_rBtns->AddStretchSpacer(prop_rSpace);
-	m_sizer_rBtns->Add(m_btn_launchVanilla, prop_rBtns, wxEXPAND, 0);
-	m_sizer_rBtns->AddStretchSpacer(prop_rSpace);
-	m_sizer_rBtns->Add(m_btn_addMod, prop_rBtns, wxEXPAND, 0);
-	m_sizer_rBtns->AddStretchSpacer(prop_rSpace);
-	m_sizer_rBtns->Add(m_btn_dlMod, prop_rBtns, wxEXPAND, 0);
-	m_sizer_rBtns->AddStretchSpacer(prop_rSpace);
-	m_sizer_rBtns->Add(m_btn_delMod, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right = new wxBoxSizer(wxVERTICAL);
+	m_sizer_buttons_right->Add(m_button_launch_smapi, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
+	m_sizer_buttons_right->Add(m_button_launch_vanilla, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
+	m_sizer_buttons_right->Add(m_button_addMod, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
+	m_sizer_buttons_right->Add(m_button_dlMod, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
+	m_sizer_buttons_right->Add(m_button_delMod, prop_rBtns, wxEXPAND, 0);
 
 	// Window layout horizontal
-	m_sizer_Hmain = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_Hmain->Add(m_notebook, 2, wxEXPAND | wxLEFT | wxRIGHT, 10);
-	m_sizer_Hmain->Add(m_sizer_rBtns, 1, wxEXPAND | wxRIGHT, 10);
+	m_sizer_main_horizontal = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_main_horizontal->Add(m_notebook, 2, wxEXPAND | wxLEFT | wxRIGHT, 10);
+	m_sizer_main_horizontal->Add(m_sizer_buttons_right, 1, wxEXPAND | wxRIGHT, 10);
 
 	// Banner
 	wxImage::AddHandler(new wxPNGHandler);
-	m_sbmp_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG)); // TODO save in code?
+	m_bitmap_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG)); // TODO save in code?
 	wxImage::CleanUpHandlers();
 
 	// Version info
-	string m_version_SMAPI = "1.1.1"; // TODO Fetch
-	string m_version_SDVMM2 = "1.0.0";
-	m_sText_APIversion = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_version_SMAPI); // TODO Fetch
-	m_sText_MMversion = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_version_SDVMM2);
-	m_sizer_vInfo = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_vInfo->Add(m_sText_MMversion, 1, wxEXPAND | wxLEFT, 15);
-	m_sizer_vInfo->Add(m_sText_APIversion, 1, wxEXPAND | wxLEFT, 5);
-	m_sizer_vInfo->AddStretchSpacer(1);
+	string m_version_smapi = "1.1.1"; // TODO Fetch
+	string m_version_this_mm = "1.0.0";
+	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_version_smapi); // TODO Fetch
+	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_version_this_mm);
+	m_sizer_version_info = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_version_info->Add(m_stext_this_version, 1, wxEXPAND | wxLEFT, 15);
+	m_sizer_version_info->Add(m_stext_smapi_version, 1, wxEXPAND | wxLEFT, 5);
+	m_sizer_version_info->AddStretchSpacer(1);
 
 	// Window layout Vertical + insert banner
-	m_sizer_Vmain = new wxBoxSizer(wxVERTICAL);
-	m_sizer_Vmain->Add(m_sbmp_banner, 16, wxEXPAND | wxALL, 10);
-	m_sizer_Vmain->Add(m_sizer_Hmain, 40, wxEXPAND, 0);
-	m_sizer_Vmain->Add(m_sizer_vInfo, 3, wxEXPAND, 0); // for static text
-	SetSizer(m_sizer_Vmain);
+	m_sizer_main_vertical = new wxBoxSizer(wxVERTICAL);
+	m_sizer_main_vertical->Add(m_bitmap_banner, 16, wxEXPAND | wxALL, 10);
+	m_sizer_main_vertical->Add(m_sizer_main_horizontal, 40, wxEXPAND, 0);
+	m_sizer_main_vertical->Add(m_sizer_version_info, 3, wxEXPAND, 0); // for static text
+	SetSizer(m_sizer_main_vertical);
 
 	// Setting background colour as needed
 	m_bg_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500));
 	wxColour* m_colour_grey = new wxColour(240, 240, 240, wxALPHA_OPAQUE);
 	m_bg_panel->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_sText_APIversion->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_sText_MMversion->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_stext_smapi_version->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_stext_this_version->SetBackgroundColour(wxColour(*m_colour_grey));
 	delete m_colour_grey;
 }
 
@@ -237,10 +237,10 @@ void cMain::OnDisabledClick(wxCommandEvent& event)
 void cMain::OnRefreshClick(wxCommandEvent& event)
 {
 	event.Skip();
-	this->refreshModLists();
+	this->RefreshModLists();
 }
 
-void cMain::toggleMod(wxDataViewEvent& event)
+void cMain::ToggleMod(wxDataViewEvent& event)
 {
 	event.Skip();
 	
@@ -255,7 +255,7 @@ void cMain::toggleMod(wxDataViewEvent& event)
 		else {}
 	)
 	wxVariant temp_path("");
-	m_dvlc_Mods->GetValue(temp_path, m_dvlc_Mods->GetSelectedRow(), 4);
+	m_dataviewlistctrl_mods->GetValue(temp_path, m_dataviewlistctrl_mods->GetSelectedRow(), 4);
 	fs::path mod_path = string(temp_path);
 	fs::path parent_path = mod_path.parent_path();
 	fs::path folder_name = mod_path.filename();
@@ -306,10 +306,10 @@ void cMain::toggleMod(wxDataViewEvent& event)
 			else{}
 		)
 	}
-	refreshModLists();
+	RefreshModLists();
 }
 
-void cMain::formatOldVersion(json& manifest)
+void cMain::FormatOldVersion(json& manifest) // TODO remove? currently is rejected by smapi
 {
 	string temp_v = "";
 	if (manifest.at("Version").is_object())
@@ -341,15 +341,15 @@ void cMain::formatOldVersion(json& manifest)
 	)
 }
 
-void cMain::refreshModLists()
+void cMain::RefreshModLists()
 {
-	wxWindowUpdateLocker noUpdates(m_dvlc_Mods);
-	m_dvlc_Mods->DeleteAllItems();
-	loadModsFromDir("\\Mods\\");
-	loadModsFromDir("\\Mods_disabled\\");
+	wxWindowUpdateLocker noUpdates(m_dataviewlistctrl_mods);
+	m_dataviewlistctrl_mods->DeleteAllItems();
+	LoadModsFromDir("\\Mods\\");
+	LoadModsFromDir("\\Mods_disabled\\");
 }
 
-void cMain::loadModsFromDir(string folder_name)
+void cMain::LoadModsFromDir(string folder_name) // TODO replace custom ioFunctions with filesystem
 {
 	json json_manifest;
 	bool is_good_json = false;
@@ -405,7 +405,7 @@ void cMain::loadModsFromDir(string folder_name)
 
 		}
 
-		this->formatOldVersion(json_manifest);
+		this->FormatOldVersion(json_manifest);
 
 		if (existsFile(temp_path.string()) and is_good_json == true) // TODO Review
 		{
@@ -431,7 +431,7 @@ void cMain::loadModsFromDir(string folder_name)
 			thisMod.push_back(wxVariant(aMod.mod_author()));
 			thisMod.push_back(wxVariant(aMod.mod_version()));
 			thisMod.push_back(wxVariant((dir_iter.path()).string()));
-			this->m_dvlc_Mods->AppendItem(thisMod);
+			this->m_dataviewlistctrl_mods->AppendItem(thisMod);
 			thisMod.clear();
 
 			/*
@@ -477,7 +477,7 @@ void cMain::loadModsFromDir(string folder_name)
 	}
 }
 
-bool cMain::existsModFolders()
+bool cMain::ExistsModFolders()
 {
 	fs::path mod_path = this->gamepath();
 	fs::path mod_d_path = this->gamepath();

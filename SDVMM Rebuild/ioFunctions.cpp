@@ -1,6 +1,6 @@
 #include "ioFunctions.h"
 
-string getDirectory(FILE* ini)
+string GetIniDirectory(FILE* ini)
 {
 	char iniBuffer[100];
 	fgets(iniBuffer, 100, ini);
