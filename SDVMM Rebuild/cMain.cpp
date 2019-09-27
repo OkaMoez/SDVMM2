@@ -106,11 +106,13 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_menubar->Append(m_menubar_file, wxT("File"));
 	ID_MENU_MODS = wxNewId();
 	ID_MENU_DMODS = wxNewId();
+	ID_MENU_QUIT = wxNewId();
 	m_menubar_file->Append(ID_MENU_MODS, "Open Mods Folder", wxEmptyString, wxITEM_NORMAL);
 	m_menubar_file->Append(ID_MENU_DMODS, "Open Disabled Mods Folder", wxEmptyString, wxITEM_NORMAL);
+	m_menubar_file->Append(ID_MENU_QUIT, "Quit", wxEmptyString, wxITEM_NORMAL);
 	m_menubar->Append(m_menubar_help, wxT("&Help"));
 	SetMenuBar(m_menubar);
-	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS);
+	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS, ID_MENU_QUIT);
 
 	// Right side buttons
 	int r_btn_width = 200;
@@ -220,6 +222,10 @@ void cMain::OnMenuClick(wxCommandEvent& event) // TODO complete
 	{
 		OnMenuModsDisabledClick(event);
 	}
+	else if (event.GetId() == (ID_MENU_QUIT))
+	{
+		OnMenuQuitClick(event);
+	}
 	else {}
 }
 
@@ -244,6 +250,12 @@ void cMain::OnMenuModsDisabledClick(wxCommandEvent& event)
 	string test_str = ("explorer " + (this->gamepath() + "\\Mods_disabled"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+}
+
+void cMain::OnMenuQuitClick(wxCommandEvent& event)
+{
+	event.Skip();
+	this->Close();
 }
 
 void cMain::OnRefreshClick(wxCommandEvent& event) // TODO give some indication of the refresh

@@ -12,8 +12,11 @@ class cMain : public wxFrame // TODO Organize privacy
 {
 private:
 	string gamepath_;
+
+	// IDs currently don't follow google style guide afaik
 	int ID_MENU_MODS;
 	int ID_MENU_DMODS;
+	int ID_MENU_QUIT;
 
 public:
 	cMain();
@@ -72,7 +75,9 @@ private:
 	void OnMenuClick(wxCommandEvent& event); // TODO complete
 	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
 	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
+	void OnMenuQuitClick(wxCommandEvent& event);
 	void OnRefreshClick(wxCommandEvent& event);
+	
 public:
 	void ToggleMod(wxDataViewEvent& event);
 	void FormatOldVersion(json& manifest);
