@@ -115,7 +115,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	ID_BUTTON_FORUMS = wxNewId();
 	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
 	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
-	m_button_add_mod = new wxButton(this, wxID_ANY, "Add Mod from File"); // TODO
+	m_button_add_mod = new wxButton(this, wxID_ANY, "Add Mod from File/Archive"); // TODO
 	m_button_nexus_download = new wxButton(this, ID_BUTTON_NEXUS, "Visit Nexus Mods");
 	m_button_forums_download = new wxButton(this, ID_BUTTON_FORUMS, "Visit Mod Forums");
 	m_button_refresh_mods = new wxButton(this, wxID_ANY, "Refresh Mod List"); // TODO Remove?
