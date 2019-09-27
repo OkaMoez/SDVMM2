@@ -132,7 +132,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_button_dlMod = new wxButton(this, 10001, "Download Mod from Nexus"); // TODO
 	m_button_delMod = new wxButton(this, 10001, "Delete Mod"); // TODO Remove?
 	m_button_launch_smapi->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
-	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
+	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchVanillaClick, this);
 
 	// Right side button - sizer
 	int prop_rBtns = 15;
