@@ -189,11 +189,17 @@ cMain::~cMain()
 {
 }
 
+//------------------
+// Getters/Setters
+//------------------
 void cMain::set_gamepath(string filepath)
 {
 	gamepath_ = filepath;
 }
 
+//-----------------------------
+// Buttons and Menu Functions
+//-----------------------------
 void cMain::OnLaunchSMAPIClick(wxCommandEvent& event)
 {
 	event.Skip();
@@ -264,6 +270,9 @@ void cMain::OnRefreshClick(wxCommandEvent& event) // TODO give some indication o
 	this->RefreshModLists();
 }
 
+//--------------------
+// Backend Functions
+//--------------------
 void cMain::ToggleMod(wxDataViewEvent& event)
 {
 	event.Skip();
