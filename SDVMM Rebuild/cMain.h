@@ -11,12 +11,14 @@
 class cMain : public wxFrame // TODO Organize privacy
 {
 private:
-	string gamepath_;
+	string gamepath_ = "";
 
 	// IDs currently don't follow google style guide afaik
-	int ID_MENU_MODS;
-	int ID_MENU_DMODS;
-	int ID_MENU_QUIT;
+	int ID_BUTTON_NEXUS = NULL;
+	int ID_BUTTON_FORUMS = NULL;
+	int ID_MENU_MODS = NULL;
+	int ID_MENU_DMODS = NULL;
+	int ID_MENU_QUIT = NULL;
 
 public:
 	cMain();
@@ -54,7 +56,8 @@ public:
 	wxButton* m_button_launch_smapi = nullptr;
 	wxButton* m_button_launch_vanilla = nullptr;
 	wxButton* m_button_add_mod = nullptr;
-	wxButton* m_button_download_mod = nullptr;
+	wxButton* m_button_nexus_download = nullptr;
+	wxButton* m_button_forums_download = nullptr;
 	wxButton* m_button_refresh_mods = nullptr;
 	wxBoxSizer* m_sizer_buttons_right = nullptr;
 
@@ -72,6 +75,7 @@ public:
 private:
 	void OnLaunchSMAPIClick(wxCommandEvent& event);
 	void OnLaunchVanillaClick(wxCommandEvent& event);
+	void OnLaunchModSiteClick(wxCommandEvent& event);
 	void OnRefreshClick(wxCommandEvent& event);
 	void OnMenuClick(wxCommandEvent& event); // TODO complete
 	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform

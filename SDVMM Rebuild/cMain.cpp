@@ -111,29 +111,33 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS, ID_MENU_QUIT);
 
 	// Right side buttons
-	int r_btn_width = 200;
-	int r_btn_height = 50;
+	ID_BUTTON_NEXUS = wxNewId();
+	ID_BUTTON_FORUMS = wxNewId();
 	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
 	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
 	m_button_add_mod = new wxButton(this, wxID_ANY, "Add Mod from File"); // TODO
-	m_button_download_mod = new wxButton(this, wxID_ANY, "Download Mod from Nexus"); // TODO
+	m_button_nexus_download = new wxButton(this, ID_BUTTON_NEXUS, "Visit Nexus Mods");
+	m_button_forums_download = new wxButton(this, ID_BUTTON_FORUMS, "Visit Mod Forums");
 	m_button_refresh_mods = new wxButton(this, wxID_ANY, "Refresh Mod List"); // TODO Remove?
 	m_button_launch_smapi->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchVanillaClick, this);
-
+	m_button_nexus_download->Bind(wxEVT_BUTTON, &cMain::OnLaunchModSiteClick, this);
+	m_button_forums_download->Bind(wxEVT_BUTTON, &cMain::OnLaunchModSiteClick, this);
 	m_button_refresh_mods->Bind(wxEVT_BUTTON, &cMain::OnRefreshClick, this);
 
 	// Right side button - sizer
-	int prop_rBtns = 15;
-	int prop_rSpace = 4;
+	int prop_rBtns = 10;
+	int prop_rSpace = 1;
 	m_sizer_buttons_right = new wxBoxSizer(wxVERTICAL);
 	m_sizer_buttons_right->Add(m_button_launch_smapi, prop_rBtns, wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
 	m_sizer_buttons_right->Add(m_button_launch_vanilla, prop_rBtns, wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_add_mod, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_add_mod, (prop_rBtns/2), wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_download_mod, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_nexus_download, (prop_rBtns/2), wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
+	m_sizer_buttons_right->Add(m_button_forums_download, (prop_rBtns/2), wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
 	m_sizer_buttons_right->Add(m_button_refresh_mods, prop_rBtns, wxEXPAND, 0);
 
@@ -175,7 +179,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_button_launch_smapi->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_button_launch_vanilla->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_button_add_mod->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_button_download_mod->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_button_nexus_download->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_button_refresh_mods->SetBackgroundColour(wxColour(*m_colour_grey));
 	*/
 	delete m_colour_grey;
@@ -212,6 +216,21 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event)
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
+}
+
+void cMain::OnLaunchModSiteClick(wxCommandEvent& event)
+{
+
+	if (event.GetId() == ID_BUTTON_NEXUS)
+	{
+		wxLaunchDefaultBrowser("https://www.nexusmods.com/stardewvalley");
+	}
+	else if (event.GetId() == ID_BUTTON_FORUMS)
+	{
+		wxLaunchDefaultBrowser("https://community.playstarbound.com/forums/mods.215/");
+	}
+	else {}
+	event.Skip();
 }
 
 void cMain::OnRefreshClick(wxCommandEvent& event) // TODO give some indication of the refresh
@@ -262,7 +281,8 @@ void cMain::OnMenuModsDisabledClick(wxCommandEvent& event)
 
 void cMain::OnMenuSettingsClick(wxCommandEvent& event)
 {
-
+	event.Skip();
+	// TODO open settings window?
 }
 
 void cMain::OnMenuQuitClick(wxCommandEvent& event)
