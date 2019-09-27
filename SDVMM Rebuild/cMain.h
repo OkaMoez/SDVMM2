@@ -72,11 +72,12 @@ public:
 private:
 	void OnLaunchSMAPIClick(wxCommandEvent& event);
 	void OnLaunchVanillaClick(wxCommandEvent& event);
+	void OnRefreshClick(wxCommandEvent& event);
 	void OnMenuClick(wxCommandEvent& event); // TODO complete
 	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
 	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
+	void OnMenuSettingsClick(wxCommandEvent& event);
 	void OnMenuQuitClick(wxCommandEvent& event);
-	void OnRefreshClick(wxCommandEvent& event);
 	
 public:
 	void ToggleMod(wxDataViewEvent& event);
@@ -84,6 +85,5 @@ public:
 	void RefreshModLists(); // TODO give some indication of the refresh
 	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();
-	wxDECLARE_EVENT_TABLE();  // TODO Use or delete
 };
 

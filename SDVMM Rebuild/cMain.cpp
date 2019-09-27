@@ -1,9 +1,5 @@
 #include "cApp.h"
 
-wxBEGIN_EVENT_TABLE(cMain, wxFrame)
-	// Obsolete?
-wxEND_EVENT_TABLE()
-
 cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	wxDefaultPosition, wxSize(750,500),
 	wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX))
@@ -31,7 +27,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_sizer_notebook_tab1a_mods = new wxBoxSizer(wxVERTICAL);
 	m_sizer_notebook_tab1a_mods->AddSpacer(5);
 	m_sizer_notebook_tab1a_mods->Add(m_dataviewlistctrl_mods, 1, 0, 0);
-	m_sizer_notebook_tab1a_mods->AddSpacer(2);
+	m_sizer_notebook_tab1a_mods->AddSpacer(6);
 
 	// Tab 1 - List - Horizontal Sizer
 	m_sizer_notebook_tab1a = new wxBoxSizer(wxHORIZONTAL);
@@ -103,13 +99,13 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_menubar = new wxMenuBar; // TODO Implement
 	m_menubar_file = new wxMenu;
 	m_menubar_help = new wxMenu;
-	m_menubar->Append(m_menubar_file, wxT("File"));
 	ID_MENU_MODS = wxNewId();
 	ID_MENU_DMODS = wxNewId();
 	ID_MENU_QUIT = wxNewId();
-	m_menubar_file->Append(ID_MENU_MODS, "Open Mods Folder", wxEmptyString, wxITEM_NORMAL);
-	m_menubar_file->Append(ID_MENU_DMODS, "Open Disabled Mods Folder", wxEmptyString, wxITEM_NORMAL);
-	m_menubar_file->Append(ID_MENU_QUIT, "Quit", wxEmptyString, wxITEM_NORMAL);
+	m_menubar->Append(m_menubar_file, wxT("&File"));
+	m_menubar_file->Append(ID_MENU_MODS, wxT("&Open Mods Folder"), wxEmptyString, wxITEM_NORMAL);
+	m_menubar_file->Append(ID_MENU_DMODS, wxT("&Open Disabled Mods Folder"), wxEmptyString, wxITEM_NORMAL);
+	m_menubar_file->Append(ID_MENU_QUIT, wxT("&Quit"), wxEmptyString, wxITEM_NORMAL);
 	m_menubar->Append(m_menubar_help, wxT("&Help"));
 	SetMenuBar(m_menubar);
 	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS, ID_MENU_QUIT);
@@ -118,7 +114,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	int r_btn_width = 200;
 	int r_btn_height = 50;
 	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
-	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley"); // TODO FIX
+	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
 	m_button_add_mod = new wxButton(this, wxID_ANY, "Add Mod from File"); // TODO
 	m_button_download_mod = new wxButton(this, wxID_ANY, "Download Mod from Nexus"); // TODO
 	m_button_refresh_mods = new wxButton(this, wxID_ANY, "Refresh Mod List"); // TODO Remove?
@@ -218,6 +214,12 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event)
 
 }
 
+void cMain::OnRefreshClick(wxCommandEvent& event) // TODO give some indication of the refresh
+{
+	event.Skip();
+	this->RefreshModLists();
+}
+
 void cMain::OnMenuClick(wxCommandEvent& event) // TODO complete
 {
 	if (event.GetId() == (ID_MENU_MODS))
@@ -258,16 +260,15 @@ void cMain::OnMenuModsDisabledClick(wxCommandEvent& event)
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 }
 
+void cMain::OnMenuSettingsClick(wxCommandEvent& event)
+{
+
+}
+
 void cMain::OnMenuQuitClick(wxCommandEvent& event)
 {
 	event.Skip();
 	this->Close();
-}
-
-void cMain::OnRefreshClick(wxCommandEvent& event) // TODO give some indication of the refresh
-{
-	event.Skip();
-	this->RefreshModLists();
 }
 
 //--------------------
