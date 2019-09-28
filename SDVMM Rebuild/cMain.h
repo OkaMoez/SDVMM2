@@ -12,6 +12,8 @@ class cMain : public wxFrame // TODO Organize privacy
 {
 private:
 	string gamepath_ = "";
+	string version_smapi_ = "";
+	string version_this_mm_ = "1.0.0";
 
 	// IDs currently don't follow google style guide afaik
 	int ID_BUTTON_NEXUS = NULL;
@@ -24,7 +26,10 @@ public:
 	cMain();
 	~cMain();
 	string gamepath() { return gamepath_; }
-	void set_gamepath(string);
+	string version_smapi() { return version_smapi_; }
+	string version_this_mm() { return version_this_mm_; }
+	void set_gamepath(string filepath); // TODO make a different automated version of onInit
+	void set_version_this_mm(string version); // TODO
 
 public:
 	// Notebook
@@ -89,5 +94,6 @@ public:
 	void RefreshModLists(); // TODO give some indication of the refresh
 	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();
+	void CheckSmapiVersion();
 };
 
