@@ -53,6 +53,7 @@ bool cApp::OnInit()
 
 	fs::path temp_path = m_frame1->gamepath();
 	temp_path += "\\Mods\\";
+	m_frame1->CheckSmapiVersion();
 	m_frame1->Show(true);
 	return true;
 }
