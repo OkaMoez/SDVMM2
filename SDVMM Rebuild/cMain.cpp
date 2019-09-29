@@ -152,10 +152,8 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	wxImage::CleanUpHandlers();
 
 	// Version info
-	string m_version_smapi = "1.1.1"; // TODO Fetch
-	string m_version_this_mm = "1.0.0";
-	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_version_smapi); // TODO Fetch
-	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_version_this_mm);
+	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: unknown"); // TODO getters/setters
+	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + version_this_mm_);
 	m_sizer_version_info = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_version_info->Add(m_stext_this_version, 1, wxEXPAND | wxLEFT, 15);
 	m_sizer_version_info->Add(m_stext_smapi_version, 1, wxEXPAND | wxLEFT, 5);
@@ -189,13 +187,19 @@ cMain::~cMain()
 {
 }
 
-//------------------
-// Getters/Setters
-//------------------
+//----------
+// Setters
+//----------
 void cMain::set_gamepath(string filepath)
 {
 	gamepath_ = filepath;
 }
+
+void cMain::set_version_this_mm(string version)
+{
+	version_this_mm_ = version;
+}
+
 
 //-----------------------------
 // Buttons and Menu Functions
@@ -609,4 +613,25 @@ bool cMain::ExistsModFolders()
 		}
 	}
 	return true;
+}
+
+void cMain::CheckSmapiVersion()
+{
+	string version = "";
+	fs::path path_smapi_logs = string(wxStandardPaths::Get().GetUserConfigDir());
+	path_smapi_logs += "\\StardewValley\\ErrorLogs\\SMAPI-latest.txt";
+	if (fs::exists(path_smapi_logs) and fs::is_regular_file(path_smapi_logs))
+	{
+		wxTextFile smapi_logs;
+		smapi_logs.Open(wxString(path_smapi_logs));
+		wxString temp_string = smapi_logs.GetFirstLine();
+		size_t temp_version_start = temp_string.Find("] ") + 8;
+		size_t temp_version_end = temp_string.Find(" with Stardew") - 1;
+		version = temp_string.SubString(temp_version_start, temp_version_end);
+	}
+	else
+	{
+		version = "unknown";
+	}
+	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);
 }
