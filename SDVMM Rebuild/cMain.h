@@ -12,6 +12,8 @@
 class cMain : public wxFrame // TODO Organize privacy
 {
 private:
+	bool ini_exists_ = false;
+	bool launch_with_steam_ = false;
 	string gamedir_ = "";
 	string version_smapi_ = "not found";
 	string version_this_mm_ = "0.5.0-ALPHA";
@@ -26,11 +28,14 @@ private:
 public:
 	cMain();
 	~cMain();
+	void SelfInitialize();
+	bool ini_exists() { return ini_exists_; }
+	bool launch_with_steam() { return launch_with_steam_; }
 	string gamedir() { return gamedir_; }
 	string version_smapi() { return version_smapi_; }
 	string version_this_mm() { return version_this_mm_; }
 	void set_gamepath(string filepath); // TODO make a different automated version of onInit
-	void set_version_this_mm(string version); // TODO
+	void set_version_this_mm(string version);
 
 public:
 	// Notebook

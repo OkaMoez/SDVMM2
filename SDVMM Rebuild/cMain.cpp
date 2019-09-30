@@ -201,6 +201,8 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_stext_smapi_version->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_stext_this_version->SetBackgroundColour(wxColour(*m_colour_grey));
 	delete m_colour_grey;
+
+	SelfInitialize();
 }
 
 
@@ -210,6 +212,47 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 //-------------------
 cMain::~cMain()
 {
+}
+
+void cMain::SelfInitialize()
+{
+	string ini_name = "SDVMM2.ini";
+	if (existsFile(ini_name))
+	{
+		ini_exists_ = true;
+		if (FILE * iniFile = fopen(ini_name.c_str(), "r")) {
+			set_gamepath(GetIniDirectory(iniFile));
+			fclose(iniFile);
+			if (ExistsModFolders())
+			{
+				RefreshModLists();
+			}
+		}
+		else {}
+		D(
+			if (report_game_directory) {
+				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
+					gamedir(), wxT("Game Directory"),
+					wxOK, wxDefaultPosition);
+				m_pBox1->ShowModal();
+				delete m_pBox1;
+			}
+			else {}
+		)
+	}
+	else
+	{
+		D(
+			if (report_ini_exists) {
+				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
+					wxT("No .ini file was found."), wxT("INI Not Found"),
+					wxOK, wxDefaultPosition);
+				m_pBox1->ShowModal();
+				delete m_pBox1;
+			}
+			else {}
+		)
+	}
 }
 
 //----------
