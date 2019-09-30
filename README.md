@@ -35,16 +35,28 @@ I don't have tests atm.  My bad.
 ## Goals
 ### Before first alpha release:
 In order of importance.
-* ALL BUTTONS HAVE A FUNCTION
+* ALL BUTTONS HAVE A FUNCTION [PARTIAL]
 * See Installed Mods (and State) [COMPLETE]
 * Toggle Mods On/Off [COMPLETE]
 * Locate Game Directory [TODO]
 * Locate Steam Directory [TODO]
-* Add/Delete Mods [PARTIAL]
-* Launch through Steam [TODO]
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
+### Before first full release:
+Not yet in order of importance.
+* ALL ALPHA GOALS [TODO]
+* Auto-find Game Directory [TODO]
+* Auto-find Steam Directory [TODO]
+* Flag Incompatible Mods [TODO]
+* Add/Delete Mods [PARTIAL]
+* Launch through Steam [TODO]
+* Help/About Menu Tab [TODO]
+
+### Maybe one day:
+Not in order of importance.
+* Donation Button? [TODO]
+* XNB Support? [TODO]
 
 ## Authors
 
