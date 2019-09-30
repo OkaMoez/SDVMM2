@@ -1,6 +1,6 @@
 #pragma once
 // Define R for reports, and Q for quiet
-#define myLOUD
+//#define myLOUD
 #ifdef myLOUD
 #define myREPORT(x) x
 #define myQUIET(y)

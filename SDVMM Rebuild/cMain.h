@@ -7,6 +7,8 @@
 #include <wx/checkbox.h>
 #include <wx/event.h>
 #include "cMod.h"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 
 class cMain : public wxFrame // TODO Organize privacy
@@ -14,7 +16,8 @@ class cMain : public wxFrame // TODO Organize privacy
 private:
 	bool ini_exists_ = false;
 	bool launch_with_steam_ = false;
-	string gamedir_ = "";
+	fs::path game_directory_ = "";
+	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
 	string version_this_mm_ = "0.5.0-ALPHA";
 
@@ -31,10 +34,12 @@ public:
 	void SelfInitialize();
 	bool ini_exists() { return ini_exists_; }
 	bool launch_with_steam() { return launch_with_steam_; }
-	string gamedir() { return gamedir_; }
+	fs::path game_directory() { return game_directory_; }
+	fs::path steam_directory() { return steam_directory_; }
 	string version_smapi() { return version_smapi_; }
 	string version_this_mm() { return version_this_mm_; }
-	void set_gamepath(string filepath); // TODO make a different automated version of onInit
+	void set_game_directory(fs::path filepath); // TODO make a different automated version of onInit
+	void set_steam_directory(fs::path filepath);
 	void set_version_this_mm(string version);
 
 public:
@@ -59,17 +64,17 @@ public:
 	wxCheckBox* m_checkbox_launcher = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab3_launcher = nullptr;
 	// Tab 3 - Game Directory
-	wxStaticText* m_stext_gamedir = nullptr;
-	wxTextCtrl* m_textctrl_gamedir = nullptr;
-	wxButton* m_button_gamedir_save = nullptr;
-	wxButton* m_button_gamedir_browse = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3_gamedir = nullptr;
+	wxStaticText* m_stext_game_directory = nullptr;
+	wxTextCtrl* m_textctrl_game_directory = nullptr;
+	wxButton* m_button_game_directory_save = nullptr;
+	wxButton* m_button_game_directory_browse = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3_game_directory = nullptr;
 	// Tab 3 - Steam Directory
-	wxStaticText* m_stext_steamdir = nullptr;
-	wxTextCtrl* m_textctrl_steamdir = nullptr;
-	wxButton* m_button_steamdir_save = nullptr;
-	wxButton* m_button_steamdir_browse = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3_steamdir = nullptr;
+	wxStaticText* m_stext_steam_directory = nullptr;
+	wxTextCtrl* m_textctrl_steam_directory = nullptr;
+	wxButton* m_button_steam_directory_save = nullptr;
+	wxButton* m_button_steam_directory_browse = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3_steam_directory = nullptr;
 	// Tab 3 - Layout
 	wxBoxSizer* m_sizer_notebook_tab3_items = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab3_left = nullptr;
@@ -109,7 +114,6 @@ private:
 	void OnMenuClick(wxCommandEvent& event); // TODO complete
 	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
 	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
-	void OnMenuSettingsClick(wxCommandEvent& event);
 	void OnMenuQuitClick(wxCommandEvent& event);
 	
 public:

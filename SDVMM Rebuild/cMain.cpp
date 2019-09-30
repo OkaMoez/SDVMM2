@@ -74,34 +74,34 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_sizer_notebook_tab3_launcher->Add(m_stext_launcher, 2, wxALIGN_CENTER_VERTICAL, 0);
 	m_sizer_notebook_tab3_launcher->Add(m_checkbox_launcher, 7, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
 
-	// Tab 3 - GameDir Sizer
-	m_stext_gamedir = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Game Folder: ");
-	m_textctrl_gamedir = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "game directory not found");
-	m_button_gamedir_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
-	m_button_gamedir_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
-	m_sizer_notebook_tab3_gamedir = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_notebook_tab3_gamedir->Add(m_stext_gamedir, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 2);
-	m_sizer_notebook_tab3_gamedir->Add(m_textctrl_gamedir, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-	m_sizer_notebook_tab3_gamedir->Add(m_button_gamedir_save, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-	m_sizer_notebook_tab3_gamedir->Add(m_button_gamedir_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
+	// Tab 3 - Game Directory Sizer
+	m_stext_game_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Game Folder: ");
+	m_textctrl_game_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "game directory not found");
+	m_button_game_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
+	m_button_game_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
+	m_sizer_notebook_tab3_game_directory = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab3_game_directory->Add(m_stext_game_directory, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 2);
+	m_sizer_notebook_tab3_game_directory->Add(m_textctrl_game_directory, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+	m_sizer_notebook_tab3_game_directory->Add(m_button_game_directory_save, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+	m_sizer_notebook_tab3_game_directory->Add(m_button_game_directory_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
 
-	// Tab 3 - SteamDir Sizer
-	m_stext_steamdir = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Steam Folder: ");
-	m_textctrl_steamdir = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "steam directory not found");
-	m_button_steamdir_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
-	m_button_steamdir_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
-	m_sizer_notebook_tab3_steamdir = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_notebook_tab3_steamdir->Add(m_stext_steamdir, 0, wxALIGN_CENTER_VERTICAL, 0);
-	m_sizer_notebook_tab3_steamdir->Add(m_textctrl_steamdir, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-	m_sizer_notebook_tab3_steamdir->Add(m_button_steamdir_save, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-	m_sizer_notebook_tab3_steamdir->Add(m_button_steamdir_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
+	// Tab 3 - Steam Directory Sizer
+	m_stext_steam_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Steam Folder: ");
+	m_textctrl_steam_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "steam directory not found");
+	m_button_steam_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
+	m_button_steam_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
+	m_sizer_notebook_tab3_steam_directory = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab3_steam_directory->Add(m_stext_steam_directory, 0, wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_steam_directory->Add(m_textctrl_steam_directory, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+	m_sizer_notebook_tab3_steam_directory->Add(m_button_steam_directory_save, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+	m_sizer_notebook_tab3_steam_directory->Add(m_button_steam_directory_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
 
 	// Tab 3 - Vertical Sizer // TODO change layout
 	m_sizer_notebook_tab3_items = new wxBoxSizer(wxVERTICAL);
 	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_launcher, 1, wxEXPAND, 0);
 	m_sizer_notebook_tab3_items->AddStretchSpacer(0);
-	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_gamedir, 1, wxEXPAND, 0);
-	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_steamdir, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_game_directory, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_steam_directory, 1, wxEXPAND, 0);
 	m_sizer_notebook_tab3_items->AddStretchSpacer(4);
 
 	// Tab 3 - Dummy Sizers for Margins
@@ -221,7 +221,7 @@ void cMain::SelfInitialize()
 	{
 		ini_exists_ = true;
 		if (FILE * iniFile = fopen(ini_name.c_str(), "r")) {
-			set_gamepath(GetIniDirectory(iniFile));
+			set_game_directory(GetIniDirectory(iniFile));
 			fclose(iniFile);
 			if (ExistsModFolders())
 			{
@@ -232,7 +232,7 @@ void cMain::SelfInitialize()
 		D(
 			if (report_game_directory) {
 				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
-					gamedir(), wxT("Game Directory"),
+					game_directory().string(), wxT("Game Directory"),
 					wxOK, wxDefaultPosition);
 				m_pBox1->ShowModal();
 				delete m_pBox1;
@@ -258,9 +258,16 @@ void cMain::SelfInitialize()
 //----------
 // Setters
 //----------
-void cMain::set_gamepath(string filepath)
+void cMain::set_game_directory(fs::path filepath)
 {
-	gamedir_ = filepath;
+	m_textctrl_game_directory->SetLabel(filepath.string());
+	game_directory_ = filepath;
+}
+
+void cMain::set_steam_directory(fs::path filepath)
+{
+	m_textctrl_steam_directory->SetLabel(filepath.string());
+	steam_directory_ = filepath;
 }
 
 void cMain::set_version_this_mm(string version)
@@ -275,7 +282,7 @@ void cMain::set_version_this_mm(string version)
 void cMain::OnLaunchSMAPIClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ((this->gamedir() + "\\StardewModdingAPI"));
+	string test_str = ((this->game_directory().string() + "\\StardewModdingAPI"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -284,7 +291,7 @@ void cMain::OnLaunchSMAPIClick(wxCommandEvent& event)
 void cMain::OnLaunchVanillaClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ((this->gamedir() + "\\Stardew Valley"));
+	string test_str = ((this->game_directory().string() + "\\Stardew Valley"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -331,7 +338,7 @@ void cMain::OnMenuClick(wxCommandEvent& event) // TODO complete
 void cMain::OnMenuModsClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ("explorer " + (this->gamedir() + "\\Mods\\"));
+	string test_str = ("explorer " + (this->game_directory().string() + "\\Mods\\"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -346,15 +353,9 @@ void cMain::OnMenuModsClick(wxCommandEvent& event)
 void cMain::OnMenuModsDisabledClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ("explorer " + (this->gamedir() + "\\Mods_disabled"));
+	string test_str = ("explorer " + (this->game_directory().string() + "\\Mods_disabled"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
-}
-
-void cMain::OnMenuSettingsClick(wxCommandEvent& event)
-{
-	event.Skip();
-	// TODO open settings window?
 }
 
 void cMain::OnMenuQuitClick(wxCommandEvent& event)
@@ -386,7 +387,7 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 	fs::path parent_path = mod_path.parent_path();
 	fs::path folder_name = mod_path.filename();
 
-	if (parent_path == ((this->gamedir()) += "\\Mods"))
+	if (parent_path == ((this->game_directory()) += "\\Mods"))
 	{
 		D(
 			if (report_file_move_event) {
@@ -399,11 +400,11 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 			else {}
 		)
 
-		fs::copy(mod_path, (fs::path(this->gamedir() += "\\Mods_disabled\\") += folder_name));
+		fs::copy(mod_path, (fs::path(this->game_directory() += "\\Mods_disabled\\") += folder_name));
 		fs::remove_all(mod_path);
 
 	}
-	else if (parent_path == ((this->gamedir()) += "\\Mods_disabled"))
+	else if (parent_path == ((this->game_directory()) += "\\Mods_disabled"))
 	{
 		D(
 			if (report_file_move_event) {
@@ -416,7 +417,7 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 			else{}
 		)
 
-			fs::copy(mod_path, (fs::path(this->gamedir() += "\\Mods\\") += folder_name));
+			fs::copy(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
 			fs::remove_all(mod_path);
 	}
 	else
@@ -480,7 +481,7 @@ void cMain::LoadModsFromDir(string folder_name) // TODO replace custom ioFunctio
 	json json_manifest;
 	bool is_good_json = false;
 	bool is_active = (folder_name == "\\Mods\\");
-	fs::path temp_dir = (this->gamedir());
+	fs::path temp_dir = (this->game_directory());
 	temp_dir += folder_name;
 	fs::path temp_path;
 	for (auto& dir_iter : fs::directory_iterator(temp_dir))
@@ -605,9 +606,9 @@ void cMain::LoadModsFromDir(string folder_name) // TODO replace custom ioFunctio
 
 bool cMain::ExistsModFolders()
 {
-	fs::path mod_path = this->gamedir();
-	fs::path mod_d_path = this->gamedir();
-	fs::path game_file_path = this->gamedir();
+	fs::path mod_path = this->game_directory();
+	fs::path mod_d_path = this->game_directory();
+	fs::path game_file_path = this->game_directory();
 	mod_path += "\\Mods";
 	mod_d_path += "\\Mods_disabled";
 	game_file_path += "\\Stardew Valley.exe"; // TODO Make crossplatform?
