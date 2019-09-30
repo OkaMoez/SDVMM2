@@ -32,7 +32,15 @@ I don't have tests atm.  My bad.
 ## Contributing
 
 
-## Versioning
+## Goals
+### Before first release:
+In order of importance.
+* ALL BUTTONS HAVE A FUNCTION
+* See Installed Mods (and State)
+* Toggle Mods On/Off
+* Add/Delete Mods
+* Shortcut to Mod Folders
+* Shortcut to Mod Sources (Nexus/Forums)
 
 
 ## Authors
@@ -49,5 +57,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 * nlohmann/json
 * yuukiw/StardewValleyMM
+* Stack Exchange/Overflow for teaching me to code
 * wxWidgets forums (even if they delete posts that would have saved me hours of my time)
 * Google, for always being there when I needed help learning code
