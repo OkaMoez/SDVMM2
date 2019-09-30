@@ -70,15 +70,18 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	// Tab 3 - Launcher Sizer
 	m_stext_launcher = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Launch w/ Steam: ");
 	m_checkbox_launcher = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "(uncheck if you have the GOG version)");
+	m_checkbox_launcher->Bind(wxEVT_CHECKBOX, &cMain::OnLauncherToggleClick, this);
 	m_sizer_notebook_tab3_launcher = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_launcher->Add(m_stext_launcher, 2, wxALIGN_CENTER_VERTICAL, 0);
 	m_sizer_notebook_tab3_launcher->Add(m_checkbox_launcher, 7, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
+
 
 	// Tab 3 - Game Directory Sizer
 	m_stext_game_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Game Folder: ");
 	m_textctrl_game_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "game directory not found");
 	m_button_game_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
 	m_button_game_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
+	m_button_game_directory_save->Bind(wxEVT_BUTTON, &cMain::OnGameDirectorySaveClick, this);
 	m_sizer_notebook_tab3_game_directory = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_game_directory->Add(m_stext_game_directory, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 2);
 	m_sizer_notebook_tab3_game_directory->Add(m_textctrl_game_directory, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
@@ -89,6 +92,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_stext_steam_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Steam Folder: ");
 	m_textctrl_steam_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "steam directory not found");
 	m_button_steam_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
+	m_button_steam_directory_save->Bind(wxEVT_BUTTON, &cMain::OnSteamDirectorySaveClick, this);
 	m_button_steam_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
 	m_sizer_notebook_tab3_steam_directory = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_steam_directory->Add(m_stext_steam_directory, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -258,6 +262,11 @@ void cMain::SelfInitialize()
 //----------
 // Setters
 //----------
+void cMain::set_launch_with_steam(bool state)
+{
+	launch_with_steam_ = state;
+}
+
 void cMain::set_game_directory(fs::path filepath)
 {
 	m_textctrl_game_directory->SetLabel(filepath.string());
@@ -279,6 +288,7 @@ void cMain::set_version_this_mm(string version)
 //-----------------------------
 // Buttons and Menu Functions
 //-----------------------------
+// Top Level Buttons
 void cMain::OnLaunchSMAPIClick(wxCommandEvent& event)
 {
 	event.Skip();
@@ -318,6 +328,7 @@ void cMain::OnRefreshClick(wxCommandEvent& event) // TODO give some indication o
 	this->RefreshModLists();
 }
 
+// Menu Bar Buttons
 void cMain::OnMenuClick(wxCommandEvent& event) // TODO complete
 {
 	if (event.GetId() == (ID_MENU_MODS))
@@ -362,6 +373,70 @@ void cMain::OnMenuQuitClick(wxCommandEvent& event)
 {
 	event.Skip();
 	this->Close();
+}
+
+// Settings Buttons
+void cMain::OnLauncherToggleClick(wxCommandEvent& event)
+{
+	event.Skip();
+	set_launch_with_steam(m_checkbox_launcher->GetValue());
+	if (launch_with_steam())
+	{
+		D(
+			if (report_launcher_cbox_event) {
+				wxMessageDialog* event_launcher_toggle_box1 = new wxMessageDialog(NULL,
+					wxT("Launcher toggled on."), wxT("Launcher Option"),
+					wxOK, wxDefaultPosition);
+				event_launcher_toggle_box1->ShowModal();
+				delete event_launcher_toggle_box1;
+			}
+			else {}
+		)
+	}
+}
+
+void cMain::OnGameDirectorySaveClick(wxCommandEvent& event)
+{
+	event.Skip();
+	if (fs::exists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Stardew Valley.exe"))
+	{
+		set_game_directory(string(m_textctrl_game_directory->GetLineText(0)));
+	}
+	else
+	{
+		wxMessageDialog* event_bad_game_directory = new wxMessageDialog(NULL,
+			wxT("Game files not found in: " + string(m_textctrl_game_directory->GetLineText(0))),
+			wxT("Game Directory"), wxOK, wxDefaultPosition);
+		event_bad_game_directory->ShowModal();
+		delete event_bad_game_directory;
+	}
+}
+
+void cMain::OnGameDirectoryBrowseClick(wxCommandEvent& event)
+{
+	event.Skip();
+}
+
+void cMain::OnSteamDirectorySaveClick(wxCommandEvent& event)
+{
+	event.Skip();
+	if (fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
+	{
+		set_steam_directory(string(m_textctrl_steam_directory->GetLineText(0)));
+	}
+	else
+	{
+		wxMessageDialog* event_bad_steam_directory = new wxMessageDialog(NULL,
+			wxT("Steam files not found in: " + string(m_textctrl_steam_directory->GetLineText(0))),
+			wxT("Steam Directory"), wxOK, wxDefaultPosition);
+		event_bad_steam_directory->ShowModal();
+		delete event_bad_steam_directory;
+	}
+}
+
+void cMain::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
+{
+	event.Skip();
 }
 
 //--------------------

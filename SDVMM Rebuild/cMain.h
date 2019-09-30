@@ -38,6 +38,7 @@ public:
 	fs::path steam_directory() { return steam_directory_; }
 	string version_smapi() { return version_smapi_; }
 	string version_this_mm() { return version_this_mm_; }
+	void set_launch_with_steam(bool state);
 	void set_game_directory(fs::path filepath); // TODO make a different automated version of onInit
 	void set_steam_directory(fs::path filepath);
 	void set_version_this_mm(string version);
@@ -107,14 +108,22 @@ public:
 	wxBoxSizer* m_sizer_main_vertical = nullptr;
 
 private:
+	// Top Level Buttons
 	void OnLaunchSMAPIClick(wxCommandEvent& event);
 	void OnLaunchVanillaClick(wxCommandEvent& event);
 	void OnLaunchModSiteClick(wxCommandEvent& event);
 	void OnRefreshClick(wxCommandEvent& event);
+	// Menu Bar Buttons
 	void OnMenuClick(wxCommandEvent& event); // TODO complete
 	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
 	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
 	void OnMenuQuitClick(wxCommandEvent& event);
+	// Settings Buttons
+	void OnLauncherToggleClick(wxCommandEvent& event);
+	void OnGameDirectorySaveClick(wxCommandEvent& event);
+	void OnGameDirectoryBrowseClick(wxCommandEvent& event);
+	void OnSteamDirectorySaveClick(wxCommandEvent& event);
+	void OnSteamDirectoryBrowseClick(wxCommandEvent& event);
 	
 public:
 	void ToggleMod(wxDataViewEvent& event);

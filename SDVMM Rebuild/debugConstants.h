@@ -1,6 +1,6 @@
 #pragma once
 // Define R for reports, and Q for quiet
-//#define myLOUD
+#define myLOUD
 #ifdef myLOUD
 #define myREPORT(x) x
 #define myQUIET(y)
@@ -15,8 +15,8 @@
 const bool report_mode = true;
 
 myREPORT(
-	const bool report_ini_exists = true;
-	const bool report_game_directory = true;
+	const bool report_ini_exists = false;
+	const bool report_game_directory = false;
 	const bool report_filepath = false;
 	const bool report_json_name = false;
 	const bool report_looped_path = false;
@@ -28,6 +28,7 @@ myREPORT(
 	const bool report_mod_directories = false;
 	const bool report_cbox_event = false;
 	const bool report_file_move_event = false;
+	const bool report_launcher_cbox_event = true;
 )
 
 myQUIET(
@@ -44,4 +45,5 @@ myQUIET(
 	const bool report_mod_directories = false;
 	const bool report_cbox_event = false;
 	const bool report_file_move_event = false;
+	const bool report_launcher_cbox_event = false;
 )
