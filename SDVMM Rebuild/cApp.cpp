@@ -38,7 +38,7 @@ bool cApp::OnInit()
 	}
 	else
 	{
-		string myPath = m_frame1->gamepath();
+		string myPath = m_frame1->gamedir();
 		D(
 			if (report_game_directory) {
 				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
@@ -51,10 +51,13 @@ bool cApp::OnInit()
 		)
 	}
 
-	fs::path temp_path = m_frame1->gamepath();
+	fs::path temp_path = m_frame1->gamedir();
 	temp_path += "\\Mods\\";
 	m_frame1->CheckSmapiVersion();
 	m_frame1->Show(true);
+	// Band-aid fix for intial render issues (flips pages once)
+	m_frame1->m_notebook->SetSelection(1);
+	m_frame1->m_notebook->SetSelection(0);
 	return true;
 }
 

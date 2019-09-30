@@ -33,7 +33,7 @@ I don't have tests atm.  My bad.
 
 
 ## Goals
-### Before first release:
+### Before first alpha release:
 In order of importance.
 * ALL BUTTONS HAVE A FUNCTION
 * See Installed Mods (and State) [COMPLETE]

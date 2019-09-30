@@ -4,6 +4,7 @@
 #include <wx/menu.h>
 #include <wx/notebook.h>
 #include <wx/dataview.h>
+#include <wx/checkbox.h>
 #include <wx/event.h>
 #include "cMod.h"
 
@@ -11,9 +12,9 @@
 class cMain : public wxFrame // TODO Organize privacy
 {
 private:
-	string gamepath_ = "";
-	string version_smapi_ = "";
-	string version_this_mm_ = "1.0.0";
+	string gamedir_ = "";
+	string version_smapi_ = "not found";
+	string version_this_mm_ = "0.5.0-ALPHA";
 
 	// IDs currently don't follow google style guide afaik
 	int ID_BUTTON_NEXUS = NULL;
@@ -25,7 +26,7 @@ private:
 public:
 	cMain();
 	~cMain();
-	string gamepath() { return gamepath_; }
+	string gamedir() { return gamedir_; }
 	string version_smapi() { return version_smapi_; }
 	string version_this_mm() { return version_this_mm_; }
 	void set_gamepath(string filepath); // TODO make a different automated version of onInit
@@ -48,8 +49,26 @@ public:
 	wxBoxSizer* m_sizer_notebook_tab2 = nullptr;
 	// Tab 3
 	wxPanel* m_panel_notebook_tab3 = nullptr;
-	wxListBox* m_list_loadorder = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3a = nullptr;
+	// Tab 3 - Launcher Option
+	wxStaticText* m_stext_launcher = nullptr;
+	wxCheckBox* m_checkbox_launcher = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3_launcher = nullptr;
+	// Tab 3 - Game Directory
+	wxStaticText* m_stext_gamedir = nullptr;
+	wxTextCtrl* m_textctrl_gamedir = nullptr;
+	wxButton* m_button_gamedir_save = nullptr;
+	wxButton* m_button_gamedir_browse = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3_gamedir = nullptr;
+	// Tab 3 - Steam Directory
+	wxStaticText* m_stext_steamdir = nullptr;
+	wxTextCtrl* m_textctrl_steamdir = nullptr;
+	wxButton* m_button_steamdir_save = nullptr;
+	wxButton* m_button_steamdir_browse = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3_steamdir = nullptr;
+	// Tab 3 - Layout
+	wxBoxSizer* m_sizer_notebook_tab3_items = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3_left = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3_right = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab3 = nullptr;
 
 	// m_menubar

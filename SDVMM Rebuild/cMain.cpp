@@ -1,13 +1,13 @@
 #include "cApp.h"
 
-cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
+cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	wxDefaultPosition, wxSize(750,500),
 	wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX))
 {
 	//---------------------------
 	//  Notebook Implementation
 	//---------------------------
-	// Tab 1, 2, 3 = Active/Inactive Mods, XNB Mods, Drag/Drop Load Order
+	// Tab 1, 2, 3 = Active/Inactive Mods, XNB Mods, Settings
 	m_notebook = new wxNotebook(this, -1);
 
 	// Tab 1
@@ -41,6 +41,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_sizer_notebook_tab1->Add(m_sizer_notebook_tab1a, 1, wxEXPAND| wxBOTTOM, 3);
 	m_panel_notebook_tab1->SetSizer(m_sizer_notebook_tab1);
 
+	/* // REMOVED FOR 0.5.0-ALPHA RELEASE
 	// Tab 2
 	m_panel_notebook_tab2 = new wxPanel(m_notebook, wxID_ANY);
 
@@ -61,36 +62,63 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_sizer_notebook_tab2->Add(m_sizer_notebook_tab2a, 1, wxEXPAND, 0);
 	m_sizer_notebook_tab2->AddSpacer(10);
 	m_panel_notebook_tab2->SetSizer(m_sizer_notebook_tab2);
+	*/
 
 	// Tab 3
 	m_panel_notebook_tab3 = new wxPanel(m_notebook, wxID_ANY);
 
-	// Tab 3 - List Box
-	m_list_loadorder = new wxListBox(m_panel_notebook_tab3, wxID_ANY);
-	m_list_loadorder->Append(wxT("Not Implemented"));  // TODO Load Order tomfoolery?
+	// Tab 3 - Launcher Sizer
+	m_stext_launcher = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Launch w/ Steam: ");
+	m_checkbox_launcher = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "(uncheck if you have the GOG version)");
+	m_sizer_notebook_tab3_launcher = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab3_launcher->Add(m_stext_launcher, 2, wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_launcher->Add(m_checkbox_launcher, 7, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
 
-	// Tab 3 - Horizontal Sizer
-	m_sizer_notebook_tab3a = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_notebook_tab3a->AddStretchSpacer(1);
-	m_sizer_notebook_tab3a->Add(m_list_loadorder, 2, wxEXPAND, 0);
-	m_sizer_notebook_tab3a->AddStretchSpacer(1);
+	// Tab 3 - GameDir Sizer
+	m_stext_gamedir = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Game Folder: ");
+	m_textctrl_gamedir = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "game directory not found");
+	m_button_gamedir_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
+	m_button_gamedir_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
+	m_sizer_notebook_tab3_gamedir = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab3_gamedir->Add(m_stext_gamedir, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 2);
+	m_sizer_notebook_tab3_gamedir->Add(m_textctrl_gamedir, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+	m_sizer_notebook_tab3_gamedir->Add(m_button_gamedir_save, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+	m_sizer_notebook_tab3_gamedir->Add(m_button_gamedir_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
 
+	// Tab 3 - SteamDir Sizer
+	m_stext_steamdir = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Steam Folder: ");
+	m_textctrl_steamdir = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "steam directory not found");
+	m_button_steamdir_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
+	m_button_steamdir_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
+	m_sizer_notebook_tab3_steamdir = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab3_steamdir->Add(m_stext_steamdir, 0, wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_steamdir->Add(m_textctrl_steamdir, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+	m_sizer_notebook_tab3_steamdir->Add(m_button_steamdir_save, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+	m_sizer_notebook_tab3_steamdir->Add(m_button_steamdir_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
 
-	// Tab 3 - Vertical Sizer
+	// Tab 3 - Vertical Sizer // TODO change layout
+	m_sizer_notebook_tab3_items = new wxBoxSizer(wxVERTICAL);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_launcher, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->AddStretchSpacer(0);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_gamedir, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_steamdir, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->AddStretchSpacer(4);
+
+	// Tab 3 - Dummy Sizers for Margins
+	m_sizer_notebook_tab3_left = new wxBoxSizer(wxVERTICAL);
+	m_sizer_notebook_tab3_left->Add(m_sizer_notebook_tab3_items, 1, wxEXPAND | wxLEFT, 7);
+	m_sizer_notebook_tab3_right = new wxBoxSizer(wxVERTICAL);
+	m_sizer_notebook_tab3_right->Add(m_sizer_notebook_tab3_left, 1, wxEXPAND | wxRIGHT, 9);
 	m_sizer_notebook_tab3 = new wxBoxSizer(wxVERTICAL);
 	m_sizer_notebook_tab3->AddSpacer(10);
-	m_sizer_notebook_tab3->Add(m_sizer_notebook_tab3a, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab3->Add(m_sizer_notebook_tab3_right, 1, wxEXPAND, 0);
 	m_sizer_notebook_tab3->AddSpacer(10);
 	m_panel_notebook_tab3->SetSizer(m_sizer_notebook_tab3);
 
 	// Notebook Tabs
 	m_notebook->AddPage(m_panel_notebook_tab1, "SMAPI Mods", true);
-	m_notebook->AddPage(m_panel_notebook_tab2, "XNB Mods", false);
-	m_notebook->AddPage(m_panel_notebook_tab3, "Load Order", false); // TODO Delete?
-
-	// Band-aid fix for intial render issues (flips pages once)
-	m_notebook->SetSelection(1);
-	m_notebook->SetSelection(0);
+	//m_notebook->AddPage(m_panel_notebook_tab2, "XNB Mods", false); // REMOVED FOR 0.5.0-ALPHA RELEASE
+	m_notebook->AddPage(m_panel_notebook_tab3, "Settings", false);
 	
 	//---------------------------------
 	//  Additional GUI Implementation
@@ -98,7 +126,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	// Menubar - File, Help, etc
 	m_menubar = new wxMenuBar; // TODO Implement
 	m_menubar_file = new wxMenu;
-	m_menubar_help = new wxMenu;
+	//m_menubar_help = new wxMenu; // REMOVED FOR 0.5.0-ALPHA RELEASE
 	ID_MENU_MODS = wxNewId();
 	ID_MENU_DMODS = wxNewId();
 	ID_MENU_QUIT = wxNewId();
@@ -106,7 +134,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	m_menubar_file->Append(ID_MENU_MODS, wxT("&Open Mods Folder"), wxEmptyString, wxITEM_NORMAL);
 	m_menubar_file->Append(ID_MENU_DMODS, wxT("&Open Disabled Mods Folder"), wxEmptyString, wxITEM_NORMAL);
 	m_menubar_file->Append(ID_MENU_QUIT, wxT("&Quit"), wxEmptyString, wxITEM_NORMAL);
-	m_menubar->Append(m_menubar_help, wxT("&Help"));
+	//m_menubar->Append(m_menubar_help, wxT("&Help")); // REMOVED FOR 0.5.0-ALPHA RELEASE
 	SetMenuBar(m_menubar);
 	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS, ID_MENU_QUIT);
 
@@ -115,10 +143,10 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	ID_BUTTON_FORUMS = wxNewId();
 	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
 	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
-	m_button_add_mod = new wxButton(this, wxID_ANY, "Add Mod from File/Archive"); // TODO
+	m_button_add_mod = new wxButton(this, wxID_ANY, ""); // TODO "Add Mod from File/Archive" // REMOVED FOR 0.5.0-ALPHA RELEASE
 	m_button_nexus_download = new wxButton(this, ID_BUTTON_NEXUS, "Visit Nexus Mods");
 	m_button_forums_download = new wxButton(this, ID_BUTTON_FORUMS, "Visit Mod Forums");
-	m_button_refresh_mods = new wxButton(this, wxID_ANY, "Refresh Mod List"); // TODO Remove?
+	m_button_refresh_mods = new wxButton(this, wxID_ANY, "Refresh Mod List");
 	m_button_launch_smapi->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchVanillaClick, this);
 	m_button_nexus_download->Bind(wxEVT_BUTTON, &cMain::OnLaunchModSiteClick, this);
@@ -152,7 +180,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	wxImage::CleanUpHandlers();
 
 	// Version info
-	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: unknown"); // TODO getters/setters
+	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + version_smapi_); // TODO getters/setters
 	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + version_this_mm_);
 	m_sizer_version_info = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_version_info->Add(m_stext_this_version, 1, wxEXPAND | wxLEFT, 15);
@@ -169,20 +197,17 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "SDVMM 2",
 	// Setting background colour as needed
 	m_bg_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500));
 	wxColour* m_colour_grey = new wxColour(240, 240, 240, wxALPHA_OPAQUE);
-	//m_bg_panel->SetBackgroundColour(wxColour(*m_colour_grey));
-	//m_notebook->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_panel_notebook_tab1->SetBackgroundColour(wxColour(*wxWHITE));
 	m_stext_smapi_version->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_stext_this_version->SetBackgroundColour(wxColour(*m_colour_grey));
-	/*
-	m_button_launch_smapi->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_button_launch_vanilla->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_button_add_mod->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_button_nexus_download->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_button_refresh_mods->SetBackgroundColour(wxColour(*m_colour_grey));
-	*/
 	delete m_colour_grey;
 }
 
+
+
+//-------------------
+// MEMBER FUNCTIONS
+//-------------------
 cMain::~cMain()
 {
 }
@@ -192,7 +217,7 @@ cMain::~cMain()
 //----------
 void cMain::set_gamepath(string filepath)
 {
-	gamepath_ = filepath;
+	gamedir_ = filepath;
 }
 
 void cMain::set_version_this_mm(string version)
@@ -207,7 +232,7 @@ void cMain::set_version_this_mm(string version)
 void cMain::OnLaunchSMAPIClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ((this->gamepath() + "\\StardewModdingAPI"));
+	string test_str = ((this->gamedir() + "\\StardewModdingAPI"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -216,7 +241,7 @@ void cMain::OnLaunchSMAPIClick(wxCommandEvent& event)
 void cMain::OnLaunchVanillaClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ((this->gamepath() + "\\Stardew Valley"));
+	string test_str = ((this->gamedir() + "\\Stardew Valley"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -263,7 +288,7 @@ void cMain::OnMenuClick(wxCommandEvent& event) // TODO complete
 void cMain::OnMenuModsClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ("explorer " + (this->gamepath() + "\\Mods\\"));
+	string test_str = ("explorer " + (this->gamedir() + "\\Mods\\"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -278,7 +303,7 @@ void cMain::OnMenuModsClick(wxCommandEvent& event)
 void cMain::OnMenuModsDisabledClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ("explorer " + (this->gamepath() + "\\Mods_disabled"));
+	string test_str = ("explorer " + (this->gamedir() + "\\Mods_disabled"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 }
@@ -318,7 +343,7 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 	fs::path parent_path = mod_path.parent_path();
 	fs::path folder_name = mod_path.filename();
 
-	if (parent_path == ((this->gamepath()) += "\\Mods"))
+	if (parent_path == ((this->gamedir()) += "\\Mods"))
 	{
 		D(
 			if (report_file_move_event) {
@@ -331,11 +356,11 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 			else {}
 		)
 
-		fs::copy(mod_path, (fs::path(this->gamepath() += "\\Mods_disabled\\") += folder_name));
+		fs::copy(mod_path, (fs::path(this->gamedir() += "\\Mods_disabled\\") += folder_name));
 		fs::remove_all(mod_path);
 
 	}
-	else if (parent_path == ((this->gamepath()) += "\\Mods_disabled"))
+	else if (parent_path == ((this->gamedir()) += "\\Mods_disabled"))
 	{
 		D(
 			if (report_file_move_event) {
@@ -348,7 +373,7 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 			else{}
 		)
 
-			fs::copy(mod_path, (fs::path(this->gamepath() += "\\Mods\\") += folder_name));
+			fs::copy(mod_path, (fs::path(this->gamedir() += "\\Mods\\") += folder_name));
 			fs::remove_all(mod_path);
 	}
 	else
@@ -412,7 +437,7 @@ void cMain::LoadModsFromDir(string folder_name) // TODO replace custom ioFunctio
 	json json_manifest;
 	bool is_good_json = false;
 	bool is_active = (folder_name == "\\Mods\\");
-	fs::path temp_dir = (this->gamepath());
+	fs::path temp_dir = (this->gamedir());
 	temp_dir += folder_name;
 	fs::path temp_path;
 	for (auto& dir_iter : fs::directory_iterator(temp_dir))
@@ -443,7 +468,7 @@ void cMain::LoadModsFromDir(string folder_name) // TODO replace custom ioFunctio
 			is_good_json = false;
 			string temp_exc = e.what();
 
-			if (e.id == 101) { // TODO use exception id
+			if (e.id == 101) {
 				json_problem = 1;
 			}
 			else {
@@ -537,9 +562,9 @@ void cMain::LoadModsFromDir(string folder_name) // TODO replace custom ioFunctio
 
 bool cMain::ExistsModFolders()
 {
-	fs::path mod_path = this->gamepath();
-	fs::path mod_d_path = this->gamepath();
-	fs::path game_file_path = this->gamepath();
+	fs::path mod_path = this->gamedir();
+	fs::path mod_d_path = this->gamedir();
+	fs::path game_file_path = this->gamedir();
 	mod_path += "\\Mods";
 	mod_d_path += "\\Mods_disabled";
 	game_file_path += "\\Stardew Valley.exe"; // TODO Make crossplatform?
@@ -631,7 +656,7 @@ void cMain::CheckSmapiVersion()
 	}
 	else
 	{
-		version = "unknown";
+		version = "not found";
 	}
 	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);
 }
