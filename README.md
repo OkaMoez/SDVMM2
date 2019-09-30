@@ -38,7 +38,10 @@ In order of importance.
 * ALL BUTTONS HAVE A FUNCTION
 * See Installed Mods (and State) [COMPLETE]
 * Toggle Mods On/Off [COMPLETE]
+* Locate Game Directory [TODO]
+* Locate Steam Directory [TODO]
 * Add/Delete Mods [PARTIAL]
+* Launch through Steam [TODO]
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
