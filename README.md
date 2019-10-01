@@ -1,6 +1,6 @@
 # Stardew Valley Mod Manager 2
 
-Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.  Originally inpired by yuukiw's StardewValleyMM in vb.NET.  And this README is from a template and needs work.
+Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.  Originally inspired by yuukiw's StardewValleyMM in vb.NET.  And this README is from a template and needs work.
 
 ## Getting Started
 
