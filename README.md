@@ -3,7 +3,7 @@
 Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.  Originally inspired by yuukiw's StardewValleyMM in vb.NET.  And this README is from a template and needs work.
 
 ## What I've Used (and you'll need to use this code easily)
-* Visual Studio Community 2019 (if you want to use the solution file) \n
+* Visual Studio Community 2019 (if you want to use the solution file)
 * wxWidgets v3.0.0 or better
 
 ## Goals
