@@ -5,6 +5,8 @@
 #include <wx/notebook.h>
 #include <wx/dataview.h>
 #include <wx/checkbox.h>
+#include <wx/dirdlg.h>
+#include <wx/filedlg.h>
 #include <wx/event.h>
 #include "cMod.h"
 #include <filesystem>
@@ -67,12 +69,14 @@ public:
 	// Tab 3 - Game Directory
 	wxStaticText* m_stext_game_directory = nullptr;
 	wxTextCtrl* m_textctrl_game_directory = nullptr;
+	wxDirDialog* m_dirdialog_game_browse = nullptr;
 	wxButton* m_button_game_directory_save = nullptr;
 	wxButton* m_button_game_directory_browse = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab3_game_directory = nullptr;
 	// Tab 3 - Steam Directory
 	wxStaticText* m_stext_steam_directory = nullptr;
 	wxTextCtrl* m_textctrl_steam_directory = nullptr;
+	wxFileDialog* m_filedialog_steam_browse = nullptr;
 	wxButton* m_button_steam_directory_save = nullptr;
 	wxButton* m_button_steam_directory_browse = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab3_steam_directory = nullptr;

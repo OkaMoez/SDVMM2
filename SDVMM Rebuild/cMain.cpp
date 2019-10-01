@@ -82,6 +82,9 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_button_game_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
 	m_button_game_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
 	m_button_game_directory_save->Bind(wxEVT_BUTTON, &cMain::OnGameDirectorySaveClick, this);
+	m_button_game_directory_browse->Bind(wxEVT_BUTTON, &cMain::OnGameDirectoryBrowseClick, this);
+	m_dirdialog_game_browse = new wxDirDialog(this, "Select your 'Stardew Valley' game directory",
+		wxEmptyString, wxDD_DIR_MUST_EXIST);
 	m_sizer_notebook_tab3_game_directory = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_game_directory->Add(m_stext_game_directory, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 2);
 	m_sizer_notebook_tab3_game_directory->Add(m_textctrl_game_directory, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
@@ -92,8 +95,11 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_stext_steam_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Steam Folder: ");
 	m_textctrl_steam_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "steam directory not found");
 	m_button_steam_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
-	m_button_steam_directory_save->Bind(wxEVT_BUTTON, &cMain::OnSteamDirectorySaveClick, this);
 	m_button_steam_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
+	m_button_steam_directory_save->Bind(wxEVT_BUTTON, &cMain::OnSteamDirectorySaveClick, this);
+	m_button_steam_directory_browse->Bind(wxEVT_BUTTON, &cMain::OnSteamDirectoryBrowseClick, this);
+	m_filedialog_steam_browse = new wxFileDialog(this, "Select the Steam executable/application file (Steam.exe)",
+		wxEmptyString, "Steam.exe", wxFileSelectorDefaultWildcardStr, wxFD_FILE_MUST_EXIST);
 	m_sizer_notebook_tab3_steam_directory = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_steam_directory->Add(m_stext_steam_directory, 0, wxALIGN_CENTER_VERTICAL, 0);
 	m_sizer_notebook_tab3_steam_directory->Add(m_textctrl_steam_directory, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
@@ -415,6 +421,21 @@ void cMain::OnGameDirectorySaveClick(wxCommandEvent& event)
 void cMain::OnGameDirectoryBrowseClick(wxCommandEvent& event)
 {
 	event.Skip();
+	if ((m_dirdialog_game_browse->ShowModal() == wxID_OK) and
+		(fs::exists(string(m_dirdialog_game_browse->GetPath()) + "\\Stardew Valley.exe")))
+	{
+		m_dirdialog_game_browse->SetPath(m_dirdialog_game_browse->GetPath());
+		set_game_directory(string(m_dirdialog_game_browse->GetPath()));
+	}
+	else 
+	{
+		m_dirdialog_game_browse->SetPath(m_dirdialog_game_browse->GetPath());
+		wxMessageDialog* game_directory_browse_fail = new wxMessageDialog(NULL,
+			("Game executable not found in directory:\n" + string(m_dirdialog_game_browse->GetPath())),
+			wxT("Incorrect Directory"), wxOK, wxDefaultPosition);
+		game_directory_browse_fail->ShowModal();
+		delete game_directory_browse_fail;
+	}
 }
 
 void cMain::OnSteamDirectorySaveClick(wxCommandEvent& event)
@@ -437,6 +458,22 @@ void cMain::OnSteamDirectorySaveClick(wxCommandEvent& event)
 void cMain::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 {
 	event.Skip();
+	if ((m_filedialog_steam_browse->ShowModal() == wxID_OK) and
+		(fs::exists(string(m_filedialog_steam_browse->GetPath()))) and
+		(fs::path(string((m_filedialog_steam_browse->GetPath()))).filename() == fs::path("Steam.exe")))
+	{
+		m_filedialog_steam_browse->SetPath(m_filedialog_steam_browse->GetPath());
+		set_steam_directory(string(m_filedialog_steam_browse->GetPath()));
+	}
+	else
+	{
+		m_filedialog_steam_browse->SetPath(m_filedialog_steam_browse->GetPath());
+		wxMessageDialog* steam_directory_browse_fail = new wxMessageDialog(NULL,
+			("Steam executable not found:\n" + string(m_filedialog_steam_browse->GetPath())),
+			wxT("Incorrect Directory"), wxOK, wxDefaultPosition);
+		steam_directory_browse_fail->ShowModal();
+		delete steam_directory_browse_fail;
+	}
 }
 
 //--------------------
