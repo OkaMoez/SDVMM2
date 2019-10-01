@@ -2,19 +2,15 @@
 
 Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.  Originally inspired by yuukiw's StardewValleyMM in vb.NET.  And this README is from a template and needs work.
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-Visual Studio Community 2019 (if you want to use the solution file)
-wxWidgets v3.0.0 or better
+## What I've Used (and you'll need to use this code easily)
+* Visual Studio Community 2019 (if you want to use the solution file) \n
+* wxWidgets v3.0.0 or better
 
 ## Goals
-### Always
-* ALL BUTTONS HAVE A FUNCTION
+#### Always
+* All Buttons Have a Function
 
-### Before first alpha release:
+#### Before first alpha release:
 In order of importance.
 * See Installed Mods (and State) [COMPLETE]
 * Toggle Mods On/Off [COMPLETE]
@@ -23,9 +19,8 @@ In order of importance.
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
-### Before first full release:
+#### Before first full release:
 Not yet in order of importance.
-* ALL ALPHA GOALS [TODO]
 * Auto-find Game Directory [TODO]
 * Auto-find Steam Directory [TODO]
 * Flag Incompatible Mods [TODO]
@@ -33,7 +28,7 @@ Not yet in order of importance.
 * Launch through Steam [TODO]
 * Help/About Menu Tab [TODO]
 
-### Maybe one day:
+#### Maybe one day:
 Not in order of importance.
 * Donation Button? [TODO]
 * XNB Support? [TODO]
