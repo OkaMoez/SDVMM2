@@ -1,45 +1,25 @@
 # Stardew Valley Mod Manager 2
 
-Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.  Originally inpired by yuukiw's StardewValleyMM in vb.NET.  And most of this README is a template that needs work.
+Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.  Originally inpired by yuukiw's StardewValleyMM in vb.NET.  And this README is from a template and needs work.
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-
+Visual Studio Community 2019 (if you want to use the solution file)
 wxWidgets v3.0.0 or better
 
-### Installing
-
-
-## Running the tests
-
-I don't have tests atm.  My bad.
-
-### Break down into end to end tests
-
-
-### And coding style tests
-
-
-## Deployment
-
-
-## Built With
-
-
-## Contributing
-
-
 ## Goals
+### Always
+* ALL BUTTONS HAVE A FUNCTION
+
 ### Before first alpha release:
 In order of importance.
-* ALL BUTTONS HAVE A FUNCTION [PARTIAL]
 * See Installed Mods (and State) [COMPLETE]
 * Toggle Mods On/Off [COMPLETE]
-* Locate Game Directory [TODO]
-* Locate Steam Directory [TODO]
+* Locate Game Directory [PARTIAL]
+* Locate Steam Directory [PARTIAL]
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
@@ -59,17 +39,11 @@ Not in order of importance.
 * XNB Support? [TODO]
 
 ## Authors
-
 * **OkaMoez** - (https://github.com/OkaMoez)
 
 See also the list of [contributors](https://github.com/OkaMoez/SDVMM2/contributors) who participated in this project.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
 ## Acknowledgments
-
 * nlohmann/json
 * yuukiw/StardewValleyMM
 * Stack Exchange/Overflow for teaching me to code
