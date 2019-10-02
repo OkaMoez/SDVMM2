@@ -14,8 +14,9 @@ Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.
 In order of importance.
 * See Installed Mods (and State) [COMPLETE]
 * Toggle Mods On/Off [COMPLETE]
-* Locate Game Directory [PARTIAL]
-* Locate Steam Directory [PARTIAL]
+* Locate Game Directory [COMPLETE]
+* Locate Steam Directory [COMPLETE]
+* Save Settings [PARTIAL]
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
@@ -24,10 +25,10 @@ Not yet in order of importance.
 * Auto-find Game Directory [TODO]
 * Auto-find Steam Directory [TODO]
 * Flag Incompatible Mods [TODO]
-* Add/Delete Mods [PARTIAL]
+* Add/Delete Mods [TODO]
 * Launch through Steam [TODO]
 * Help/About Menu Tab [TODO]
-
+* Migrate Filesystem to wxStandardPaths [TODO]
 #### Maybe one day:
 Not in order of importance.
 * Donation Button? [TODO]

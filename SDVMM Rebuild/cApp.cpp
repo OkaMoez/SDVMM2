@@ -15,7 +15,6 @@ cApp::~cApp()
 bool cApp::OnInit()
 {
 	m_frame1 = new cMain();
-	m_frame1->CheckSmapiVersion();
 	m_frame1->Show(true);
 	// Band-aid fix for intial render issues (flips pages once)
 	m_frame1->m_notebook->SetSelection(1);

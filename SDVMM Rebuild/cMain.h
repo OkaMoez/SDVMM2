@@ -8,6 +8,7 @@
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
 #include <wx/event.h>
+#include <wx/fileconf.h>
 #include "cMod.h"
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -46,6 +47,7 @@ public:
 	void set_version_this_mm(string version);
 
 public:
+	wxFileConfig* config_ini = nullptr;
 	// Notebook
 	wxNotebook* m_notebook = nullptr;
 	// Tab 1
