@@ -230,19 +230,17 @@ cMain::~cMain()
 void cMain::SelfInitialize()
 {
 	string ini_name = "SDVMM2.ini"; // TODO use ini.h to interact with ini file
+
+	wxFileName f(wxStandardPaths::Get().GetExecutablePath());
+	wxString appPath = (f.GetPath() + wxT("\\SDVMM2.ini"));
+	config_ini = new wxFileConfig(wxEmptyString,
+		wxEmptyString, appPath);
+	config_ini->SetPath("/General");
+
 	if (existsFile(ini_name))
 	{
 		ini_exists_ = true;
 		if (FILE * ini_file = fopen(ini_name.c_str(), "r")) {
-			//Create wxFileName Class and assign complete exe path
-			wxFileName f(wxStandardPaths::Get().GetExecutablePath());
-			wxString appPath = (f.GetPath() + wxT("\\SDVMM2.ini"));
-
-			//Assign complete path of config to ConfigINI pointer.
-			config_ini = new wxFileConfig(wxEmptyString,
-				wxEmptyString, appPath);
-
-			config_ini->SetPath("/General");
 			set_game_directory(string(config_ini->Read(wxT("GamePath"), "directory not found")));
 			set_launch_with_steam(config_ini->ReadBool("SteamLauncher", true));
 			set_steam_directory(string(config_ini->Read(wxT("SteamPath"), "directory not found")));
@@ -252,7 +250,10 @@ void cMain::SelfInitialize()
 				RefreshModLists();
 			}
 		}
-		else {}
+		else 
+		{
+		
+		}
 		D(
 			if (report_game_directory) {
 				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
@@ -293,6 +294,7 @@ void cMain::set_game_directory(fs::path filepath)
 {
 	m_textctrl_game_directory->SetLabel(filepath.string());
 	game_directory_ = filepath;
+	RefreshModLists();
 }
 
 void cMain::set_steam_directory(fs::path filepath)
@@ -314,18 +316,38 @@ void cMain::set_version_this_mm(string version)
 void cMain::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher option
 {
 	event.Skip();
-	string test_str = ((this->game_directory().string() + "\\StardewModdingAPI"));
-	const char* open_command = (test_str.c_str());
-	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+	if (launch_with_steam())
+	{
+		string test_str = ((this->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
+			" \"" + game_directory().string() + "//StardewValleyAPI.exe\" %command%";
+		const char* open_command = (test_str.c_str());
+		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
+	}
+	else
+	{
+		string test_str = ((this->game_directory().string() + "\\StardewModdingAPI"));
+		const char* open_command = (test_str.c_str());
+		wxExecute(open_command, wxEXEC_ASYNC, NULL);
+	}
 }
 
 void cMain::OnLaunchVanillaClick(wxCommandEvent& event) // TODO Steam Launcher option
 {
 	event.Skip();
-	string test_str = ((this->game_directory().string() + "\\Stardew Valley"));
-	const char* open_command = (test_str.c_str());
-	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+	if (launch_with_steam())
+	{
+		string test_str = ((this->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150";
+		const char* open_command = (test_str.c_str());
+		wxExecute(open_command, wxEXEC_ASYNC, NULL);
+		wxExecute(open_command , wxEXEC_ASYNC, NULL);
+	}
+	else 
+	{
+		string test_str = ((this->game_directory().string() + "\\Stardew Valley"));
+		const char* open_command = (test_str.c_str());
+		wxExecute(open_command, wxEXEC_ASYNC, NULL);
+	}
 
 }
 
@@ -401,9 +423,21 @@ void cMain::OnMenuQuitClick(wxCommandEvent& event)
 void cMain::OnLauncherToggleClick(wxCommandEvent& event)
 {
 	event.Skip();
-	set_launch_with_steam(m_checkbox_launcher->GetValue());
-	config_ini->Write("SteamLauncher", m_checkbox_launcher->GetValue());
-	config_ini->Flush();
+	if (fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
+	{
+		set_launch_with_steam(m_checkbox_launcher->GetValue());
+		config_ini->Write("SteamLauncher", m_checkbox_launcher->GetValue());
+		config_ini->Flush();
+	}
+	else
+	{
+		set_launch_with_steam(false);
+		wxMessageDialog* event_launcher_toggle_box1 = new wxMessageDialog(NULL,
+			wxT("No Steam files found. \nPlease save the Steam path below and retry."), 
+			wxT("Launcher Option"),	wxOK, wxDefaultPosition);
+		event_launcher_toggle_box1->ShowModal();
+		delete event_launcher_toggle_box1;
+	}
 	if (launch_with_steam())
 	{
 		D(

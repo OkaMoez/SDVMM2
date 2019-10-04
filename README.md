@@ -16,7 +16,7 @@ In order of importance.
 * Toggle Mods On/Off [COMPLETE]
 * Locate Game Directory [COMPLETE]
 * Locate Steam Directory [COMPLETE]
-* Save Settings [PARTIAL]
+* Save Settings [COMPLETE]
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
