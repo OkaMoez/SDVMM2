@@ -20,6 +20,9 @@ In order of importance.
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
+#### Before second alpha release:
+* Handle exceptions if SMAPI not found [TODO]
+
 #### Before first full release:
 Not yet in order of importance.
 * Auto-find Game Directory [TODO]

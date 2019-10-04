@@ -294,6 +294,14 @@ void cMain::set_game_directory(fs::path filepath)
 {
 	m_textctrl_game_directory->SetLabel(filepath.string());
 	game_directory_ = filepath;
+	if (!fs::exists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods"))
+	{
+		fs::create_directory(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods");
+	}
+	if (!fs::exists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods_disabled"))
+	{
+		fs::create_directory(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods_disabled");
+	}
 	RefreshModLists();
 }
 
