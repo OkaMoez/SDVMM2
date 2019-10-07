@@ -232,8 +232,6 @@ void cMain::SelfInitialize()
 	D(
 		OutputDebugString(_T("SelfInit - Begin\n"));
 	)
-
-	string ini_name = "SDVMM2.ini"; // TODO use ini.h to interact with ini file
 	wxFileName f(wxStandardPaths::Get().GetExecutablePath());
 	wxString appPath = (f.GetPath() + wxT("\\SDVMM2.ini"));
 	D(
@@ -792,7 +790,7 @@ void cMain::LoadModsFromDir(string folder_name) // TODO replace custom ioFunctio
 			if (json_problem == 1)
 			{
 				wxMessageDialog* init_eBox1 = new wxMessageDialog(NULL,
-					wxT("Bad Format: Illegal trailing comma at:\n" + temp_path.string()),
+					wxT("Bad JSON Format: Illegal trailing comma at:\n" + temp_path.string()),
 					wxT("manifest.json error"), wxOK, wxDefaultPosition);
 				init_eBox1->ShowModal();
 				delete init_eBox1;
