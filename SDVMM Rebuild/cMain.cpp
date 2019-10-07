@@ -827,14 +827,16 @@ bool cMain::ExistsModFolders()
 	mod_d_path += "\\Mods_disabled";
 	game_file_path += "\\Stardew Valley.exe"; // TODO Make crossplatform?
 
+	D(
+		OutputDebugString(_T("ExistsModFolders - Begin Checking Mod Folders\n"));
+	)
+
 	if (!(fs::exists(game_file_path) and fs::is_regular_file(game_file_path)))
 	{
 		D(
-			wxMessageDialog * init_mfBox1 = new wxMessageDialog(NULL,
-				wxT("Game executable not found on path:\n" + game_file_path.string()),
-				wxT("wrong directory"), wxOK, wxDefaultPosition);
-		init_mfBox1->ShowModal();
-		delete init_mfBox1;
+			OutputDebugString(_T("ExistsModFolders - Game Executable not Found on Path:\n"));
+			OutputDebugStringA(game_file_path.string().c_str());
+			OutputDebugString(_T("ExistsModFolders - Bad Game Directory\n"));
 		)
 			return false;
 	}
@@ -842,56 +844,38 @@ bool cMain::ExistsModFolders()
 	{
 		if (!(fs::exists(mod_path) and fs::is_directory(mod_path)))
 		{
+			D(
+				OutputDebugString(_T("ExistsModFolders - Mods Folder not Found\n"));
+			)
 			fs::create_directory(mod_path);
 			D(
-				if (report_mod_directories) {
-					wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
-						mod_path.string(), wxT("Mods Directory Created"),
-						wxOK, wxDefaultPosition);
-					init_mdBox1->ShowModal();
-					delete init_mdBox1;
-				}
-				else {}
+				OutputDebugString(_T("ExistsModFolders - Mods Folder Created at:\n"));
+				OutputDebugStringA(mod_path.string().c_str());
 			)
 		}
 		else
 		{
 			D(
-				if (report_mod_directories) {
-					wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
-						mod_path.string(), wxT("Mods Directory Found"),
-						wxOK, wxDefaultPosition);
-					init_mdBox1->ShowModal();
-					delete init_mdBox1;
-				}
-				else {}
+				OutputDebugString(_T("ExistsModFolders - Mods Directory Found on Path:\n"));
+				OutputDebugStringA(mod_path.string().c_str());
 			)
 		}
 		if (!(fs::exists(mod_d_path) and fs::is_directory(mod_d_path)))
 		{
+			D(
+				OutputDebugString(_T("ExistsModFolders - Mods_disabled Folder not Found\n"));
+			)
 			fs::create_directory(mod_d_path);
 			D(
-				if (report_mod_directories) {
-					wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
-						mod_d_path.string(), wxT("Mods_d Directory Created"),
-						wxOK, wxDefaultPosition);
-					init_mdBox1->ShowModal();
-					delete init_mdBox1;
-				}
-				else {}
+				OutputDebugString(_T("ExistsModFolders - Mods_disabled Folder Created at:\n"));
+				OutputDebugStringA(mod_d_path.string().c_str());
 			)
 		}
 		else
 		{
 			D(
-				if (report_mod_directories) {
-					wxMessageDialog* init_mdBox1 = new wxMessageDialog(NULL,
-						mod_d_path.string(), wxT("Mods_d Directory Found"),
-						wxOK, wxDefaultPosition);
-					init_mdBox1->ShowModal();
-					delete init_mdBox1;
-				}
-				else {}
+				OutputDebugString(_T("ExistsModFolders - Mods Directory Found on Path:\n"));
+			OutputDebugStringA(mod_d_path.string().c_str());
 			)
 		}
 	}
