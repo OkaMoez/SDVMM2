@@ -244,12 +244,12 @@ void cMain::SelfInitialize()
 		wxEmptyString, appPath);
 	config_ini->SetPath("/General");
 
-	if (existsFile(ini_name))
+	if (existsFile(string(appPath)))
 	{
+		ini_exists_ = true;
 		D(
 			OutputDebugString(_T("SelfInit - .ini Exists\n"));
 		)
-		ini_exists_ = true;
 		if (FILE * ini_file = fopen(ini_name.c_str(), "r")) 
 		{
 			D(
