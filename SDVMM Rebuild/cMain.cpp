@@ -875,7 +875,7 @@ bool cMain::ExistsModFolders()
 		{
 			D(
 				OutputDebugString(_T("ExistsModFolders - Mods Directory Found on Path:\n"));
-			OutputDebugStringA(mod_d_path.string().c_str());
+				OutputDebugStringA(mod_d_path.string().c_str());
 			)
 		}
 	}
@@ -889,15 +889,25 @@ void cMain::CheckSmapiVersion()
 	path_smapi_logs += "\\StardewValley\\ErrorLogs\\SMAPI-latest.txt";
 	if (fs::exists(path_smapi_logs) and fs::is_regular_file(path_smapi_logs))
 	{
+		D(
+			OutputDebugString(_T("CheckSmapiVersion - Logs Found\n"));
+		)
 		wxTextFile smapi_logs;
 		smapi_logs.Open(wxString(path_smapi_logs));
 		wxString temp_string = smapi_logs.GetFirstLine();
 		size_t temp_version_start = temp_string.Find("] ") + 8;
 		size_t temp_version_end = temp_string.Find(" with Stardew") - 1;
 		version = temp_string.SubString(temp_version_start, temp_version_end);
+		D(
+			OutputDebugString(_T("CheckSmapiVersion - Version: "));
+			OutputDebugStringA(version.c_str());
+		)
 	}
 	else
 	{
+		D(
+			OutputDebugString(_T("CheckSmapiVersion - No Logs Found to Scrape\n"));
+		)
 		version = "not found";
 	}
 	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);
