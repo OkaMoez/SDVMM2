@@ -267,7 +267,7 @@ void cMain::SelfInitialize()
 		if (ExistsModFolders())
 		{
 			D(
-				OutputDebugString(_T("SelfInit - Refreshing Mod List..."));
+				OutputDebugString(_T("SelfInit - Refreshing Mod List\n"));
 			)
 			RefreshModLists();
 			D(
@@ -320,7 +320,6 @@ void cMain::set_game_directory(fs::path filepath)
 	{
 		fs::create_directory(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods_disabled");
 	}
-	RefreshModLists();
 }
 
 void cMain::set_steam_directory(fs::path filepath)
@@ -487,6 +486,7 @@ void cMain::OnGameDirectorySaveClick(wxCommandEvent& event)
 		set_game_directory(string(m_textctrl_game_directory->GetLineText(0)));
 		config_ini->Write("GamePath", wxString(game_directory().string()));
 		config_ini->Flush();
+		RefreshModLists();
 	}
 	else
 	{
@@ -509,6 +509,7 @@ void cMain::OnGameDirectoryBrowseClick(wxCommandEvent& event)
 			set_game_directory(string(m_dirdialog_game_browse->GetPath()));
 			config_ini->Write("GamePath", wxString(game_directory().string()));
 			config_ini->Flush();
+			RefreshModLists();
 		}
 		else
 		{
@@ -680,130 +681,140 @@ void cMain::RefreshModLists()
 	LoadModsFromDir("\\Mods_disabled\\");
 }
 
-void cMain::LoadModsFromDir(string folder_name) // TODO replace custom ioFunctions with filesystem
+void cMain::LoadModsFromDir(string folder_name) 
 {
+	// TODO group and report errors in scrollable dialogue (bad jsons, incompatible mods, etc.)
+	// TODO replace custom ioFunctions with filesystem
 	json json_manifest;
 	bool is_good_json = false;
 	bool is_active = (folder_name == "\\Mods\\");
 	fs::path temp_dir = (this->game_directory());
 	temp_dir += folder_name;
 	fs::path temp_path;
+	D(
+		OutputDebugString(_T("LoadModsFromDir - Begin Iterator at:\n"));
+		OutputDebugStringA(game_directory().string().c_str());
+		OutputDebugString(_T("\n"));
+	)
 	for (auto& dir_iter : fs::directory_iterator(temp_dir))
 	{
 		is_good_json = false;
 		temp_path = dir_iter.path();
-		temp_path += "\\manifest.json";
-
-
 		D(
-			if (report_looped_path) {
-				wxMessageDialog* m_pBox6 = new wxMessageDialog(NULL,
-					(temp_path.string()), wxT("Path Check"),
-					wxOK, wxDefaultPosition);
-				m_pBox6->ShowModal();
-				delete m_pBox6;
-			}
-			else {}
+			OutputDebugStringA(temp_path.string().c_str());
 		)
-
-			int json_problem = NULL;
-		ifstream json_stream(temp_path.c_str());
-		try {
-			json_manifest = json::parse(json_stream); // TODO prompt user to handle trailing commas
-			is_good_json = true;
-		}
-		catch (json::parse_error & e) {
-			is_good_json = false;
-			string temp_exc = e.what();
-
-			if (e.id == 101) {
-				json_problem = 1;
-			}
-			else {
-				json_problem = 2;
-			}
-
-			D(
-				if (report_parse_exception) {
-					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-						temp_exc, wxT("Exception Report"),
-						wxOK, wxDefaultPosition);
-					m_pBox2->ShowModal();
-					delete m_pBox2;
-				}
-				else {}
-			)
-
-		}
-
-		this->FormatOldVersion(json_manifest);
-
-		if (existsFile(temp_path.string()) and is_good_json == true) // TODO Review
+		if (fs::is_directory(temp_path))
 		{
-			D(
-				if (report_parsed_mod_data) {
-					string temp_msg1 = "";
-					string temp_msg2 = "";
-					json_manifest["Name"].get_to(temp_msg1);
-					json_manifest["Version"].get_to(temp_msg2);
-					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-						(temp_msg1 + " exists, " + temp_msg2),
-						wxT("File Check"), wxOK, wxDefaultPosition);
-					m_pBox2->ShowModal();
-					delete m_pBox2;
+		D(
+			OutputDebugString(_T(" - Is Directory\n"));
+		)
+			temp_path += "\\manifest.json";
+
+				int json_problem = NULL;
+			ifstream json_stream(temp_path.c_str());
+			try {
+				json_manifest = json::parse(json_stream); // TODO prompt user to handle trailing commas
+				is_good_json = true;
+			}
+			catch (json::parse_error& e) {
+				is_good_json = false;
+				string temp_exc = e.what();
+
+				if (e.id == 101) {
+					json_problem = 1;
 				}
-				else {}
-			)
+				else {
+					json_problem = 2;
+				}
 
-				cMod aMod(json_manifest);
-			wxVector<wxVariant> thisMod;
-			thisMod.push_back(wxVariant(is_active));
-			thisMod.push_back(wxVariant(aMod.mod_name()));
-			thisMod.push_back(wxVariant(aMod.mod_author()));
-			thisMod.push_back(wxVariant(aMod.mod_version()));
-			thisMod.push_back(wxVariant((dir_iter.path()).string()));
-			this->m_dataviewlistctrl_mods->AppendItem(thisMod);
-			thisMod.clear();
+				D(
+					if (report_parse_exception) {
+						wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
+							temp_exc, wxT("Exception Report"),
+							wxOK, wxDefaultPosition);
+						m_pBox2->ShowModal();
+						delete m_pBox2;
+					}
+					else {}
+				)
 
-			/*
-			wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
-			m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
+			}
 
-			wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
-				if(!pStrData)
-			wxString id = pStrData->GetData();
-			*/
+			this->FormatOldVersion(json_manifest);
 
-			D(
-				if (report_mod_object_data) {
-					wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-						(aMod.infoString()), wxT("Mod Object"),
+			if (existsFile(temp_path.string()) and is_good_json == true) // TODO Review
+			{
+				D(
+					if (report_parsed_mod_data) {
+						string temp_msg1 = "";
+						string temp_msg2 = "";
+						json_manifest["Name"].get_to(temp_msg1);
+						json_manifest["Version"].get_to(temp_msg2);
+						wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
+							(temp_msg1 + " exists, " + temp_msg2),
+							wxT("File Check"), wxOK, wxDefaultPosition);
+						m_pBox2->ShowModal();
+						delete m_pBox2;
+					}
+					else {}
+				)
+
+					cMod aMod(json_manifest);
+				wxVector<wxVariant> thisMod;
+				thisMod.push_back(wxVariant(is_active));
+				thisMod.push_back(wxVariant(aMod.mod_name()));
+				thisMod.push_back(wxVariant(aMod.mod_author()));
+				thisMod.push_back(wxVariant(aMod.mod_version()));
+				thisMod.push_back(wxVariant((dir_iter.path()).string()));
+				this->m_dataviewlistctrl_mods->AppendItem(thisMod);
+				thisMod.clear();
+
+				/*
+				wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
+				m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
+
+				wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
+					if(!pStrData)
+				wxString id = pStrData->GetData();
+				*/
+
+				D(
+					if (report_mod_object_data) {
+						wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
+							(aMod.infoString()), wxT("Mod Object"),
+							wxOK, wxDefaultPosition);
+						m_pBox2->ShowModal();
+						delete m_pBox2;
+					}
+					else {}
+				)
+			}
+			else if (is_good_json == false)
+			{
+				if (json_problem == 1)
+				{
+					wxMessageDialog* init_eBox1 = new wxMessageDialog(NULL,
+						wxT("Bad JSON Format: Illegal trailing comma at:\n" + temp_path.string()),
+						wxT("manifest.json error"), wxOK, wxDefaultPosition);
+					init_eBox1->ShowModal();
+					delete init_eBox1;
+				}
+				else if (json_problem)
+				{
+					wxMessageDialog* init_eBox2 = new wxMessageDialog(NULL,
+						wxT("Bad Format: I dunno yet."), wxT("manifest.json error"),
 						wxOK, wxDefaultPosition);
-					m_pBox2->ShowModal();
-					delete m_pBox2;
+					init_eBox2->ShowModal();
+					delete init_eBox2;
 				}
 				else {}
-			)
+			}
 		}
-		else if (is_good_json == false)
+		else 
 		{
-			if (json_problem == 1)
-			{
-				wxMessageDialog* init_eBox1 = new wxMessageDialog(NULL,
-					wxT("Bad JSON Format: Illegal trailing comma at:\n" + temp_path.string()),
-					wxT("manifest.json error"), wxOK, wxDefaultPosition);
-				init_eBox1->ShowModal();
-				delete init_eBox1;
-			}
-			else if (json_problem)
-			{
-				wxMessageDialog* init_eBox2 = new wxMessageDialog(NULL,
-					wxT("Bad Format: I dunno yet."), wxT("manifest.json error"),
-					wxOK, wxDefaultPosition);
-				init_eBox2->ShowModal();
-				delete init_eBox2;
-			}
-			else {}
+		D(
+			OutputDebugString(_T(" - Is NOT Directory\n"));
+		)
 		}
 	}
 }
@@ -826,6 +837,7 @@ bool cMain::ExistsModFolders()
 		D(
 			OutputDebugString(_T("ExistsModFolders - Game Executable not Found on Path:\n"));
 			OutputDebugStringA(game_file_path.string().c_str());
+			OutputDebugString(_T("\n"));
 			OutputDebugString(_T("ExistsModFolders - Bad Game Directory\n"));
 		)
 			return false;
@@ -841,6 +853,7 @@ bool cMain::ExistsModFolders()
 			D(
 				OutputDebugString(_T("ExistsModFolders - Mods Folder Created at:\n"));
 				OutputDebugStringA(mod_path.string().c_str());
+				OutputDebugString(_T("\n"));
 			)
 		}
 		else
@@ -848,6 +861,7 @@ bool cMain::ExistsModFolders()
 			D(
 				OutputDebugString(_T("ExistsModFolders - Mods Directory Found on Path:\n"));
 				OutputDebugStringA(mod_path.string().c_str());
+				OutputDebugString(_T("\n"));
 			)
 		}
 		if (!(fs::exists(mod_d_path) and fs::is_directory(mod_d_path)))
@@ -859,6 +873,7 @@ bool cMain::ExistsModFolders()
 			D(
 				OutputDebugString(_T("ExistsModFolders - Mods_disabled Folder Created at:\n"));
 				OutputDebugStringA(mod_d_path.string().c_str());
+				OutputDebugString(_T("\n"));
 			)
 		}
 		else
@@ -866,6 +881,7 @@ bool cMain::ExistsModFolders()
 			D(
 				OutputDebugString(_T("ExistsModFolders - Mods Directory Found on Path:\n"));
 				OutputDebugStringA(mod_d_path.string().c_str());
+				OutputDebugString(_T("\n"));
 			)
 		}
 	}

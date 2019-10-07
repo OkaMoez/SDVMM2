@@ -21,8 +21,13 @@ In order of importance.
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
 #### Before second alpha release:
-* Handle exceptions if SMAPI not found [TODO]
-* Handle other exceptions (see bug reports) [TODO]
+* Rework debug message methods [COMPLETE]
+* Migrate init file checks from filesystem to wxWidgets [COMPLETE]
+
+#### Before third alpha release:
+* Launch without exceptions [PARTIAL]
+* Handle exceptions if SMAPI not found [COMPLETE]
+* Handle other exceptions (see bug reports) [PARTIAL]
 
 #### Before first full release:
 Not yet in order of importance.
@@ -33,6 +38,7 @@ Not yet in order of importance.
 * Launch through Steam [TODO]
 * Help/About Menu Tab [TODO]
 * Migrate Filesystem to wxStandardPaths [TODO]
+
 #### Maybe one day:
 Not in order of importance.
 * Donation Button? [TODO]
