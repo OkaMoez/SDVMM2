@@ -229,54 +229,82 @@ cMain::~cMain()
 
 void cMain::SelfInitialize()
 {
-	string ini_name = "SDVMM2.ini"; // TODO use ini.h to interact with ini file
+	D(
+		OutputDebugString(_T("SelfInit - Begin\n"));
+	)
 
+	string ini_name = "SDVMM2.ini"; // TODO use ini.h to interact with ini file
 	wxFileName f(wxStandardPaths::Get().GetExecutablePath());
 	wxString appPath = (f.GetPath() + wxT("\\SDVMM2.ini"));
+	D(
+		OutputDebugString(_T("SelfInit - Checking for .ini at:\n"));
+		OutputDebugStringA(appPath + "\n");
+	)
 	config_ini = new wxFileConfig(wxEmptyString,
 		wxEmptyString, appPath);
 	config_ini->SetPath("/General");
 
 	if (existsFile(ini_name))
 	{
+		D(
+			OutputDebugString(_T("SelfInit - .ini Exists\n"));
+		)
 		ini_exists_ = true;
-		if (FILE * ini_file = fopen(ini_name.c_str(), "r")) {
+		if (FILE * ini_file = fopen(ini_name.c_str(), "r")) 
+		{
+			D(
+				OutputDebugString(_T("SelfInit - Open .ini\n"));
+			)
 			set_game_directory(string(config_ini->Read(wxT("GamePath"), "directory not found")));
+			D(
+				OutputDebugString(_T("SelfInit - .ini Game Path Read\n"));
+			)
 			set_launch_with_steam(config_ini->ReadBool("SteamLauncher", true));
+			D(
+				OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
+			)
 			set_steam_directory(string(config_ini->Read(wxT("SteamPath"), "directory not found")));
+			D(
+				OutputDebugString(_T("SelfInit - .ini Steam Path Read\n"));
+			)
 
 			if (ExistsModFolders())
 			{
+				D(
+					OutputDebugString(_T("SelfInit - Refreshing Mod List..."));
+				)
 				RefreshModLists();
+				D(
+					OutputDebugString(_T("SelfInit - Refreshed Mod List\n"));
+				)
+			}
+			else
+			{
+				D(
+					OutputDebugString(_T("SelfInit - No Mod Folders Found\n"));
+				)
 			}
 		}
 		else 
 		{
-		
+			D(
+				OutputDebugString(_T("SelfInit - .ini Could Not Open\n"));
+			)		
 		}
 		D(
-			if (report_game_directory) {
-				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
-					game_directory().string(), wxT("Game Directory"),
-					wxOK, wxDefaultPosition);
-				m_pBox1->ShowModal();
-				delete m_pBox1;
-			}
-			else {}
+			OutputDebugString(_T("SelfInit - Game Directory\n"));
+			OutputDebugStringA(game_directory().string().c_str());
+			OutputDebugString(_T("SelfInit - Checking SMAPI Version\n"));
 		)
 			CheckSmapiVersion();
+		D(
+			OutputDebugString(_T("SelfInit - Checked SMAPI Version\n"));
+		)
 	}
 	else
 	{
 		D(
-			if (report_ini_exists) {
-				wxMessageDialog* m_pBox1 = new wxMessageDialog(NULL,
-					wxT("No .ini file was found."), wxT("INI Not Found"),
-					wxOK, wxDefaultPosition);
-				m_pBox1->ShowModal();
-				delete m_pBox1;
-			}
-			else {}
+			OutputDebugString(_T("SelfInit - No .ini Found\n"));
 		)
 	}
 }

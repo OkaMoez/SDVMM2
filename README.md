@@ -22,6 +22,7 @@ In order of importance.
 
 #### Before second alpha release:
 * Handle exceptions if SMAPI not found [TODO]
+* Handle other exceptions (see bug reports) [TODO]
 
 #### Before first full release:
 Not yet in order of importance.
