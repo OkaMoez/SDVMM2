@@ -250,50 +250,42 @@ void cMain::SelfInitialize()
 		D(
 			OutputDebugString(_T("SelfInit - .ini Exists\n"));
 		)
-		if (FILE * ini_file = fopen(ini_name.c_str(), "r")) 
-		{
-			D(
-				OutputDebugString(_T("SelfInit - Open .ini\n"));
-			)
-			set_game_directory(string(config_ini->Read(wxT("GamePath"), "directory not found")));
-			D(
-				OutputDebugString(_T("SelfInit - .ini Game Path Read\n"));
-			)
-			set_launch_with_steam(config_ini->ReadBool("SteamLauncher", true));
-			D(
-				OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
-			)
-			set_steam_directory(string(config_ini->Read(wxT("SteamPath"), "directory not found")));
-			D(
-				OutputDebugString(_T("SelfInit - .ini Steam Path Read\n"));
-			)
+		D(
+			OutputDebugString(_T("SelfInit - Open .ini\n"));
+		)
+		set_game_directory(string(config_ini->Read(wxT("GamePath"), "directory not found")));
+		D(
+			OutputDebugString(_T("SelfInit - .ini Game Path Read\n"));
+		)
+		set_launch_with_steam(config_ini->ReadBool("SteamLauncher", true));
+		D(
+			OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
+		)
+		set_steam_directory(string(config_ini->Read(wxT("SteamPath"), "directory not found")));
+		D(
+			OutputDebugString(_T("SelfInit - .ini Steam Path Read\n"));
+		)
 
-			if (ExistsModFolders())
-			{
-				D(
-					OutputDebugString(_T("SelfInit - Refreshing Mod List..."));
-				)
-				RefreshModLists();
-				D(
-					OutputDebugString(_T("SelfInit - Refreshed Mod List\n"));
-				)
-			}
-			else
-			{
-				D(
-					OutputDebugString(_T("SelfInit - No Mod Folders Found\n"));
-				)
-			}
-		}
-		else 
+		if (ExistsModFolders())
 		{
 			D(
-				OutputDebugString(_T("SelfInit - .ini Could Not Open\n"));
-			)		
+				OutputDebugString(_T("SelfInit - Refreshing Mod List..."));
+			)
+			RefreshModLists();
+			D(
+				OutputDebugString(_T("Refreshed Mod List\n"));
+			)
+		}
+		else
+		{
+			D(
+				OutputDebugString(_T("SelfInit - No Mod Folders Found\n"));
+			)
 		}
 		D(
 			OutputDebugString(_T("SelfInit - Game Directory\n"));
 			OutputDebugStringA(game_directory().string().c_str());
+			OutputDebugString(_T("\n"));
 			OutputDebugString(_T("SelfInit - Checking SMAPI Version\n"));
 		)
 			CheckSmapiVersion();
@@ -901,6 +893,7 @@ void cMain::CheckSmapiVersion()
 		D(
 			OutputDebugString(_T("CheckSmapiVersion - Version: "));
 			OutputDebugStringA(version.c_str());
+			OutputDebugString(_T("\n"));
 		)
 	}
 	else
