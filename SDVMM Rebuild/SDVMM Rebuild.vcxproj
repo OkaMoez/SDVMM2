@@ -31,7 +31,6 @@
     <ClInclude Include="debugConstants.h" />
     <ClInclude Include="ioFunctions.h" />
     <ClInclude Include="json.hpp" />
-    <ClInclude Include="wxDirectoriesEnumerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="E:\Image Edits\SDVMM\SDVMM2.png">

@@ -37,10 +37,14 @@ Not yet in order of importance.
 * Add/Delete Mods [TODO]
 * Launch through Steam [TODO]
 * Help/About Menu Tab [TODO]
-* Migrate Filesystem to wxStandardPaths [TODO]
+* Migrate Filesystem to wxStandardPaths [PARTIAL]
 
 #### Maybe one day:
 Not in order of importance.
+* Nest mods in list (content patcher, etc) [TODO]
+* Save/Load Modlist Profiles [TODO]
+* Export/Import shared Modlist profiles [TODO]
+* Check for mod updates [TODO]
 * Donation Button? [TODO]
 * XNB Support? [TODO]
 
