@@ -23,6 +23,10 @@ In order of importance.
 #### Before second alpha release:
 * Rework debug message methods [COMPLETE]
 * Migrate init file checks from filesystem to wxWidgets [COMPLETE]
+* Group json error messages [TODO]
+* Handle bad manifest.json format errors [TODO]
+* Mod counter [TODO]
+* Consider migration to RapidJSON [TODO]
 
 #### Before third alpha release:
 * Launch without exceptions [PARTIAL]
@@ -35,7 +39,7 @@ Not yet in order of importance.
 * Auto-find Steam Directory [TODO]
 * Flag Incompatible Mods [TODO]
 * Add/Delete Mods [TODO]
-* Launch through Steam [TODO]
+* Launch through Steam [COMPLETE]
 * Help/About Menu Tab [TODO]
 * Migrate Filesystem to wxStandardPaths [PARTIAL]
 
