@@ -641,7 +641,7 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 	RefreshModLists();
 }
 
-void cMain::FormatOldVersion(json& manifest) // TODO remove? currently is rejected by smapi
+void cMain::FormatOldVersion(json& manifest) // TODO move check to refresh and make flag
 {
 	string temp_v = "";
 	if (manifest.at("Version").is_object())
@@ -684,10 +684,11 @@ void cMain::RefreshModLists()
 void cMain::LoadModsFromDir(string folder_name) 
 {
 	// TODO group and report errors in scrollable dialogue (bad jsons, incompatible mods, etc.)
-	// TODO replace custom ioFunctions with filesystem
+	// TODO replace custom ioFunctions with filesystem?
 	json json_manifest;
-	bool is_good_json = false;
 	bool is_active = (folder_name == "\\Mods\\");
+	bool is_good_json = false;
+	bool is_using_semvar = true;
 	fs::path temp_dir = (this->game_directory());
 	temp_dir += folder_name;
 	fs::path temp_path;
@@ -713,7 +714,7 @@ void cMain::LoadModsFromDir(string folder_name)
 				int json_problem = NULL;
 			ifstream json_stream(temp_path.c_str());
 			try {
-				json_manifest = json::parse(json_stream); // TODO prompt user to handle trailing commas
+				json_manifest = json::parse(json_stream); // TODO handle trailing commas
 				is_good_json = true;
 			}
 			catch (json::parse_error& e) {
@@ -722,25 +723,101 @@ void cMain::LoadModsFromDir(string folder_name)
 
 				if (e.id == 101) {
 					json_problem = 1;
+					// TODO clean commas and try again
 				}
 				else {
 					json_problem = 2;
 				}
-
-				D(
-					if (report_parse_exception) {
-						wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-							temp_exc, wxT("Exception Report"),
-							wxOK, wxDefaultPosition);
-						m_pBox2->ShowModal();
-						delete m_pBox2;
-					}
-					else {}
-				)
-
 			}
 
-			this->FormatOldVersion(json_manifest);
+			// Check for required manifest.json fields and edit as needed
+			// TODO 
+			if (!json_manifest.contains("Name"))
+			{
+				string temp = "";
+				if (json_manifest.contains("name"))
+				{
+					json_manifest["name"].get_to(temp);
+					json_manifest["Name"] = temp;
+					json_manifest.erase("name");
+				}
+				else
+				{
+					json_manifest["Name"] = temp;
+				}
+
+			}
+			if (!json_manifest.contains("Author"))
+			{
+				string temp = "";
+				if (json_manifest.contains("author"))
+				{
+					json_manifest["author"].get_to(temp);
+					json_manifest["Author"] = temp;
+					json_manifest.erase("author");
+				}
+				else
+				{
+					json_manifest["Author"] = temp;
+				}
+			}
+			if (!json_manifest.contains("Version"))
+			{
+				string temp = "";
+				if (json_manifest.contains("version"))
+				{
+					json_manifest["version"].get_to(temp);
+					json_manifest["Version"] = temp;
+					json_manifest.erase("version");
+				}
+				else
+				{
+					json_manifest["Version"] = temp;
+				}
+			}
+			else if (json_manifest["Version"].is_object())
+			{
+				// flag outdated version object and make readable
+				string temp = "";
+				is_using_semvar = false;
+				int temp_v1 = NULL;
+				int temp_v2 = NULL;
+				int temp_v3 = NULL;
+				json_manifest["Version"]["MajorVersion"].get_to(temp_v1);
+				json_manifest["Version"]["MinorVersion"].get_to(temp_v2);
+				json_manifest["Version"]["PatchVersion"].get_to(temp_v3);
+				temp = std::to_string(temp_v1)
+					+ "." + std::to_string(temp_v2)
+					+ "." + std::to_string(temp_v3);
+				json_manifest.erase("Version");
+				json_manifest["Version"] = temp;
+			}
+			if (!json_manifest.contains("Description"))
+			{
+				string temp = "";
+				if (json_manifest.contains("description"))
+				{
+					json_manifest["description"].get_to(temp);
+					json_manifest["Description"] = temp;
+					json_manifest.erase("description");
+				}
+				else
+				{
+					json_manifest["Description"] = temp;
+				}
+			}
+			if (!json_manifest.contains("UniqueID"))
+			{
+				string temp = "";
+				if (json_manifest.contains("uniqueID"))
+				{
+					// if bad case, fix case (more work needed)
+				}
+				else
+				{
+					json_manifest["UniqueID"] = temp;
+				}
+			}
 
 			if (existsFile(temp_path.string()) and is_good_json == true) // TODO Review
 			{
