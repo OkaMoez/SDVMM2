@@ -165,6 +165,6 @@ public:
 	bool ExistsModFolders();
 	void CheckSmapiVersion();
 	void ResetRefreshErrors(); // TODO format and move to getters/setter
-	void ShowRefreshErrors();
+	void ShowRefreshErrors(); // TODO add note about not showing bad jsons
 };
 
