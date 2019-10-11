@@ -19,11 +19,11 @@ private:
 	string mod_name_;
 	string mod_author_;
 	string mod_version_;
+	string mod_description_;
+	string mod_unique_id_;
 	int major_version_;
 	int minor_version_;
 	int patch_version_;
-	string mod_description_;
-	string mod_unique_id_;
 
 	void set_int_version();
 

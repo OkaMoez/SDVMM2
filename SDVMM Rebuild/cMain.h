@@ -20,6 +20,10 @@ class cMain : public wxFrame // TODO Organize privacy
 private:
 	bool ini_exists_ = false;
 	bool launch_with_steam_ = false;
+	fs::path game_directory_ = "";
+	fs::path steam_directory_ = "";
+	string version_smapi_ = "not found";
+	string version_this_mm_ = "0.5.0-alpha.5";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
 		{"on_refresh", false},
@@ -31,7 +35,8 @@ private:
 		{"json", false},
 		{"semvar", false},
 		{"format", false},
-		{"reserved", false}
+		{"format_local", false},
+		{"smapi", false}
 	};
 	std::map<string, int> error_count_{
 		{"json", 0},
@@ -39,10 +44,6 @@ private:
 		{"format", 0},
 		{"reserved", 0}
 	};
-	fs::path game_directory_ = "";
-	fs::path steam_directory_ = "";
-	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.4";
 
 	// TODO Rename?
 	int ID_MENU_MODS = wxNewId();
@@ -102,6 +103,10 @@ public:
 	wxButton* m_button_steam_directory_save = nullptr;
 	wxButton* m_button_steam_directory_browse = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab3_steam_directory = nullptr;
+	// Tab 3 - Error Mute Option
+	wxStaticText* m_stext_mute = nullptr;
+	wxCheckBox* m_checkbox_mute = nullptr;
+	wxBoxSizer* m_sizer_notebook_tab3_mute = nullptr;
 	// Tab 3 - Layout
 	wxBoxSizer* m_sizer_notebook_tab3_items = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab3_left = nullptr;
@@ -150,6 +155,7 @@ private:
 	void OnGameDirectoryBrowseClick(wxCommandEvent& event);
 	void OnSteamDirectorySaveClick(wxCommandEvent& event);
 	void OnSteamDirectoryBrowseClick(wxCommandEvent& event);
+	void OnMuteModToggleClick(wxCommandEvent& event);
 	
 public:
 	void ToggleMod(wxDataViewEvent& event);

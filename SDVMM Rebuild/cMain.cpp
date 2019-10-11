@@ -69,10 +69,10 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 
 	// Tab 3 - Launcher Sizer
 	m_stext_launcher = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Launch w/ Steam: ");
-	m_checkbox_launcher = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "(uncheck if you have the GOG version)");
+	m_checkbox_launcher = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "  (uncheck if you have the GOG version)");
 	m_checkbox_launcher->Bind(wxEVT_CHECKBOX, &cMain::OnLauncherToggleClick, this);
 	m_sizer_notebook_tab3_launcher = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_notebook_tab3_launcher->Add(m_stext_launcher, 2, wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_launcher->Add(m_stext_launcher, 3, wxALIGN_CENTER_VERTICAL, 0);
 	m_sizer_notebook_tab3_launcher->Add(m_checkbox_launcher, 7, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
 
 
@@ -106,13 +106,22 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_sizer_notebook_tab3_steam_directory->Add(m_button_steam_directory_save, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
 	m_sizer_notebook_tab3_steam_directory->Add(m_button_steam_directory_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
 
+	// Tab 3 - Error Mute Sizer
+	m_stext_mute = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Mute Mod List Errors:");
+	m_checkbox_mute = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "");
+	m_checkbox_mute->Bind(wxEVT_CHECKBOX, &cMain::OnMuteModToggleClick, this);
+	m_sizer_notebook_tab3_mute = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_notebook_tab3_mute->Add(m_stext_mute, 3, wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_mute->Add(m_checkbox_mute, 7, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
+
 	// Tab 3 - Vertical Sizer // TODO change layout
 	m_sizer_notebook_tab3_items = new wxBoxSizer(wxVERTICAL);
 	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_launcher, 1, wxEXPAND, 0);
 	m_sizer_notebook_tab3_items->AddStretchSpacer(0);
 	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_game_directory, 1, wxEXPAND, 0);
 	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_steam_directory, 1, wxEXPAND, 0);
-	m_sizer_notebook_tab3_items->AddStretchSpacer(4);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_mute, 1, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->AddStretchSpacer(3);
 
 	// Tab 3 - Dummy Sizers for Margins
 	m_sizer_notebook_tab3_left = new wxBoxSizer(wxVERTICAL);
@@ -305,6 +314,21 @@ void cMain::set_launch_with_steam(bool state)
 
 void cMain::set_game_directory(fs::path filepath)
 {
+	if (!fs::exists(filepath.string() + "\\StardewModdingAPI.exe")) // TODO make own function
+	{
+		error_check_["smapi"] = true;
+		wxMessageDialog* error_no_smapi = new wxMessageDialog(NULL,
+			wxT("SMAPI not detected in:\n" + filepath.string()),
+			wxT("SMAPI Error"), wxOK, wxDefaultPosition);
+		error_no_smapi->ShowModal();
+		delete error_no_smapi;
+	}
+	else 
+	{ 
+		error_check_["smapi"] = false;
+		m_button_launch_smapi->SetLabel("Launch SMAPI with Mods");
+		m_button_launch_smapi->Enable();
+	}
 	m_textctrl_game_directory->SetLabel(filepath.string());
 	game_directory_ = filepath;
 	if (!fs::exists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods"))
@@ -336,19 +360,27 @@ void cMain::set_version_this_mm(string version)
 void cMain::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher option
 {
 	event.Skip();
-	if (launch_with_steam())
+	if (error_check_["smapi"] == true) 
 	{
-		string test_str = ((this->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
-			" \"" + game_directory().string() + "//StardewValleyAPI.exe\" %command%";
-		const char* open_command = (test_str.c_str());
-		wxExecute(open_command, wxEXEC_ASYNC, NULL);
-
+		m_button_launch_smapi->Disable();
+		m_button_launch_smapi->SetLabel("SMAPI Not Found!");
 	}
 	else
 	{
-		string test_str = ((this->game_directory().string() + "\\StardewModdingAPI"));
-		const char* open_command = (test_str.c_str());
-		wxExecute(open_command, wxEXEC_ASYNC, NULL);
+		if (launch_with_steam())
+		{
+			string test_str = ((this->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
+				" \"" + game_directory().string() + "//StardewValleyAPI.exe\" %command%";
+			const char* open_command = (test_str.c_str());
+			wxExecute(open_command, wxEXEC_ASYNC, NULL);
+
+		}
+		else
+		{
+			string test_str = ((this->game_directory().string() + "\\StardewModdingAPI"));
+			const char* open_command = (test_str.c_str());
+			wxExecute(open_command, wxEXEC_ASYNC, NULL);
+		}
 	}
 }
 
@@ -564,6 +596,19 @@ void cMain::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 	else {}
 }
 
+void cMain::OnMuteModToggleClick(wxCommandEvent& event)
+{
+	event.Skip();
+	if (error_mute_["on_refresh"] == 1)
+	{
+		error_mute_["on_refresh"] = 0;
+	}
+	else
+	{
+		error_mute_["on_refresh"] = 1;
+	}
+}
+
 //--------------------
 // Backend Functions
 //--------------------
@@ -669,7 +714,6 @@ void cMain::LoadModsFromDir(string folder_name)
 {
 	// TODO group and report errors in scrollable dialogue (bad jsons, incompatible mods, etc.)
 	// TODO replace custom ioFunctions with filesystem?
-	json json_manifest;
 	fs::path temp_dir = (this->game_directory());
 	temp_dir += folder_name;
 	fs::path temp_path;
@@ -684,7 +728,8 @@ void cMain::LoadModsFromDir(string folder_name)
 	)
 	for (auto& dir_iter : fs::directory_iterator(temp_dir))
 	{
-		error_json = 0;
+		error_check_["json"] = false;
+		error_check_["format_local"] = false;
 		error_path = dir_iter.path().filename();
 		temp_path = dir_iter.path();
 		D(
@@ -698,19 +743,23 @@ void cMain::LoadModsFromDir(string folder_name)
 			temp_path += "\\manifest.json";
 
 			ifstream json_stream(temp_path.c_str());
+			json json_manifest;
 			try {
 				try {
 					json_manifest = json::parse(json_stream); // TODO handle trailing commas
 				}
 				catch (json::parse_error & e) {
+					error_check_["json"] = true;
+					error_count_["json"]++;
 					string temp_exc = e.what();
-
 					if (e.id == 101) {
-						error_json = 1;
+						error_locations_ += "\n" + error_path.string() + " - JSON Comma Error";
 						// TODO clean commas and try again
+						continue;
 					}
 					else {
-						error_json = 2;
+						error_locations_ += "\n" + error_path.string() + " - JSON Formatting";
+						continue;
 					}
 				}
 
@@ -719,6 +768,7 @@ void cMain::LoadModsFromDir(string folder_name)
 				if (!json_manifest.contains("Name"))
 				{
 					error_check_["format"] = true;
+					error_check_["format_local"] = true;
 					error_count_["format"]++;
 					string temp = "";
 					if (json_manifest.contains("name"))
@@ -736,6 +786,7 @@ void cMain::LoadModsFromDir(string folder_name)
 				if (!json_manifest.contains("Author"))
 				{
 					error_check_["format"] = true;
+					error_check_["format_local"] = true;
 					error_count_["format"]++;
 					string temp = "";
 					if (json_manifest.contains("author"))
@@ -752,6 +803,7 @@ void cMain::LoadModsFromDir(string folder_name)
 				if (!json_manifest.contains("Version"))
 				{
 					error_check_["format"] = true;
+					error_check_["format_local"] = true;
 					error_count_["format"]++;
 					string temp = "";
 					if (json_manifest.contains("version"))
@@ -787,6 +839,7 @@ void cMain::LoadModsFromDir(string folder_name)
 				if (!json_manifest.contains("Description"))
 				{
 					error_check_["format"] = true;
+					error_check_["format_local"] = true;
 					error_count_["format"]++;
 					string temp = "";
 					if (json_manifest.contains("description"))
@@ -803,6 +856,7 @@ void cMain::LoadModsFromDir(string folder_name)
 				if (!json_manifest.contains("UniqueID"))
 				{
 					error_check_["format"] = true;
+					error_check_["format_local"] = true;
 					error_count_["format"]++;
 					string temp = "";
 					if (json_manifest.contains("uniqueID"))
@@ -814,12 +868,12 @@ void cMain::LoadModsFromDir(string folder_name)
 						json_manifest["UniqueID"] = temp;
 					}
 				}
-				if (error_check_["format"] == true)
+				if (error_check_["format_local"] == true)
 				{
 					error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
 				}
 
-				if (existsFile(temp_path.string()) and error_count_["json"] == 0) // TODO Review
+				if (existsFile(temp_path.string()) and (error_check_["json"] == false)) // TODO Review
 				{
 					D(
 						if (report_parsed_mod_data) {
@@ -865,27 +919,6 @@ void cMain::LoadModsFromDir(string folder_name)
 						}
 						else {}
 					)
-				}
-				else if (error_json != 0)
-				{
-					error_count_["json"]++;
-					if (error_json == 1)
-					{
-						wxMessageDialog* init_eBox1 = new wxMessageDialog(NULL,
-							wxT("Bad JSON Format: Illegal trailing comma at:\n" + temp_path.string()),
-							wxT("manifest.json error"), wxOK, wxDefaultPosition);
-						init_eBox1->ShowModal();
-						delete init_eBox1;
-					}
-					else if (error_json == 2)
-					{
-						wxMessageDialog* init_eBox2 = new wxMessageDialog(NULL,
-							wxT("Bad Format: I dunno yet."), wxT("manifest.json error"),
-							wxOK, wxDefaultPosition);
-						init_eBox2->ShowModal();
-						delete init_eBox2;
-					}
-					else {}
 				}
 			}
 			catch (...) 
@@ -1006,9 +1039,11 @@ void cMain::CheckSmapiVersion()
 
 void cMain::ResetRefreshErrors() 
 {
+	error_locations_ = "Errors at: ";
 	error_check_["json"] = false;
 	error_check_["semvar"] = false;
 	error_check_["format"] = false;
+	error_check_["format_local"] = false;
 	error_count_["json"] = 0;
 	error_count_["semvar"] = 0;
 	error_count_["format"] = 0;
