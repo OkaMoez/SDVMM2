@@ -267,6 +267,10 @@ void cMain::SelfInitialize()
 		D(
 			OutputDebugString(_T("SelfInit - .ini Steam Path Read\n"));
 		)
+		set_error_mute(config_ini->ReadBool("MuteErrors", false));
+		D(
+			OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
+		)
 
 		if (ExistsModFolders())
 		{
@@ -352,6 +356,11 @@ void cMain::set_version_this_mm(string version)
 	version_this_mm_ = version;
 }
 
+void cMain::set_error_mute(bool state)
+{
+	m_checkbox_mute->SetValue(state);
+	error_mute_["on_refresh"] = state;
+}
 
 //-----------------------------
 // Buttons and Menu Functions
@@ -599,14 +608,9 @@ void cMain::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 void cMain::OnMuteModToggleClick(wxCommandEvent& event)
 {
 	event.Skip();
-	if (error_mute_["on_refresh"] == 1)
-	{
-		error_mute_["on_refresh"] = 0;
-	}
-	else
-	{
-		error_mute_["on_refresh"] = 1;
-	}
+	config_ini->Write("MuteErrors", m_checkbox_mute->GetValue());
+	config_ini->Flush();
+	set_error_mute(m_checkbox_mute->GetValue());
 }
 
 //--------------------

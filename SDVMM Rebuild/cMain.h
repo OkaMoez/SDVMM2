@@ -23,7 +23,7 @@ private:
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.5";
+	string version_this_mm_ = "0.5.0-alpha.6";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
 		{"on_refresh", false},
@@ -66,6 +66,7 @@ public:
 	void set_game_directory(fs::path filepath); // TODO make a different automated version of onInit
 	void set_steam_directory(fs::path filepath);
 	void set_version_this_mm(string version);
+	void set_error_mute(bool state);
 
 public:
 	wxFileConfig* config_ini = nullptr;
