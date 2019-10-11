@@ -22,7 +22,7 @@ private:
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.2";
+	string version_this_mm_ = "0.5.0-alpha.3";
 
 	// IDs currently don't follow google style guide afaik
 	int ID_BUTTON_NEXUS = NULL;
