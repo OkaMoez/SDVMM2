@@ -753,8 +753,8 @@ void cMain::LoadModsFromDir(string folder_name)
 					error_count_["json"]++;
 					string temp_exc = e.what();
 					if (e.id == 101) {
-						error_locations_ += "\n" + error_path.string() + " - JSON Comma Error";
-						// TODO clean commas and try again
+						error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
+						// TODO clean commas and comments, then try again
 						continue;
 					}
 					else {
