@@ -2,7 +2,7 @@
 
 #include <wx/wx.h>
 #include <algorithm>
-#include "ioFunctions.h"
+#include "cMain.h"
 
 class cApp : public wxApp
 {

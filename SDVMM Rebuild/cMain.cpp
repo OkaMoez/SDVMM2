@@ -1,4 +1,4 @@
-#include "cApp.h"
+#include "cMain.h"
 
 cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	wxDefaultPosition, wxSize(750,500),
@@ -137,9 +137,6 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_menubar = new wxMenuBar; // TODO Implement
 	m_menubar_file = new wxMenu;
 	//m_menubar_help = new wxMenu; // REMOVED FOR 0.5.0-ALPHA RELEASE
-	ID_MENU_MODS = wxNewId();
-	ID_MENU_DMODS = wxNewId();
-	ID_MENU_QUIT = wxNewId();
 	m_menubar->Append(m_menubar_file, wxT("&File"));
 	m_menubar_file->Append(ID_MENU_MODS, wxT("&Open Mods Folder"), wxEmptyString, wxITEM_NORMAL);
 	m_menubar_file->Append(ID_MENU_DMODS, wxT("&Open Disabled Mods Folder"), wxEmptyString, wxITEM_NORMAL);
@@ -149,8 +146,6 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS, ID_MENU_QUIT);
 
 	// Right side buttons
-	ID_BUTTON_NEXUS = wxNewId();
-	ID_BUTTON_FORUMS = wxNewId();
 	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
 	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
 	m_button_add_mod = new wxButton(this, wxID_ANY, ""); // TODO "Add Mod from File/Archive" // REMOVED FOR 0.5.0-ALPHA RELEASE
@@ -641,40 +636,14 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 	RefreshModLists();
 }
 
-void cMain::FormatOldVersion(json& manifest) // TODO move check to refresh and make flag
+void cMain::CleanManifest(json& manifest) // TODO move check to refresh and make flag
 {
-	string temp_v = "";
-	if (manifest.at("Version").is_object())
-	{
-		int temp_v1 = NULL;
-		int temp_v2 = NULL;
-		int temp_v3 = NULL;
-		manifest["Version"]["MajorVersion"].get_to(temp_v1);
-		manifest["Version"]["MinorVersion"].get_to(temp_v2);
-		manifest["Version"]["PatchVersion"].get_to(temp_v3);
-		temp_v = std::to_string(temp_v1)
-			+ "." + std::to_string(temp_v2)
-			+ "." + std::to_string(temp_v3);
-		manifest.erase("Version");
-		manifest["Version"] = temp_v;
-	}
-	else
-		manifest.at("Version").get_to(temp_v);
-
-	D(
-		if (report_got_version) {
-			wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-				("got version: " + temp_v), wxT("File Check"),
-				wxOK, wxDefaultPosition);
-			m_pBox2->ShowModal();
-			delete m_pBox2;
-		}
-		else {}
-	)
+	// Make error_count a member variable, reset it in refeshmodlist, etc
 }
 
 void cMain::RefreshModLists()
 {
+	ResetRefreshErrors();
 	wxWindowUpdateLocker noUpdates(m_dataviewlistctrl_mods);
 	m_dataviewlistctrl_mods->DeleteAllItems();
 	try { LoadModsFromDir("\\Mods\\"); }
@@ -693,6 +662,7 @@ void cMain::RefreshModLists()
 		error_load_modsd->ShowModal();
 		delete error_load_modsd;
 	}
+	ShowRefreshErrors();
 }
 
 void cMain::LoadModsFromDir(string folder_name) 
@@ -703,13 +673,9 @@ void cMain::LoadModsFromDir(string folder_name)
 	fs::path temp_dir = (this->game_directory());
 	temp_dir += folder_name;
 	fs::path temp_path;
+	fs::path error_path;
 	bool is_active = (folder_name == "\\Mods\\");
-	int error_json = 0;
-	std::map<string, int> error_count;
-	error_count["json"] = 0; // 0 = no error, 1 = bad comma, 2 = other
-	error_count["semvar"] = 0;
-	error_count["format"] = 0;
-
+	int error_json = 0; // 0 = no error, 1 = bad comma, 2 = other
 
 	D(
 		OutputDebugString(_T("LoadModsFromDir - Begin Iterator at:\n"));
@@ -719,6 +685,7 @@ void cMain::LoadModsFromDir(string folder_name)
 	for (auto& dir_iter : fs::directory_iterator(temp_dir))
 	{
 		error_json = 0;
+		error_path = dir_iter.path().filename();
 		temp_path = dir_iter.path();
 		D(
 			OutputDebugStringA(temp_path.string().c_str());
@@ -732,182 +699,200 @@ void cMain::LoadModsFromDir(string folder_name)
 
 			ifstream json_stream(temp_path.c_str());
 			try {
-				json_manifest = json::parse(json_stream); // TODO handle trailing commas
-			}
-			catch (json::parse_error& e) {
-				string temp_exc = e.what();
+				try {
+					json_manifest = json::parse(json_stream); // TODO handle trailing commas
+				}
+				catch (json::parse_error & e) {
+					string temp_exc = e.what();
 
-				if (e.id == 101) {
-					error_json = 1;
-					// TODO clean commas and try again
-				}
-				else {
-					error_json = 2;
-				}
-			}
-
-			// Check for required manifest.json fields and edit as needed
-			// TODO 
-			if (!json_manifest.contains("Name"))
-			{
-				error_count["format"]++;
-				string temp = "";
-				if (json_manifest.contains("name"))
-				{
-					json_manifest["name"].get_to(temp);
-					json_manifest["Name"] = temp;
-					json_manifest.erase("name");
-				}
-				else
-				{
-					json_manifest["Name"] = temp;
-				}
-
-			}
-			if (!json_manifest.contains("Author"))
-			{
-				error_count["format"]++;
-				string temp = "";
-				if (json_manifest.contains("author"))
-				{
-					json_manifest["author"].get_to(temp);
-					json_manifest["Author"] = temp;
-					json_manifest.erase("author");
-				}
-				else
-				{
-					json_manifest["Author"] = temp;
-				}
-			}
-			if (!json_manifest.contains("Version"))
-			{
-				error_count["format"]++;
-				string temp = "";
-				if (json_manifest.contains("version"))
-				{
-					json_manifest["version"].get_to(temp);
-					json_manifest["Version"] = temp;
-					json_manifest.erase("version");
-				}
-				else
-				{
-					json_manifest["Version"] = temp;
-				}
-			}
-			else if (json_manifest["Version"].is_object())
-			{
-				// flag outdated version object and make readable
-				error_count["semvar"]++;
-				string temp = "";
-				int temp_v1 = NULL;
-				int temp_v2 = NULL;
-				int temp_v3 = NULL;
-				json_manifest["Version"]["MajorVersion"].get_to(temp_v1);
-				json_manifest["Version"]["MinorVersion"].get_to(temp_v2);
-				json_manifest["Version"]["PatchVersion"].get_to(temp_v3);
-				temp = std::to_string(temp_v1)
-					+ "." + std::to_string(temp_v2)
-					+ "." + std::to_string(temp_v3);
-				json_manifest.erase("Version");
-				json_manifest["Version"] = temp;
-			}
-			if (!json_manifest.contains("Description"))
-			{
-				error_count["format"]++;
-				string temp = "";
-				if (json_manifest.contains("description"))
-				{
-					json_manifest["description"].get_to(temp);
-					json_manifest["Description"] = temp;
-					json_manifest.erase("description");
-				}
-				else
-				{
-					json_manifest["Description"] = temp;
-				}
-			}
-			if (!json_manifest.contains("UniqueID"))
-			{
-				error_count["format"]++;
-				string temp = "";
-				if (json_manifest.contains("uniqueID"))
-				{
-					// if bad case, fix case (more work needed)
-				}
-				else
-				{
-					json_manifest["UniqueID"] = temp;
-				}
-			}
-
-			if (existsFile(temp_path.string()) and error_count["json"] == 0) // TODO Review
-			{
-				D(
-					if (report_parsed_mod_data) {
-						string temp_msg1 = "";
-						string temp_msg2 = "";
-						json_manifest["Name"].get_to(temp_msg1);
-						json_manifest["Version"].get_to(temp_msg2);
-						wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-							(temp_msg1 + " exists, " + temp_msg2),
-							wxT("File Check"), wxOK, wxDefaultPosition);
-						m_pBox2->ShowModal();
-						delete m_pBox2;
+					if (e.id == 101) {
+						error_json = 1;
+						// TODO clean commas and try again
 					}
-					else {}
-				)
+					else {
+						error_json = 2;
+					}
+				}
 
-					cMod aMod(json_manifest);
-				wxVector<wxVariant> thisMod;
-				thisMod.push_back(wxVariant(is_active));
-				thisMod.push_back(wxVariant(aMod.mod_name()));
-				thisMod.push_back(wxVariant(aMod.mod_author()));
-				thisMod.push_back(wxVariant(aMod.mod_version()));
-				thisMod.push_back(wxVariant((dir_iter.path()).string()));
-				this->m_dataviewlistctrl_mods->AppendItem(thisMod);
-				thisMod.clear();
+				// Check for required manifest.json fields and edit as needed
+				// TODO 
+				if (!json_manifest.contains("Name"))
+				{
+					error_check_["format"] = true;
+					error_count_["format"]++;
+					string temp = "";
+					if (json_manifest.contains("name"))
+					{
+						json_manifest["name"].get_to(temp);
+						json_manifest["Name"] = temp;
+						json_manifest.erase("name");
+					}
+					else
+					{
+						json_manifest["Name"] = temp;
+					}
 
-				/*
-				wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
-				m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
+				}
+				if (!json_manifest.contains("Author"))
+				{
+					error_check_["format"] = true;
+					error_count_["format"]++;
+					string temp = "";
+					if (json_manifest.contains("author"))
+					{
+						json_manifest["author"].get_to(temp);
+						json_manifest["Author"] = temp;
+						json_manifest.erase("author");
+					}
+					else
+					{
+						json_manifest["Author"] = temp;
+					}
+				}
+				if (!json_manifest.contains("Version"))
+				{
+					error_check_["format"] = true;
+					error_count_["format"]++;
+					string temp = "";
+					if (json_manifest.contains("version"))
+					{
+						json_manifest["version"].get_to(temp);
+						json_manifest["Version"] = temp;
+						json_manifest.erase("version");
+					}
+					else
+					{
+						json_manifest["Version"] = temp;
+					}
+				}
+				else if (json_manifest["Version"].is_object())
+				{
+					// flag outdated version object and make readable
+					error_check_["semvar"] = true;
+					error_count_["semvar"]++;
+					error_locations_ += "\n" + error_path.string() + " - Depreciated Versioning";
+					string temp = "";
+					int temp_v1 = NULL;
+					int temp_v2 = NULL;
+					int temp_v3 = NULL;
+					json_manifest["Version"]["MajorVersion"].get_to(temp_v1);
+					json_manifest["Version"]["MinorVersion"].get_to(temp_v2);
+					json_manifest["Version"]["PatchVersion"].get_to(temp_v3);
+					temp = std::to_string(temp_v1)
+						+ "." + std::to_string(temp_v2)
+						+ "." + std::to_string(temp_v3);
+					json_manifest.erase("Version");
+					json_manifest["Version"] = temp;
+				}
+				if (!json_manifest.contains("Description"))
+				{
+					error_check_["format"] = true;
+					error_count_["format"]++;
+					string temp = "";
+					if (json_manifest.contains("description"))
+					{
+						json_manifest["description"].get_to(temp);
+						json_manifest["Description"] = temp;
+						json_manifest.erase("description");
+					}
+					else
+					{
+						json_manifest["Description"] = temp;
+					}
+				}
+				if (!json_manifest.contains("UniqueID"))
+				{
+					error_check_["format"] = true;
+					error_count_["format"]++;
+					string temp = "";
+					if (json_manifest.contains("uniqueID"))
+					{
+						// if bad case, fix case (more work needed)
+					}
+					else
+					{
+						json_manifest["UniqueID"] = temp;
+					}
+				}
+				if (error_check_["format"] == true)
+				{
+					error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
+				}
 
-				wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
-					if(!pStrData)
-				wxString id = pStrData->GetData();
-				*/
+				if (existsFile(temp_path.string()) and error_count_["json"] == 0) // TODO Review
+				{
+					D(
+						if (report_parsed_mod_data) {
+							string temp_msg1 = "";
+							string temp_msg2 = "";
+							json_manifest["Name"].get_to(temp_msg1);
+							json_manifest["Version"].get_to(temp_msg2);
+							wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
+								(temp_msg1 + " exists, " + temp_msg2),
+								wxT("File Check"), wxOK, wxDefaultPosition);
+							m_pBox2->ShowModal();
+							delete m_pBox2;
+						}
+						else {}
+					)
 
-				D(
-					if (report_mod_object_data) {
-						wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-							(aMod.infoString()), wxT("Mod Object"),
+						cMod aMod(json_manifest);
+					wxVector<wxVariant> thisMod;
+					thisMod.push_back(wxVariant(is_active));
+					thisMod.push_back(wxVariant(aMod.mod_name()));
+					thisMod.push_back(wxVariant(aMod.mod_author()));
+					thisMod.push_back(wxVariant(aMod.mod_version()));
+					thisMod.push_back(wxVariant((dir_iter.path()).string()));
+					this->m_dataviewlistctrl_mods->AppendItem(thisMod);
+					thisMod.clear();
+
+					/*
+					wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
+					m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
+
+					wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
+						if(!pStrData)
+					wxString id = pStrData->GetData();
+					*/
+
+					D(
+						if (report_mod_object_data) {
+							wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
+								(aMod.infoString()), wxT("Mod Object"),
+								wxOK, wxDefaultPosition);
+							m_pBox2->ShowModal();
+							delete m_pBox2;
+						}
+						else {}
+					)
+				}
+				else if (error_json != 0)
+				{
+					error_count_["json"]++;
+					if (error_json == 1)
+					{
+						wxMessageDialog* init_eBox1 = new wxMessageDialog(NULL,
+							wxT("Bad JSON Format: Illegal trailing comma at:\n" + temp_path.string()),
+							wxT("manifest.json error"), wxOK, wxDefaultPosition);
+						init_eBox1->ShowModal();
+						delete init_eBox1;
+					}
+					else if (error_json == 2)
+					{
+						wxMessageDialog* init_eBox2 = new wxMessageDialog(NULL,
+							wxT("Bad Format: I dunno yet."), wxT("manifest.json error"),
 							wxOK, wxDefaultPosition);
-						m_pBox2->ShowModal();
-						delete m_pBox2;
+						init_eBox2->ShowModal();
+						delete init_eBox2;
 					}
 					else {}
-				)
+				}
 			}
-			else if (error_json != 0)
+			catch (...) 
 			{
-				error_count["json"]++;
-				if (error_json == 1)
-				{
-					wxMessageDialog* init_eBox1 = new wxMessageDialog(NULL,
-						wxT("Bad JSON Format: Illegal trailing comma at:\n" + temp_path.string()),
-						wxT("manifest.json error"), wxOK, wxDefaultPosition);
-					init_eBox1->ShowModal();
-					delete init_eBox1;
-				}
-				else if (error_json == 2)
-				{
-					wxMessageDialog* init_eBox2 = new wxMessageDialog(NULL,
-						wxT("Bad Format: I dunno yet."), wxT("manifest.json error"),
-						wxOK, wxDefaultPosition);
-					init_eBox2->ShowModal();
-					delete init_eBox2;
-				}
-				else {}
+				error_locations_ += "\n" + error_path.string() + " - Fatal";
 			}
+
 		}
 		else 
 		{
@@ -915,21 +900,6 @@ void cMain::LoadModsFromDir(string folder_name)
 			OutputDebugString(_T(" - Is NOT Directory\n"));
 		)
 		}
-	}
-	if ((error_count["json"] != 0) or (error_count["semvar"] != 0) or (error_count["format"] != 0))
-	{
-	// Error counter dialogue prep
-	string final_error_title = "Errors in Mods";
-	string final_error_message = 
-		("Manifests with incorrect .json format: " + std::to_string(error_count["json"]) +
-		"\nManifests with depreciated versioning: " + std::to_string(error_count["semvar"]) +
-		"\nManifests with other formatting errors: " + std::to_string(error_count["format"]));
-	if (!is_active) { final_error_title += "_disabled"; };
-	// Error counter dialogue
-	wxMessageDialog* error_mod_loop = new wxMessageDialog(NULL,
-		final_error_message, final_error_title, wxOK, wxDefaultPosition);
-	error_mod_loop->ShowModal();
-	delete error_mod_loop;
 	}
 }
 
@@ -1032,4 +1002,42 @@ void cMain::CheckSmapiVersion()
 		version = "not found";
 	}
 	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);
+}
+
+void cMain::ResetRefreshErrors() 
+{
+	error_check_["json"] = false;
+	error_check_["semvar"] = false;
+	error_check_["format"] = false;
+	error_count_["json"] = 0;
+	error_count_["semvar"] = 0;
+	error_count_["format"] = 0;
+}
+
+void cMain::ShowRefreshErrors()
+{
+	if ((error_mute_["on_refresh"] == false) and 
+		((error_count_["json"] != 0) or (error_count_["semvar"] != 0) or (error_count_["format"] != 0)))
+	{
+		// Error counter dialogue prep
+		string error_mod_loop_title = "Errors in Mods";
+		string error_mod_loop_message =
+			("Manifests with incorrect .json format: " + std::to_string(error_count_["json"]) +
+				"\nManifests with depreciated versioning: " + std::to_string(error_count_["semvar"]) +
+				"\nManifests with other formatting errors: " + std::to_string(error_count_["format"]));
+		// if (!is_active) { final_error_title += "_disabled"; };
+		// Error counter dialogue
+		wxMessageDialog* error_mod_loop = new wxMessageDialog(NULL,
+			error_mod_loop_message, error_mod_loop_title, wxOK, wxDefaultPosition);
+		error_mod_loop->ShowModal();
+		delete error_mod_loop;
+		if (error_check_["semvar"]) 
+		{
+			error_locations_ += "\n[SMAPI does not load mods with depreciated versioning.]";
+		}
+		wxMessageDialog* error_mod_loop_detailed = new wxMessageDialog(NULL,
+			error_locations_, error_mod_loop_title, wxOK, wxDefaultPosition);
+		error_mod_loop_detailed->ShowModal();
+		delete error_mod_loop_detailed;
+	}
 }

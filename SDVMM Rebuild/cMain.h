@@ -9,7 +9,8 @@
 #include <wx/filedlg.h>
 #include <wx/event.h>
 #include <wx/fileconf.h>
-#include "cMod.h"
+#include <wx/stdpaths.h>
+#include "ioFunctions.h"
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -19,17 +20,36 @@ class cMain : public wxFrame // TODO Organize privacy
 private:
 	bool ini_exists_ = false;
 	bool launch_with_steam_ = false;
+	string error_locations_ = "Errors at: ";
+	std::map<string, bool> error_mute_{
+		{"on_refresh", false},
+		{"reserved1", false},
+		{"reserved2", false},
+		{"reserved3", false}
+	};
+	std::map<string, bool> error_check_{
+		{"json", false},
+		{"semvar", false},
+		{"format", false},
+		{"reserved", false}
+	};
+	std::map<string, int> error_count_{
+		{"json", 0},
+		{"semvar", 0},
+		{"format", 0},
+		{"reserved", 0}
+	};
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.3";
+	string version_this_mm_ = "0.5.0-alpha.4";
 
-	// IDs currently don't follow google style guide afaik
-	int ID_BUTTON_NEXUS = NULL;
-	int ID_BUTTON_FORUMS = NULL;
-	int ID_MENU_MODS = NULL;
-	int ID_MENU_DMODS = NULL;
-	int ID_MENU_QUIT = NULL;
+	// TODO Rename?
+	int ID_MENU_MODS = wxNewId();
+	int ID_MENU_DMODS = wxNewId();
+	int ID_MENU_QUIT = wxNewId();
+	int ID_BUTTON_NEXUS = wxNewId();
+	int ID_BUTTON_FORUMS = wxNewId();
 
 public:
 	cMain();
@@ -133,10 +153,12 @@ private:
 	
 public:
 	void ToggleMod(wxDataViewEvent& event);
-	void FormatOldVersion(json& manifest);
+	void CleanManifest(json& manifest);
 	void RefreshModLists(); // TODO give some indication of the refresh
 	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();
 	void CheckSmapiVersion();
+	void ResetRefreshErrors(); // TODO format and move to getters/setter
+	void ShowRefreshErrors();
 };
 
