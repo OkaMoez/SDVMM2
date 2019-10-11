@@ -649,7 +649,7 @@ void cMain::RefreshModLists()
 	try { LoadModsFromDir("\\Mods\\"); }
 	catch (...) {
 		wxMessageDialog* error_load_mods = new wxMessageDialog(NULL,
-			wxT("Fatal error attempting to active mods."),
+			wxT("Fatal error attempting to refresh active mods."),
 			wxT("Refresh Error"), wxOK, wxDefaultPosition);
 		error_load_mods->ShowModal();
 		delete error_load_mods;
@@ -657,7 +657,7 @@ void cMain::RefreshModLists()
 	try { LoadModsFromDir("\\Mods_disabled\\"); }
 	catch (...) {
 		wxMessageDialog* error_load_modsd = new wxMessageDialog(NULL,
-			wxT("Fatal error attempting to inactive mods."),
+			wxT("Fatal error attempting to refresh inactive mods."),
 			wxT("Refresh Error"), wxOK, wxDefaultPosition);
 		error_load_modsd->ShowModal();
 		delete error_load_modsd;
