@@ -114,7 +114,7 @@ public:
 	wxMenu* m_menubar_help = nullptr;
 
 	// Right side buttons
-	wxButton* m_button_launch_smapi = nullptr;
+	wxButton* m_button_launch_smapi = nullptr; // TODO disable if no smapi
 	wxButton* m_button_launch_vanilla = nullptr;
 	wxButton* m_button_add_mod = nullptr;
 	wxButton* m_button_nexus_download = nullptr;
@@ -135,7 +135,7 @@ public:
 
 private:
 	// Top Level Buttons
-	void OnLaunchSMAPIClick(wxCommandEvent& event);
+	void OnLaunchSMAPIClick(wxCommandEvent& event); // TODO check for smapi first
 	void OnLaunchVanillaClick(wxCommandEvent& event);
 	void OnLaunchModSiteClick(wxCommandEvent& event);
 	void OnRefreshClick(wxCommandEvent& event);
