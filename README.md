@@ -10,7 +10,7 @@ Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.
 #### Always
 * All Buttons Have a Function
 
-#### Before first alpha release:
+#### Before first alpha release: [COMPLETE]
 In order of importance.
 * See Installed Mods (and State) [COMPLETE]
 * Toggle Mods On/Off [COMPLETE]
@@ -23,10 +23,10 @@ In order of importance.
 #### Before second alpha release:
 * Rework debug message methods [COMPLETE]
 * Migrate init file checks from filesystem to wxWidgets [COMPLETE]
+* Specify error types in reports [COMPLETE]
 * Group json error messages [TODO]
 * Handle bad manifest.json format errors [TODO]
 * Mod counter [TODO]
-* Consider migration to RapidJSON [TODO]
 
 #### Before third alpha release:
 * Launch without exceptions [PARTIAL]
@@ -35,6 +35,7 @@ In order of importance.
 
 #### Before first full release:
 Not yet in order of importance.
+* Allow group selection of mods for toggle [TODO]
 * Auto-find Game Directory [TODO]
 * Auto-find Steam Directory [TODO]
 * Flag Incompatible Mods [TODO]
