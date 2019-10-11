@@ -677,8 +677,22 @@ void cMain::RefreshModLists()
 {
 	wxWindowUpdateLocker noUpdates(m_dataviewlistctrl_mods);
 	m_dataviewlistctrl_mods->DeleteAllItems();
-	LoadModsFromDir("\\Mods\\");
-	LoadModsFromDir("\\Mods_disabled\\");
+	try { LoadModsFromDir("\\Mods\\"); }
+	catch (...) {
+		wxMessageDialog* error_load_mods = new wxMessageDialog(NULL,
+			wxT("Fatal error attempting to active mods."),
+			wxT("Refresh Error"), wxOK, wxDefaultPosition);
+		error_load_mods->ShowModal();
+		delete error_load_mods;
+	}
+	try { LoadModsFromDir("\\Mods_disabled\\"); }
+	catch (...) {
+		wxMessageDialog* error_load_modsd = new wxMessageDialog(NULL,
+			wxT("Fatal error attempting to inactive mods."),
+			wxT("Refresh Error"), wxOK, wxDefaultPosition);
+		error_load_modsd->ShowModal();
+		delete error_load_modsd;
+	}
 }
 
 void cMain::LoadModsFromDir(string folder_name) 
@@ -686,12 +700,17 @@ void cMain::LoadModsFromDir(string folder_name)
 	// TODO group and report errors in scrollable dialogue (bad jsons, incompatible mods, etc.)
 	// TODO replace custom ioFunctions with filesystem?
 	json json_manifest;
-	bool is_active = (folder_name == "\\Mods\\");
-	bool is_good_json = false;
-	bool is_using_semvar = true;
 	fs::path temp_dir = (this->game_directory());
 	temp_dir += folder_name;
 	fs::path temp_path;
+	bool is_active = (folder_name == "\\Mods\\");
+	int error_json = 0;
+	std::map<string, int> error_count;
+	error_count["json"] = 0; // 0 = no error, 1 = bad comma, 2 = other
+	error_count["semvar"] = 0;
+	error_count["format"] = 0;
+
+
 	D(
 		OutputDebugString(_T("LoadModsFromDir - Begin Iterator at:\n"));
 		OutputDebugStringA(game_directory().string().c_str());
@@ -699,34 +718,31 @@ void cMain::LoadModsFromDir(string folder_name)
 	)
 	for (auto& dir_iter : fs::directory_iterator(temp_dir))
 	{
-		is_good_json = false;
+		error_json = 0;
 		temp_path = dir_iter.path();
 		D(
 			OutputDebugStringA(temp_path.string().c_str());
 		)
 		if (fs::is_directory(temp_path))
 		{
-		D(
-			OutputDebugString(_T(" - Is Directory\n"));
-		)
+			D(
+				OutputDebugString(_T(" - Is Directory\n"));
+			)
 			temp_path += "\\manifest.json";
 
-				int json_problem = NULL;
 			ifstream json_stream(temp_path.c_str());
 			try {
 				json_manifest = json::parse(json_stream); // TODO handle trailing commas
-				is_good_json = true;
 			}
 			catch (json::parse_error& e) {
-				is_good_json = false;
 				string temp_exc = e.what();
 
 				if (e.id == 101) {
-					json_problem = 1;
+					error_json = 1;
 					// TODO clean commas and try again
 				}
 				else {
-					json_problem = 2;
+					error_json = 2;
 				}
 			}
 
@@ -734,6 +750,7 @@ void cMain::LoadModsFromDir(string folder_name)
 			// TODO 
 			if (!json_manifest.contains("Name"))
 			{
+				error_count["format"]++;
 				string temp = "";
 				if (json_manifest.contains("name"))
 				{
@@ -749,6 +766,7 @@ void cMain::LoadModsFromDir(string folder_name)
 			}
 			if (!json_manifest.contains("Author"))
 			{
+				error_count["format"]++;
 				string temp = "";
 				if (json_manifest.contains("author"))
 				{
@@ -763,6 +781,7 @@ void cMain::LoadModsFromDir(string folder_name)
 			}
 			if (!json_manifest.contains("Version"))
 			{
+				error_count["format"]++;
 				string temp = "";
 				if (json_manifest.contains("version"))
 				{
@@ -778,8 +797,8 @@ void cMain::LoadModsFromDir(string folder_name)
 			else if (json_manifest["Version"].is_object())
 			{
 				// flag outdated version object and make readable
+				error_count["semvar"]++;
 				string temp = "";
-				is_using_semvar = false;
 				int temp_v1 = NULL;
 				int temp_v2 = NULL;
 				int temp_v3 = NULL;
@@ -794,6 +813,7 @@ void cMain::LoadModsFromDir(string folder_name)
 			}
 			if (!json_manifest.contains("Description"))
 			{
+				error_count["format"]++;
 				string temp = "";
 				if (json_manifest.contains("description"))
 				{
@@ -808,6 +828,7 @@ void cMain::LoadModsFromDir(string folder_name)
 			}
 			if (!json_manifest.contains("UniqueID"))
 			{
+				error_count["format"]++;
 				string temp = "";
 				if (json_manifest.contains("uniqueID"))
 				{
@@ -819,7 +840,7 @@ void cMain::LoadModsFromDir(string folder_name)
 				}
 			}
 
-			if (existsFile(temp_path.string()) and is_good_json == true) // TODO Review
+			if (existsFile(temp_path.string()) and error_count["json"] == 0) // TODO Review
 			{
 				D(
 					if (report_parsed_mod_data) {
@@ -866,9 +887,10 @@ void cMain::LoadModsFromDir(string folder_name)
 					else {}
 				)
 			}
-			else if (is_good_json == false)
+			else if (error_json != 0)
 			{
-				if (json_problem == 1)
+				error_count["json"]++;
+				if (error_json == 1)
 				{
 					wxMessageDialog* init_eBox1 = new wxMessageDialog(NULL,
 						wxT("Bad JSON Format: Illegal trailing comma at:\n" + temp_path.string()),
@@ -876,7 +898,7 @@ void cMain::LoadModsFromDir(string folder_name)
 					init_eBox1->ShowModal();
 					delete init_eBox1;
 				}
-				else if (json_problem)
+				else if (error_json == 2)
 				{
 					wxMessageDialog* init_eBox2 = new wxMessageDialog(NULL,
 						wxT("Bad Format: I dunno yet."), wxT("manifest.json error"),
@@ -893,6 +915,21 @@ void cMain::LoadModsFromDir(string folder_name)
 			OutputDebugString(_T(" - Is NOT Directory\n"));
 		)
 		}
+	}
+	if ((error_count["json"] != 0) or (error_count["semvar"] != 0) or (error_count["format"] != 0))
+	{
+	// Error counter dialogue prep
+	string final_error_title = "Errors in Mods";
+	string final_error_message = 
+		("Manifests with incorrect .json format: " + std::to_string(error_count["json"]) +
+		"\nManifests with depreciated versioning: " + std::to_string(error_count["semvar"]) +
+		"\nManifests with other formatting errors: " + std::to_string(error_count["format"]));
+	if (!is_active) { final_error_title += "_disabled"; };
+	// Error counter dialogue
+	wxMessageDialog* error_mod_loop = new wxMessageDialog(NULL,
+		final_error_message, final_error_title, wxOK, wxDefaultPosition);
+	error_mod_loop->ShowModal();
+	delete error_mod_loop;
 	}
 }
 
