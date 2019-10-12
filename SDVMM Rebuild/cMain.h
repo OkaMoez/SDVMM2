@@ -27,10 +27,7 @@ private:
 	string version_this_mm_ = "0.5.0-alpha.8";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
-		{"on_refresh", true},
-		{"reserved1", false},
-		{"reserved2", false},
-		{"reserved3", false}
+		{"on_refresh", true}
 	};
 	std::map<string, bool> error_check_{
 		{"json", false},
@@ -42,14 +39,12 @@ private:
 	std::map<string, int> error_count_{
 		{"json", 0},
 		{"semvar", 0},
-		{"format", 0},
-		{"reserved", 0}
+		{"format", 0}
 	};
 	std::map<string, int> mod_count_{
 		{"total", 0},
 		{"errored", 0},
-		{"loaded", 0},
-		{"reserved", 0}
+		{"loaded", 0}
 	};
 
 	// TODO Rename?
