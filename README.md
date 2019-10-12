@@ -24,9 +24,9 @@ In order of importance.
 * Rework debug message methods [COMPLETE]
 * Migrate init file checks from filesystem to wxWidgets [COMPLETE]
 * Specify error types in reports [COMPLETE]
-* Group json error messages [TODO]
-* Handle bad manifest.json format errors [TODO]
-* Mod counter [TODO]
+* Group json error messages [COMPLETE]
+* Handle bad manifest.json format errors [COMPLETE]
+* Mod counter [COMPLETE]
 
 #### Before third alpha release:
 * Launch without exceptions [PARTIAL]

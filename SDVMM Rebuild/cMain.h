@@ -24,7 +24,7 @@ private:
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.7";
+	string version_this_mm_ = "0.5.0-alpha.8";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
 		{"on_refresh", true},
@@ -70,7 +70,7 @@ public:
 	string version_smapi() { return version_smapi_; }
 	string version_this_mm() { return version_this_mm_; }
 	void set_launch_with_steam(bool state);
-	void set_game_directory(fs::path filepath); // TODO make a different automated version of onInit
+	void set_game_directory(fs::path filepath);
 	void set_steam_directory(fs::path filepath);
 	void set_version_this_mm(string version);
 	void set_error_mute(bool state);
@@ -127,7 +127,7 @@ public:
 	wxMenu* m_menubar_help = nullptr;
 
 	// Right side buttons
-	wxButton* m_button_launch_smapi = nullptr; // TODO disable if no smapi
+	wxButton* m_button_launch_smapi = nullptr;
 	wxButton* m_button_launch_vanilla = nullptr;
 	wxButton* m_button_add_mod = nullptr;
 	wxButton* m_button_nexus_download = nullptr;
@@ -149,7 +149,7 @@ public:
 
 private:
 	// Top Level Buttons
-	void OnLaunchSMAPIClick(wxCommandEvent& event); // TODO check for smapi first
+	void OnLaunchSMAPIClick(wxCommandEvent& event);
 	void OnLaunchVanillaClick(wxCommandEvent& event);
 	void OnLaunchModSiteClick(wxCommandEvent& event);
 	void OnRefreshClick(wxCommandEvent& event);
@@ -169,12 +169,12 @@ private:
 public:
 	void ToggleMod(wxDataViewEvent& event);
 	void CleanManifest(json& manifest, fs::path error_path);
-	void CleanJson();
+	void CleanJson(); // TODO tranfer code to function
 	void RefreshModLists(); // TODO give some indication of the refresh
 	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();
 	void CheckSmapiVersion();
 	void ResetRefreshErrors(); // TODO format and move to getters/setter
-	void ShowRefreshErrors(); // TODO add note about not showing bad jsons
+	void ShowRefreshErrors();
 };
 
