@@ -194,13 +194,18 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_bitmap_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG)); // TODO save in code?
 	wxImage::CleanUpHandlers();
 
-	// Version info
+	// Bottom Bar - Version Info & Mod Count
 	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + version_smapi_); // TODO getters/setters
 	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + version_this_mm_);
+	m_stext_mod_count = new wxStaticText(this, wxID_ANY, "Mods: " +
+		std::to_string(mod_count_["loaded"]) + "/" + 
+		std::to_string(mod_count_["errored"]) + "/" + 
+		std::to_string(mod_count_["total"]));
 	m_sizer_version_info = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_version_info->Add(m_stext_this_version, 1, wxEXPAND | wxLEFT, 15);
-	m_sizer_version_info->Add(m_stext_smapi_version, 1, wxEXPAND | wxLEFT, 5);
-	m_sizer_version_info->AddStretchSpacer(1);
+	m_sizer_version_info->Add(m_stext_this_version, 10, wxEXPAND | wxLEFT, 15);
+	m_sizer_version_info->Add(m_stext_smapi_version, 10, wxEXPAND | wxLEFT, 5);
+	m_sizer_version_info->AddStretchSpacer(10);
+	m_sizer_version_info->Add(m_stext_mod_count, 4, wxRIGHT, 10);
 
 	// Window layout Vertical + insert banner
 	m_sizer_main_vertical = new wxBoxSizer(wxVERTICAL);
@@ -215,12 +220,11 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_panel_notebook_tab1->SetBackgroundColour(wxColour(*wxWHITE));
 	m_stext_smapi_version->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_stext_this_version->SetBackgroundColour(wxColour(*m_colour_grey));
+	m_stext_mod_count->SetBackgroundColour(wxColour(*m_colour_grey));
 	delete m_colour_grey;
 
 	SelfInitialize();
 }
-
-
 
 //-------------------
 // MEMBER FUNCTIONS
@@ -807,6 +811,7 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (error_check_["format_local"] == true)
 	{
+		mod_count_["errored"]++;
 		error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
 	}
 }
@@ -832,6 +837,11 @@ void cMain::RefreshModLists()
 		error_load_modsd->ShowModal();
 		delete error_load_modsd;
 	}
+	string temp_mod = "Mods: " +
+		std::to_string(mod_count_["loaded"]) + "/" +
+		std::to_string(mod_count_["errored"]) + "/" +
+		std::to_string(mod_count_["total"]);
+	m_stext_mod_count->SetLabel(temp_mod);
 	ShowRefreshErrors();
 }
 
@@ -865,8 +875,8 @@ void cMain::LoadModsFromDir(string folder_name)
 			D(
 				OutputDebugString(_T(" - Is Directory\n"));
 			)
+			mod_count_["total"]++;
 			temp_path += "\\manifest.json";
-
 			ifstream json_stream(temp_path.c_str());
 			json json_manifest;
 			try 
@@ -881,6 +891,7 @@ void cMain::LoadModsFromDir(string folder_name)
 				{ // On fail, output error and skip to next mod
 					error_check_["json"] = true;
 					error_count_["json"]++;
+					mod_count_["errored"]++;
 					string temp_exc = e.what();
 					if (e.id == 101) {
 						error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
@@ -990,6 +1001,7 @@ void cMain::LoadModsFromDir(string folder_name)
 					thisMod.push_back(wxVariant(aMod.mod_version()));
 					thisMod.push_back(wxVariant((dir_iter.path()).string()));
 					this->m_dataviewlistctrl_mods->AppendItem(thisMod);
+					mod_count_["loaded"]++;
 					thisMod.clear();
 
 					/*
@@ -1135,6 +1147,9 @@ void cMain::ResetRefreshErrors()
 	error_count_["json"] = 0;
 	error_count_["semvar"] = 0;
 	error_count_["format"] = 0;
+	mod_count_["total"] = 0;
+	mod_count_["errored"] = 0;
+	mod_count_["loaded"] = 0;
 }
 
 void cMain::ShowRefreshErrors()

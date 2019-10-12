@@ -45,6 +45,12 @@ private:
 		{"format", 0},
 		{"reserved", 0}
 	};
+	std::map<string, int> mod_count_{
+		{"total", 0},
+		{"errored", 0},
+		{"loaded", 0},
+		{"reserved", 0}
+	};
 
 	// TODO Rename?
 	int ID_MENU_MODS = wxNewId();
@@ -133,6 +139,7 @@ public:
 	wxStaticBitmap* m_bitmap_banner = nullptr;
 	wxStaticText* m_stext_smapi_version = nullptr;
 	wxStaticText* m_stext_this_version = nullptr;
+	wxStaticText* m_stext_mod_count = nullptr;
 	wxBoxSizer* m_sizer_version_info = nullptr;
 	wxPanel* m_bg_panel = nullptr;
 
