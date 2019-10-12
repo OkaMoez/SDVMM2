@@ -109,7 +109,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 
 	// Tab 3 - Error Mute Sizer
 	m_stext_mute = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Mute Mod List Errors:");
-	m_checkbox_mute = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "");
+	m_checkbox_mute = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "  (unmute for debugging)");
 	m_checkbox_mute->Bind(wxEVT_CHECKBOX, &cMain::OnMuteModToggleClick, this);
 	m_sizer_notebook_tab3_mute = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_mute->Add(m_stext_mute, 3, wxALIGN_CENTER_VERTICAL, 0);
