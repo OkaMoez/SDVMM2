@@ -10,8 +10,9 @@
 #include <wx/event.h>
 #include <wx/fileconf.h>
 #include <wx/stdpaths.h>
-#include "ioFunctions.h"
+#include <sstream>
 #include <filesystem>
+#include "ioFunctions.h"
 namespace fs = std::filesystem;
 
 
@@ -26,7 +27,7 @@ private:
 	string version_this_mm_ = "0.5.0-alpha.6";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
-		{"on_refresh", false},
+		{"on_refresh", true},
 		{"reserved1", false},
 		{"reserved2", false},
 		{"reserved3", false}
@@ -161,6 +162,7 @@ private:
 public:
 	void ToggleMod(wxDataViewEvent& event);
 	void CleanManifest(json& manifest, fs::path error_path);
+	void CleanJson();
 	void RefreshModLists(); // TODO give some indication of the refresh
 	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();

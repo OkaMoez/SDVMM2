@@ -1,4 +1,5 @@
 #include "cMain.h"
+#include "strip.h"
 
 cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	wxDefaultPosition, wxSize(750,500),
@@ -703,7 +704,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 		{
 			manifest["Name"] = temp;
 		}
-
+		D(
+			OutputDebugStringA((error_path.string() + " Manifest Error - Name\n").c_str());
+		)
 	}
 	if (!manifest.contains("Author"))
 	{
@@ -721,6 +724,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 		{
 			manifest["Author"] = temp;
 		}
+		D(
+			OutputDebugStringA((error_path.string() + " Manifest Error - Author\n").c_str());
+		)
 	}
 	if (!manifest.contains("Version"))
 	{
@@ -738,6 +744,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 		{
 			manifest["Version"] = temp;
 		}
+		D(
+			OutputDebugStringA((error_path.string() + " Manifest Error - Version\n").c_str());
+		)
 	}
 	else if (manifest["Version"].is_object())
 	{
@@ -774,6 +783,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 		{
 			manifest["Description"] = temp;
 		}
+		D(
+			OutputDebugStringA((error_path.string() + " Manifest Error - Description\n").c_str());
+		)
 	}
 	if (!manifest.contains("UniqueID"))
 	{
@@ -789,6 +801,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 		{
 			manifest["UniqueID"] = temp;
 		}
+		D(
+			OutputDebugStringA((error_path.string() + " Manifest Error - UniqueID\n").c_str());
+		)
 	}
 	if (error_check_["format_local"] == true)
 	{
@@ -859,6 +874,8 @@ void cMain::LoadModsFromDir(string folder_name)
 				try 
 				{ // Parse json
 					json_manifest = json::parse(json_stream); // TODO handle trailing commas
+					// Handle some minor typos and missing fields in manifest
+					CleanManifest(json_manifest, error_path);
 				}
 				catch (json::parse_error & e) 
 				{ // On fail, output error and skip to next mod
@@ -868,15 +885,89 @@ void cMain::LoadModsFromDir(string folder_name)
 					if (e.id == 101) {
 						error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
 						// TODO clean commas and comments, then try again
-						continue;
+						///*
+						D(
+							OutputDebugString(_T("Json Fix Attempt\n"));
+						)
+						//std::stringstream json_sstream;
+						//json_sstream << json_stream.rdbuf();
+						string json_string = "New\n";
+						//json_string = json_sstream.str();
+						ifstream json_stream2(temp_path.c_str(), std::ios::in | std::ios::binary);
+						json_stream2.seekg(0, std::ios::end);
+						json_string.resize(json_stream2.tellg());
+						json_stream2.seekg(0, std::ios::beg);
+						json_stream2.read(&json_string[0], json_string.size());
+						json_stream2.close();
+
+						D(
+							OutputDebugString(_T("Json Fix RAW\n"));
+							OutputDebugStringA(json_string.c_str());
+							OutputDebugString(_T("\n"));
+						)
+
+						try
+						{
+							json_string = stripComments(json_string, true);
+						}
+						catch (...)
+						{
+							D(
+								OutputDebugString(_T("Json Fix Comment Clean Failure\n"));
+							)
+						}
+
+						D(
+							OutputDebugString(_T("Json Fix Comment Cleaned\n"));
+							OutputDebugStringA(json_string.c_str());
+							OutputDebugString(_T("\n"));
+						)
+
+						try
+						{
+							json_string = stripTrailingCommas(json_string, true);
+						}
+						catch (const std::regex_error& e)
+						{
+							string temp = e.what();
+							D(
+								OutputDebugString(_T("Json Fix Comma Clean Failure: " + temp + "\n"));
+							)
+						}
+						//json_sstream.clear();
+						//json_sstream.str(string());
+						//json_sstream << json_string;
+
+						D(
+							OutputDebugString(_T("Json Fix Comma Cleaned\n"));
+							OutputDebugStringA(json_string.c_str());
+							OutputDebugString(_T("\n"));
+						)
+
+						try
+						{
+							json_manifest = json::parse(json_string); // TODO handle trailing commas
+							// Handle some minor typos and missing fields in manifest
+							CleanManifest(json_manifest, error_path);
+							error_check_["json"] = false;
+							D(
+								OutputDebugString(_T("Json Fix Reparse Success\n"));
+							)
+						}
+						catch (...)
+						{
+							D(
+								OutputDebugString(_T("Json Fix Reparse Failure\n"));
+							)
+							continue;
+						}
+						//*/
 					}
 					else {
 						error_locations_ += "\n" + error_path.string() + " - JSON Formatting";
 						continue;
 					}
 				}
-				// Handle some minor typos and missing fields in manifest
-				CleanManifest(json_manifest, error_path);
 
 				if (existsFile(temp_path.string()) and (error_check_["json"] == false)) // TODO Review
 				{
