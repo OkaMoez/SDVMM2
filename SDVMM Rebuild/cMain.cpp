@@ -685,9 +685,115 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 	RefreshModLists();
 }
 
-void cMain::CleanManifest(json& manifest) // TODO move check to refresh and make flag
+void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move check to refresh and make flag
 {
-	// Make error_count a member variable, reset it in refeshmodlist, etc
+	if (!manifest.contains("Name"))
+	{
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
+		string temp = "";
+		if (manifest.contains("name"))
+		{
+			manifest["name"].get_to(temp);
+			manifest["Name"] = temp;
+			manifest.erase("name");
+		}
+		else
+		{
+			manifest["Name"] = temp;
+		}
+
+	}
+	if (!manifest.contains("Author"))
+	{
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
+		string temp = "";
+		if (manifest.contains("author"))
+		{
+			manifest["author"].get_to(temp);
+			manifest["Author"] = temp;
+			manifest.erase("author");
+		}
+		else
+		{
+			manifest["Author"] = temp;
+		}
+	}
+	if (!manifest.contains("Version"))
+	{
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
+		string temp = "";
+		if (manifest.contains("version"))
+		{
+			manifest["version"].get_to(temp);
+			manifest["Version"] = temp;
+			manifest.erase("version");
+		}
+		else
+		{
+			manifest["Version"] = temp;
+		}
+	}
+	else if (manifest["Version"].is_object())
+	{
+		// flag outdated version object and make readable
+		error_check_["semvar"] = true;
+		error_count_["semvar"]++;
+		error_locations_ += "\n" + error_path.string() + " - Depreciated Versioning";
+		string temp = "";
+		int temp_v1 = NULL;
+		int temp_v2 = NULL;
+		int temp_v3 = NULL;
+		manifest["Version"]["MajorVersion"].get_to(temp_v1);
+		manifest["Version"]["MinorVersion"].get_to(temp_v2);
+		manifest["Version"]["PatchVersion"].get_to(temp_v3);
+		temp = std::to_string(temp_v1)
+			+ "." + std::to_string(temp_v2)
+			+ "." + std::to_string(temp_v3);
+		manifest.erase("Version");
+		manifest["Version"] = temp;
+	}
+	if (!manifest.contains("Description"))
+	{
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
+		string temp = "";
+		if (manifest.contains("description"))
+		{
+			manifest["description"].get_to(temp);
+			manifest["Description"] = temp;
+			manifest.erase("description");
+		}
+		else
+		{
+			manifest["Description"] = temp;
+		}
+	}
+	if (!manifest.contains("UniqueID"))
+	{
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
+		string temp = "";
+		if (manifest.contains("uniqueID"))
+		{
+			// if bad case, fix case (more work needed)
+		}
+		else
+		{
+			manifest["UniqueID"] = temp;
+		}
+	}
+	if (error_check_["format_local"] == true)
+	{
+		error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
+	}
 }
 
 void cMain::RefreshModLists()
@@ -748,11 +854,14 @@ void cMain::LoadModsFromDir(string folder_name)
 
 			ifstream json_stream(temp_path.c_str());
 			json json_manifest;
-			try {
-				try {
+			try 
+			{
+				try 
+				{ // Parse json
 					json_manifest = json::parse(json_stream); // TODO handle trailing commas
 				}
-				catch (json::parse_error & e) {
+				catch (json::parse_error & e) 
+				{ // On fail, output error and skip to next mod
 					error_check_["json"] = true;
 					error_count_["json"]++;
 					string temp_exc = e.what();
@@ -766,116 +875,8 @@ void cMain::LoadModsFromDir(string folder_name)
 						continue;
 					}
 				}
-
-				// Check for required manifest.json fields and edit as needed
-				// TODO 
-				if (!json_manifest.contains("Name"))
-				{
-					error_check_["format"] = true;
-					error_check_["format_local"] = true;
-					error_count_["format"]++;
-					string temp = "";
-					if (json_manifest.contains("name"))
-					{
-						json_manifest["name"].get_to(temp);
-						json_manifest["Name"] = temp;
-						json_manifest.erase("name");
-					}
-					else
-					{
-						json_manifest["Name"] = temp;
-					}
-
-				}
-				if (!json_manifest.contains("Author"))
-				{
-					error_check_["format"] = true;
-					error_check_["format_local"] = true;
-					error_count_["format"]++;
-					string temp = "";
-					if (json_manifest.contains("author"))
-					{
-						json_manifest["author"].get_to(temp);
-						json_manifest["Author"] = temp;
-						json_manifest.erase("author");
-					}
-					else
-					{
-						json_manifest["Author"] = temp;
-					}
-				}
-				if (!json_manifest.contains("Version"))
-				{
-					error_check_["format"] = true;
-					error_check_["format_local"] = true;
-					error_count_["format"]++;
-					string temp = "";
-					if (json_manifest.contains("version"))
-					{
-						json_manifest["version"].get_to(temp);
-						json_manifest["Version"] = temp;
-						json_manifest.erase("version");
-					}
-					else
-					{
-						json_manifest["Version"] = temp;
-					}
-				}
-				else if (json_manifest["Version"].is_object())
-				{
-					// flag outdated version object and make readable
-					error_check_["semvar"] = true;
-					error_count_["semvar"]++;
-					error_locations_ += "\n" + error_path.string() + " - Depreciated Versioning";
-					string temp = "";
-					int temp_v1 = NULL;
-					int temp_v2 = NULL;
-					int temp_v3 = NULL;
-					json_manifest["Version"]["MajorVersion"].get_to(temp_v1);
-					json_manifest["Version"]["MinorVersion"].get_to(temp_v2);
-					json_manifest["Version"]["PatchVersion"].get_to(temp_v3);
-					temp = std::to_string(temp_v1)
-						+ "." + std::to_string(temp_v2)
-						+ "." + std::to_string(temp_v3);
-					json_manifest.erase("Version");
-					json_manifest["Version"] = temp;
-				}
-				if (!json_manifest.contains("Description"))
-				{
-					error_check_["format"] = true;
-					error_check_["format_local"] = true;
-					error_count_["format"]++;
-					string temp = "";
-					if (json_manifest.contains("description"))
-					{
-						json_manifest["description"].get_to(temp);
-						json_manifest["Description"] = temp;
-						json_manifest.erase("description");
-					}
-					else
-					{
-						json_manifest["Description"] = temp;
-					}
-				}
-				if (!json_manifest.contains("UniqueID"))
-				{
-					error_check_["format"] = true;
-					error_check_["format_local"] = true;
-					error_count_["format"]++;
-					string temp = "";
-					if (json_manifest.contains("uniqueID"))
-					{
-						// if bad case, fix case (more work needed)
-					}
-					else
-					{
-						json_manifest["UniqueID"] = temp;
-					}
-				}
-				if (error_check_["format_local"] == true)
-				{
-					error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
-				}
+				// Handle some minor typos and missing fields in manifest
+				CleanManifest(json_manifest, error_path);
 
 				if (existsFile(temp_path.string()) and (error_check_["json"] == false)) // TODO Review
 				{
@@ -885,16 +886,12 @@ void cMain::LoadModsFromDir(string folder_name)
 							string temp_msg2 = "";
 							json_manifest["Name"].get_to(temp_msg1);
 							json_manifest["Version"].get_to(temp_msg2);
-							wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-								(temp_msg1 + " exists, " + temp_msg2),
-								wxT("File Check"), wxOK, wxDefaultPosition);
-							m_pBox2->ShowModal();
-							delete m_pBox2;
+							OutputDebugStringA((temp_msg1 + " exists, " + temp_msg2 + "\n").c_str());
 						}
 						else {}
 					)
 
-						cMod aMod(json_manifest);
+					cMod aMod(json_manifest);
 					wxVector<wxVariant> thisMod;
 					thisMod.push_back(wxVariant(is_active));
 					thisMod.push_back(wxVariant(aMod.mod_name()));
@@ -915,11 +912,7 @@ void cMain::LoadModsFromDir(string folder_name)
 
 					D(
 						if (report_mod_object_data) {
-							wxMessageDialog* m_pBox2 = new wxMessageDialog(NULL,
-								(aMod.infoString()), wxT("Mod Object"),
-								wxOK, wxDefaultPosition);
-							m_pBox2->ShowModal();
-							delete m_pBox2;
+							OutputDebugStringA((aMod.infoString()).c_str());
 						}
 						else {}
 					)

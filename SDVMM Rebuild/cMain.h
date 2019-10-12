@@ -160,7 +160,7 @@ private:
 	
 public:
 	void ToggleMod(wxDataViewEvent& event);
-	void CleanManifest(json& manifest);
+	void CleanManifest(json& manifest, fs::path error_path);
 	void RefreshModLists(); // TODO give some indication of the refresh
 	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();
