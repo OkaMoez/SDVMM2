@@ -135,7 +135,7 @@ public:
 	wxStaticBitmap* m_bitmap_banner = nullptr;
 	wxStaticText* m_stext_smapi_version = nullptr;
 	wxStaticText* m_stext_this_version = nullptr;
-	wxStaticText* m_stext_mod_count = nullptr; // TODO Fix spacing
+	wxStaticText* m_stext_mod_count = nullptr;
 	wxBoxSizer* m_sizer_mod_count = nullptr;
 	wxBoxSizer* m_sizer_version_info = nullptr;
 	wxPanel* m_bg_panel = nullptr;
@@ -171,7 +171,7 @@ public:
 	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();
 	void CheckSmapiVersion();
-	void ResetRefreshErrors(); // TODO format and move to getters/setter
+	void ResetRefreshErrors(); // TODO format and move to getters/setters?
 	void ShowRefreshErrors();
 };
 
