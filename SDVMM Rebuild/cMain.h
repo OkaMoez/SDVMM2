@@ -136,6 +136,7 @@ public:
 	wxStaticText* m_stext_smapi_version = nullptr;
 	wxStaticText* m_stext_this_version = nullptr;
 	wxStaticText* m_stext_mod_count = nullptr; // TODO Fix spacing
+	wxBoxSizer* m_sizer_mod_count = nullptr;
 	wxBoxSizer* m_sizer_version_info = nullptr;
 	wxPanel* m_bg_panel = nullptr;
 

@@ -2,7 +2,7 @@
 #include "strip.h"
 
 cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
-	wxDefaultPosition, wxSize(750,500),
+	wxDefaultPosition, wxSize(750, 500),
 	wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX))
 {
 	//---------------------------
@@ -16,14 +16,14 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 
 	// Tab 1 - List Control - Creation w/ Columns
 	m_dataviewlistctrl_mods = new wxDataViewListCtrl(m_panel_notebook_tab1, wxID_ANY, wxDefaultPosition, wxSize(465, 200), wxLC_REPORT);
-	m_dataviewlistctrl_mods->AppendToggleColumn("Active",wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendToggleColumn("Active", wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, 0);
 	m_dataviewlistctrl_mods->AppendTextColumn("Name", wxDATAVIEW_CELL_INERT, 200, wxALIGN_LEFT, 0);
 	m_dataviewlistctrl_mods->AppendTextColumn("Author", wxDATAVIEW_CELL_INERT, 135, wxALIGN_LEFT, 0);
 	m_dataviewlistctrl_mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
 	m_dataviewlistctrl_mods->AppendTextColumn("Location", wxDATAVIEW_CELL_INERT, 500, wxALIGN_LEFT, 0);
 	// TODO Either hide scroll bar or hide location data?
 	m_dataviewlistctrl_mods->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &cMain::ToggleMod, this);
-	
+
 	// Tab 1 - List - Vertical Sizers + Title Text
 	m_sizer_notebook_tab1a_mods = new wxBoxSizer(wxVERTICAL);
 	m_sizer_notebook_tab1a_mods->AddSpacer(5);
@@ -39,7 +39,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	// Tab 1 - Top-level Vertical Sizer
 	m_sizer_notebook_tab1 = new wxBoxSizer(wxVERTICAL);
 	m_sizer_notebook_tab1->AddSpacer(5);
-	m_sizer_notebook_tab1->Add(m_sizer_notebook_tab1a, 1, wxEXPAND| wxBOTTOM, 3);
+	m_sizer_notebook_tab1->Add(m_sizer_notebook_tab1a, 1, wxEXPAND | wxBOTTOM, 3);
 	m_panel_notebook_tab1->SetSizer(m_sizer_notebook_tab1);
 
 	/* // REMOVED FOR 0.5.0-ALPHA RELEASE
@@ -139,7 +139,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_notebook->AddPage(m_panel_notebook_tab1, "SMAPI Mods", true);
 	//m_notebook->AddPage(m_panel_notebook_tab2, "XNB Mods", false); // REMOVED FOR 0.5.0-ALPHA RELEASE
 	m_notebook->AddPage(m_panel_notebook_tab3, "Settings", false);
-	
+
 	//---------------------------------
 	//  Additional GUI Implementation
 	//---------------------------------
@@ -176,11 +176,11 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
 	m_sizer_buttons_right->Add(m_button_launch_vanilla, prop_rBtns, wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_add_mod, (prop_rBtns/2), wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_add_mod, (prop_rBtns / 2), wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_nexus_download, (prop_rBtns/2), wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_nexus_download, (prop_rBtns / 2), wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_forums_download, (prop_rBtns/2), wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_forums_download, (prop_rBtns / 2), wxEXPAND, 0);
 	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
 	m_sizer_buttons_right->Add(m_button_refresh_mods, prop_rBtns, wxEXPAND, 0);
 
@@ -198,14 +198,16 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + version_smapi_); // TODO getters/setters
 	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + version_this_mm_);
 	m_stext_mod_count = new wxStaticText(this, wxID_ANY, "Mods: " +
-		std::to_string(mod_count_["loaded"]) + "/" + 
-		std::to_string(mod_count_["errored"]) + "/" + 
+		std::to_string(mod_count_["loaded"]) + "/" +
+		std::to_string(mod_count_["errored"]) + "/" +
 		std::to_string(mod_count_["total"]));
+	m_sizer_mod_count = new wxBoxSizer(wxVERTICAL);
+	m_sizer_mod_count->Add(m_stext_mod_count, 0, wxALIGN_RIGHT, 0);
 	m_sizer_version_info = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_version_info->Add(m_stext_this_version, 10, wxEXPAND | wxLEFT, 15);
 	m_sizer_version_info->Add(m_stext_smapi_version, 10, wxEXPAND | wxLEFT, 5);
 	m_sizer_version_info->AddStretchSpacer(10);
-	m_sizer_version_info->Add(m_stext_mod_count, 4, wxRIGHT, 10);
+	m_sizer_version_info->Add(m_sizer_mod_count, 5, wxEXPAND | wxRIGHT, 10);
 
 	// Window layout Vertical + insert banner
 	m_sizer_main_vertical = new wxBoxSizer(wxVERTICAL);
