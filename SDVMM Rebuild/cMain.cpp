@@ -391,9 +391,12 @@ void cMain::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher opt
 		}
 		else
 		{
+			wxString temp = wxGetCwd();
+			wxSetWorkingDirectory(this->game_directory().string());
 			string test_str = ((this->game_directory().string() + "\\StardewModdingAPI"));
 			const char* open_command = (test_str.c_str());
 			wxExecute(open_command, wxEXEC_ASYNC, NULL);
+			wxSetWorkingDirectory(temp);
 		}
 	}
 }
@@ -410,9 +413,12 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event) // TODO Steam Launcher o
 	}
 	else 
 	{
+		wxString temp = wxGetCwd();
+		wxSetWorkingDirectory(this->game_directory().string());
 		string test_str = ((this->game_directory().string() + "\\Stardew Valley"));
 		const char* open_command = (test_str.c_str());
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
+		wxSetWorkingDirectory(temp);
 	}
 
 }
