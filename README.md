@@ -9,6 +9,7 @@ Simple mod manager for Stardew Valley to be used with SMAPI and Content Patcher.
 ## Goals
 #### Always
 * All Buttons Have a Function
+* Handle All Exceptions
 
 #### Before first alpha release: [COMPLETE]
 In order of importance.
@@ -20,17 +21,15 @@ In order of importance.
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
-#### Before second alpha release:
+#### Before 0.5.1 release:
+* Handle exceptions if SMAPI not found [COMPLETE]
+* Fix SV crash when launched from remote directory [COMPLETE]
 * Rework debug message methods [COMPLETE]
-* Migrate init file checks from filesystem to wxWidgets [COMPLETE]
+* Migrate init file checks from filesystem to wxWidgets [PARTIAL]
 * Specify error types in reports [COMPLETE]
 * Group json error messages [COMPLETE]
-* Handle bad manifest.json format errors [COMPLETE]
-* Mod counter [COMPLETE]
-
-#### Before third alpha release:
-* Launch without exceptions [PARTIAL]
-* Handle exceptions if SMAPI not found [COMPLETE]
+* Handle relaxed manifest.json format errors [COMPLETE]
+* Add mod counter [COMPLETE]
 * Handle other exceptions (see bug reports) [PARTIAL]
 
 #### Before first full release:
