@@ -765,7 +765,7 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 		// flag outdated version object and make readable
 		error_check_[wxT("semvar")] = true;
 		error_count_[wxT("semvar")]++;
-		error_locations_ += wxT("\n" + error_path.string() + " - Depreciated Versioning");
+		error_locations_ += "\n" + error_path.string() + " - Depreciated Versioning";
 		string temp = "";
 		int temp_v1 = NULL;
 		int temp_v2 = NULL;
@@ -824,7 +824,7 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	if (error_check_[wxT("format_local")] == true)
 	{
 		mod_count_[wxT("errored")]++;
-		error_locations_ += wxT("\n" + error_path.string() + " - Manifest Formatting");
+		error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
 	}
 }
 
@@ -912,7 +912,7 @@ void cMain::LoadModsFromDir(wxString folder_name)
 					mod_count_[wxT("errored")]++;
 					string temp_exc = e.what();
 					if (e.id == 101) {
-						error_locations_ += wxT("\n" + error_path.string() + " - JSON Unexpected Char");
+						error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
 						// TODO clean commas and comments, then try again
 						///*
 						D(
@@ -1009,7 +1009,7 @@ void cMain::LoadModsFromDir(wxString folder_name)
 						//*/
 					}
 					else {
-						error_locations_ += wxT("\n" + error_path.string() + " - JSON Formatting");
+						error_locations_ += "\n" + error_path.string() + " - JSON Formatting";
 						continue;
 					}
 				}
@@ -1055,7 +1055,7 @@ void cMain::LoadModsFromDir(wxString folder_name)
 			}
 			catch (...) 
 			{
-				error_locations_ += wxT("\n" + error_path.string() + " - Fatal");
+				error_locations_ += "\n" + error_path.string() + " - Fatal";
 			}
 
 		}
