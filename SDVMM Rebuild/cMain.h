@@ -2,26 +2,19 @@
 
 #include <wx/wx.h>
 #include <wx/menu.h>
-#include <wx/event.h>
 #include <wx/notebook.h>
 #include <wx/dataview.h>
 #include <wx/checkbox.h>
-#include <wx/fileconf.h>
-#include <wx/wupdlock.h>
-#include <wx/textfile.h>
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
+#include <wx/event.h>
+#include <wx/fileconf.h>
 #include <wx/stdpaths.h>
-#include <wx/filefn.h>
-#include <fileapi.h>
-#include <fstream>
-#include <iomanip>
-#include <sstream> 
+#include <sstream>
+#include <wx/filefn.h> 
 #include <filesystem>
-#include "cMod.h"
+#include "ioFunctions.h"
 namespace fs = std::filesystem;
-using std::istream;
-using std::ifstream;
 
 
 class cMain : public wxFrame // TODO Organize privacy
@@ -31,28 +24,28 @@ private:
 	bool launch_with_steam_ = false;
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
-	wxString version_smapi_ = wxT("not found");
-	wxString version_this_mm_ = wxT("0.5.0-alpha.9");
-	wxString error_locations_ = wxT("Errors at: ");
-	std::map<wxString, bool> error_mute_{
-		{wxT("on_refresh"), true}
+	string version_smapi_ = "not found";
+	string version_this_mm_ = "0.5.0-alpha.9";
+	string error_locations_ = "Errors at: ";
+	std::map<string, bool> error_mute_{
+		{"on_refresh", true}
 	};
-	std::map<wxString, bool> error_check_{
-		{wxT("json"), false},
-		{wxT("semvar"), false},
-		{wxT("format"), false},
-		{wxT("format_local"), false},
-		{wxT("smapi"), false}
+	std::map<string, bool> error_check_{
+		{"json", false},
+		{"semvar", false},
+		{"format", false},
+		{"format_local", false},
+		{"smapi", false}
 	};
-	std::map<wxString, int> error_count_{
-		{wxT("json"), 0},
-		{wxT("semvar"), 0},
-		{wxT("format"), 0}
+	std::map<string, int> error_count_{
+		{"json", 0},
+		{"semvar", 0},
+		{"format", 0}
 	};
-	std::map<wxString, int> mod_count_{
-		{wxT("total"), 0},
-		{wxT("errored"), 0},
-		{wxT("loaded"), 0}
+	std::map<string, int> mod_count_{
+		{"total", 0},
+		{"errored", 0},
+		{"loaded", 0}
 	};
 
 	// TODO Rename?
@@ -70,12 +63,12 @@ public:
 	bool launch_with_steam() { return launch_with_steam_; }
 	fs::path game_directory() { return game_directory_; }
 	fs::path steam_directory() { return steam_directory_; }
-	wxString version_smapi() { return version_smapi_; }
-	wxString version_this_mm() { return version_this_mm_; }
+	string version_smapi() { return version_smapi_; }
+	string version_this_mm() { return version_this_mm_; }
 	void set_launch_with_steam(bool state);
 	void set_game_directory(fs::path filepath);
 	void set_steam_directory(fs::path filepath);
-	void set_version_this_mm(wxString version);
+	void set_version_this_mm(string version);
 	void set_error_mute(bool state);
 
 public:
@@ -175,7 +168,7 @@ public:
 	void CleanManifest(json& manifest, fs::path error_path);
 	void CleanJson(); // TODO tranfer code to function
 	void RefreshModLists(); // TODO give some indication of the refresh
-	void LoadModsFromDir(wxString folder_name);
+	void LoadModsFromDir(string folder_name);
 	bool ExistsModFolders();
 	void CheckSmapiVersion();
 	void ResetRefreshErrors(); // TODO format and move to getters/setters?
