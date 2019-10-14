@@ -696,9 +696,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 {
 	if (!manifest.contains("Name"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[wxT("format")] = true;
+		error_check_[wxT("format_local")] = true;
+		error_count_[wxT("format")]++;
 		string temp = "";
 		if (manifest.contains("name"))
 		{
@@ -718,9 +718,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("Author"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[wxT("format")] = true;
+		error_check_[wxT("format_local")] = true;
+		error_count_[wxT("format")]++;
 		string temp = "";
 		if (manifest.contains("author"))
 		{
@@ -740,9 +740,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("Version"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[wxT("format")] = true;
+		error_check_[wxT("format_local")] = true;
+		error_count_[wxT("format")]++;
 		string temp = "";
 		if (manifest.contains("version"))
 		{
@@ -763,8 +763,8 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	else if (manifest["Version"].is_object())
 	{
 		// flag outdated version object and make readable
-		error_check_["semvar"] = true;
-		error_count_["semvar"]++;
+		error_check_[wxT("semvar")] = true;
+		error_count_[wxT("semvar")]++;
 		error_locations_ += "\n" + error_path.string() + " - Depreciated Versioning";
 		string temp = "";
 		int temp_v1 = NULL;
@@ -781,9 +781,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("Description"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[wxT("format")] = true;
+		error_check_[wxT("format_local")] = true;
+		error_count_[wxT("format")]++;
 		string temp = "";
 		if (manifest.contains("description"))
 		{
@@ -803,9 +803,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("UniqueID"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[wxT("format")] = true;
+		error_check_[wxT("format_local")] = true;
+		error_count_[wxT("format")]++;
 		string temp = "";
 		if (manifest.contains("uniqueID"))
 		{
@@ -821,9 +821,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 			}
 		)
 	}
-	if (error_check_["format_local"] == true)
+	if (error_check_[wxT("format_local")] == true)
 	{
-		mod_count_["errored"]++;
+		mod_count_[wxT("errored")]++;
 		error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
 	}
 }
@@ -877,8 +877,8 @@ void cMain::LoadModsFromDir(wxString folder_name)
 	)
 	for (auto& dir_iter : fs::directory_iterator(temp_dir))
 	{
-		error_check_["json"] = false;
-		error_check_["format_local"] = false;
+		error_check_[wxT("json")] = false;
+		error_check_[wxT("format_local")] = false;
 		error_path = dir_iter.path().filename();
 		temp_path = dir_iter.path();
 		D(
@@ -893,7 +893,7 @@ void cMain::LoadModsFromDir(wxString folder_name)
 					OutputDebugString(_T(" - Is Directory\n"));
 				}
 			)
-			mod_count_["total"]++;
+			mod_count_[wxT("total")]++;
 			temp_path += "\\manifest.json";
 			ifstream json_stream(temp_path.c_str());
 			json json_manifest;
@@ -907,9 +907,9 @@ void cMain::LoadModsFromDir(wxString folder_name)
 				}
 				catch (json::parse_error & e) 
 				{ // On fail, output error and skip to next mod
-					error_check_["json"] = true;
-					error_count_["json"]++;
-					mod_count_["errored"]++;
+					error_check_[wxT("json")] = true;
+					error_count_[wxT("json")]++;
+					mod_count_[wxT("errored")]++;
 					string temp_exc = e.what();
 					if (e.id == 101) {
 						error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
@@ -990,7 +990,7 @@ void cMain::LoadModsFromDir(wxString folder_name)
 							json_manifest = json::parse(json_string); // TODO handle trailing commas
 							// Handle some minor typos and missing fields in manifest
 							CleanManifest(json_manifest, error_path);
-							error_check_["json"] = false;
+							error_check_[wxT("json")] = false;
 							D(
 								if (report_refresh_mods) {
 									OutputDebugString(_T("Json Fix Reparse Success\n"));
@@ -1014,7 +1014,7 @@ void cMain::LoadModsFromDir(wxString folder_name)
 					}
 				}
 
-				if (wxFileExists(temp_path.string()) and (error_check_["json"] == false)) // TODO Review
+				if (wxFileExists(temp_path.string()) and (error_check_[wxT("json")] == false)) // TODO Review
 				{
 					D(
 						if (report_refresh_mods) {
@@ -1034,7 +1034,7 @@ void cMain::LoadModsFromDir(wxString folder_name)
 					thisMod.push_back(wxVariant(aMod.mod_version()));
 					thisMod.push_back(wxVariant((dir_iter.path()).string()));
 					this->m_dataviewlistctrl_mods->AppendItem(thisMod);
-					mod_count_["loaded"]++;
+					mod_count_[wxT("loaded")]++;
 					thisMod.clear();
 
 					/*
@@ -1141,7 +1141,7 @@ bool cMain::ExistsModFolders()
 
 void cMain::CheckSmapiVersion()
 {
-	string version = "";
+	wxString version = "";
 	fs::path path_smapi_logs = string(wxStandardPaths::Get().GetUserConfigDir());
 	path_smapi_logs += "\\StardewValley\\ErrorLogs\\SMAPI-latest.txt";
 	if (fs::exists(path_smapi_logs) and fs::is_regular_file(path_smapi_logs))
@@ -1166,46 +1166,46 @@ void cMain::CheckSmapiVersion()
 		D(
 			OutputDebugString(_T("CheckSmapiVersion - No Logs Found to Scrape\n"));
 		)
-		version = "not found";
+		version = wxT("not found");
 	}
-	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);
+	m_stext_smapi_version->SetLabel(wxT("SMAPI Version: " + version));
 }
 
 void cMain::ResetRefreshErrors() 
 {
-	error_locations_ = "Errors at: ";
-	error_check_["json"] = false;
-	error_check_["semvar"] = false;
-	error_check_["format"] = false;
-	error_check_["format_local"] = false;
-	error_count_["json"] = 0;
-	error_count_["semvar"] = 0;
-	error_count_["format"] = 0;
-	mod_count_["total"] = 0;
-	mod_count_["errored"] = 0;
-	mod_count_["loaded"] = 0;
+	error_locations_ = wxT("Errors at: ");
+	error_check_[wxT("json")] = false;
+	error_check_[wxT("semvar")] = false;
+	error_check_[wxT("format")] = false;
+	error_check_[wxT("format_local")] = false;
+	error_count_[wxT("json")] = 0;
+	error_count_[wxT("semvar")] = 0;
+	error_count_[wxT("format")] = 0;
+	mod_count_[wxT("total")] = 0;
+	mod_count_[wxT("errored")] = 0;
+	mod_count_[wxT("loaded")] = 0;
 }
 
 void cMain::ShowRefreshErrors()
 {
-	if ((error_mute_["on_refresh"] == false) and 
-		((error_count_["json"] != 0) or (error_count_["semvar"] != 0) or (error_count_["format"] != 0)))
+	if ((error_mute_[wxT("on_refresh")] == false) and
+		((error_count_[wxT("json")] != 0) or (error_count_[wxT("semvar")] != 0) or (error_count_[wxT("format")] != 0)))
 	{
 		// Error counter dialogue prep
-		string error_mod_loop_title = "Errors in Mods";
-		string error_mod_loop_message =
-			("Manifests with incorrect .json format: " + std::to_string(error_count_["json"]) +
-				"\nManifests with depreciated versioning: " + std::to_string(error_count_["semvar"]) +
-				"\nManifests with other formatting errors: " + std::to_string(error_count_["format"]));
+		wxString error_mod_loop_title = wxT("Errors in Mods");
+		wxString error_mod_loop_message =
+			wxT("Manifests with incorrect .json format: " + std::to_string(error_count_[wxT("json"])) +
+				"\nManifests with depreciated versioning: " + std::to_string(error_count_[wxT("semvar"])) +
+				"\nManifests with other formatting errors: " + std::to_string(error_count_[wxT("format"])));
 		// if (!is_active) { final_error_title += "_disabled"; };
 		// Error counter dialogue
 		wxMessageDialog* error_mod_loop = new wxMessageDialog(NULL,
 			error_mod_loop_message, error_mod_loop_title, wxOK, wxDefaultPosition);
 		error_mod_loop->ShowModal();
 		delete error_mod_loop;
-		if (error_check_["semvar"]) 
+		if (error_check_[wxT("semvar")])
 		{
-			error_locations_ += "\n[SMAPI does not load mods with depreciated versioning.]";
+			error_locations_ += wxT("\n[SMAPI does not load mods with depreciated versioning.]");
 		}
 		wxMessageDialog* error_mod_loop_detailed = new wxMessageDialog(NULL,
 			error_locations_, error_mod_loop_title, wxOK, wxDefaultPosition);
