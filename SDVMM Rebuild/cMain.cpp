@@ -238,7 +238,7 @@ cMain::~cMain()
 	delete config_ini;
 }
 
-void cMain::SelfInitialize()
+void cMain::SelfInitialize() // TODO add checks for each loaction
 {
 	D(
 		OutputDebugString(_T("SelfInit - Begin\n"));
