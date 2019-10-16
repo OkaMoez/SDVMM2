@@ -662,9 +662,7 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 			else {}
 		)
 
-		fs::copy(mod_path, (fs::path(this->game_directory() += "\\Mods_disabled\\") += folder_name));
-		fs::remove_all(mod_path);
-
+		fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods_disabled\\") += folder_name));
 	}
 	else if (parent_path == ((this->game_directory()) += "\\Mods_disabled"))
 	{
@@ -679,8 +677,7 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 			else{}
 		)
 
-			fs::copy(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
-			fs::remove_all(mod_path);
+			fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
 	}
 	else
 	{
