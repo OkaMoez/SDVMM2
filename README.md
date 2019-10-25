@@ -21,15 +21,16 @@ In order of importance.
 * Shortcut to Mod Folders [COMPLETE]
 * Shortcut to Mod Sources (Nexus/Forums) [COMPLETE]
 
-#### Before 0.5.1 release:
+#### Alpha TODO:
 * Handle exceptions if SMAPI not found [COMPLETE]
 * Fix SV crash when launched from remote directory [COMPLETE]
 * Rework debug message methods [COMPLETE]
-* Migrate init file checks from filesystem to wxWidgets [PARTIAL]
+* Migrate init file checks from filesystem to wxWidgets [CANCELED]
 * Specify error types in reports [COMPLETE]
 * Group json error messages [COMPLETE]
 * Handle relaxed manifest.json format errors [COMPLETE]
 * Add mod counter [COMPLETE]
+* Recognize nested mod folders [COMPLETE]
 * Handle other exceptions (see bug reports) [PARTIAL]
 
 #### Before first full release:

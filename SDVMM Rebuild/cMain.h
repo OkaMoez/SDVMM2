@@ -32,7 +32,7 @@ private:
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	wxString version_smapi_ = wxT("not found");
-	wxString version_this_mm_ = wxT("0.5.0-alpha.9");
+	wxString version_this_mm_ = wxT("0.5.0-alpha.10");
 	wxString error_locations_ = wxT("Errors at: ");
 	std::map<wxString, bool> error_mute_{
 		{wxT("on_refresh"), true}
