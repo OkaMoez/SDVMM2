@@ -16,11 +16,11 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 
 	// Tab 1 - List Control - Creation w/ Columns
 	m_dataviewlistctrl_mods = new wxDataViewListCtrl(m_panel_notebook_tab1, wxID_ANY, wxDefaultPosition, wxSize(465, 200), wxLC_REPORT);
-	m_dataviewlistctrl_mods->AppendToggleColumn(wxT("Active"), wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, 0);
-	m_dataviewlistctrl_mods->AppendTextColumn(wxT("Name"), wxDATAVIEW_CELL_INERT, 200, wxALIGN_LEFT, 0);
-	m_dataviewlistctrl_mods->AppendTextColumn(wxT("Author"), wxDATAVIEW_CELL_INERT, 135, wxALIGN_LEFT, 0);
-	m_dataviewlistctrl_mods->AppendTextColumn(wxT("Version"), wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
-	m_dataviewlistctrl_mods->AppendTextColumn(wxT("Location"), wxDATAVIEW_CELL_INERT, 500, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendToggleColumn("Active", wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendTextColumn("Name", wxDATAVIEW_CELL_INERT, 200, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendTextColumn("Author", wxDATAVIEW_CELL_INERT, 135, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendTextColumn("Version", wxDATAVIEW_CELL_INERT, 80, wxALIGN_LEFT, 0);
+	m_dataviewlistctrl_mods->AppendTextColumn("Location", wxDATAVIEW_CELL_INERT, 500, wxALIGN_LEFT, 0);
 	// TODO Either hide scroll bar or hide location data?
 	m_dataviewlistctrl_mods->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &cMain::ToggleMod, this);
 
@@ -69,8 +69,8 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_panel_notebook_tab3 = new wxPanel(m_notebook, wxID_ANY);
 
 	// Tab 3 - Launcher Sizer
-	m_stext_launcher = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, wxT("Launch w/ Steam: "));
-	m_checkbox_launcher = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, wxT("  (uncheck if you have the GOG version)"));
+	m_stext_launcher = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Launch w/ Steam: ");
+	m_checkbox_launcher = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "  (uncheck if you have the GOG version)");
 	m_checkbox_launcher->Bind(wxEVT_CHECKBOX, &cMain::OnLauncherToggleClick, this);
 	m_sizer_notebook_tab3_launcher = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_launcher->Add(m_stext_launcher, 3, wxALIGN_CENTER_VERTICAL, 0);
@@ -78,13 +78,13 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 
 
 	// Tab 3 - Game Directory Sizer
-	m_stext_game_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, wxT("Game Folder: "));
-	m_textctrl_game_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, wxT("game directory not found"));
-	m_button_game_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, wxT("Save"), wxDefaultPosition, wxSize(60, 25));
-	m_button_game_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, wxT("Browse"), wxDefaultPosition, wxSize(60, 25));
+	m_stext_game_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Game Folder: ");
+	m_textctrl_game_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "game directory not found");
+	m_button_game_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
+	m_button_game_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
 	m_button_game_directory_save->Bind(wxEVT_BUTTON, &cMain::OnGameDirectorySaveClick, this);
 	m_button_game_directory_browse->Bind(wxEVT_BUTTON, &cMain::OnGameDirectoryBrowseClick, this);
-	m_dirdialog_game_browse = new wxDirDialog(this, wxT("Select your 'Stardew Valley' game directory"),
+	m_dirdialog_game_browse = new wxDirDialog(this, "Select your 'Stardew Valley' game directory",
 		wxEmptyString, wxDD_DIR_MUST_EXIST);
 	m_sizer_notebook_tab3_game_directory = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_game_directory->Add(m_stext_game_directory, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 2);
@@ -93,14 +93,14 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_sizer_notebook_tab3_game_directory->Add(m_button_game_directory_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
 
 	// Tab 3 - Steam Directory Sizer
-	m_stext_steam_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, wxT("Steam Folder: "));
-	m_textctrl_steam_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, wxT("steam directory not found"));
-	m_button_steam_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, wxT("Save"), wxDefaultPosition, wxSize(60, 25));
-	m_button_steam_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, wxT("Browse"), wxDefaultPosition, wxSize(60, 25));
+	m_stext_steam_directory = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Steam Folder: ");
+	m_textctrl_steam_directory = new wxTextCtrl(m_panel_notebook_tab3, wxID_ANY, "steam directory not found");
+	m_button_steam_directory_save = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Save", wxDefaultPosition, wxSize(60, 25));
+	m_button_steam_directory_browse = new wxButton(m_panel_notebook_tab3, wxID_ANY, "Browse", wxDefaultPosition, wxSize(60, 25));
 	m_button_steam_directory_save->Bind(wxEVT_BUTTON, &cMain::OnSteamDirectorySaveClick, this);
 	m_button_steam_directory_browse->Bind(wxEVT_BUTTON, &cMain::OnSteamDirectoryBrowseClick, this);
-	m_filedialog_steam_browse = new wxFileDialog(this, wxT("Select the Steam executable/application file (Steam.exe)"),
-		wxEmptyString, wxT("Steam.exe"), wxFileSelectorDefaultWildcardStr, wxFD_FILE_MUST_EXIST);
+	m_filedialog_steam_browse = new wxFileDialog(this, "Select the Steam executable/application file (Steam.exe)",
+		wxEmptyString, "Steam.exe", wxFileSelectorDefaultWildcardStr, wxFD_FILE_MUST_EXIST);
 	m_sizer_notebook_tab3_steam_directory = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_steam_directory->Add(m_stext_steam_directory, 0, wxALIGN_CENTER_VERTICAL, 0);
 	m_sizer_notebook_tab3_steam_directory->Add(m_textctrl_steam_directory, 4, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
@@ -108,8 +108,8 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_sizer_notebook_tab3_steam_directory->Add(m_button_steam_directory_browse, 1, wxALIGN_CENTER_VERTICAL, 0);
 
 	// Tab 3 - Error Mute Sizer
-	m_stext_mute = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, wxT("Mute Mod List Errors:"));
-	m_checkbox_mute = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, wxT("  (unmute for debugging)"));
+	m_stext_mute = new wxStaticText(m_panel_notebook_tab3, wxID_ANY, "Mute Mod List Errors:");
+	m_checkbox_mute = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "  (unmute for debugging)");
 	m_checkbox_mute->Bind(wxEVT_CHECKBOX, &cMain::OnMuteModToggleClick, this);
 	m_sizer_notebook_tab3_mute = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_mute->Add(m_stext_mute, 3, wxALIGN_CENTER_VERTICAL, 0);
@@ -136,9 +136,9 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_panel_notebook_tab3->SetSizer(m_sizer_notebook_tab3);
 
 	// Notebook Tabs
-	m_notebook->AddPage(m_panel_notebook_tab1, wxT("SMAPI Mods"), true);
+	m_notebook->AddPage(m_panel_notebook_tab1, "SMAPI Mods", true);
 	//m_notebook->AddPage(m_panel_notebook_tab2, "XNB Mods", false); // REMOVED FOR 0.5.0-ALPHA RELEASE
-	m_notebook->AddPage(m_panel_notebook_tab3, wxT("Settings"), false);
+	m_notebook->AddPage(m_panel_notebook_tab3, "Settings", false);
 
 	//---------------------------------
 	//  Additional GUI Implementation
@@ -156,12 +156,12 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS, ID_MENU_QUIT);
 
 	// Right side buttons
-	m_button_launch_smapi = new wxButton(this, wxID_ANY, wxT("Launch SMAPI with Mods"));
-	m_button_launch_vanilla = new wxButton(this, wxID_ANY, wxT("Launch Stardew Valley"));
+	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
+	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
 	m_button_add_mod = new wxButton(this, wxID_ANY, ""); // TODO "Add Mod from File/Archive" // REMOVED FOR 0.5.0-ALPHA RELEASE
-	m_button_nexus_download = new wxButton(this, ID_BUTTON_NEXUS, wxT("Visit Nexus Mods"));
-	m_button_forums_download = new wxButton(this, ID_BUTTON_FORUMS, wxT("Visit Mod Forums"));
-	m_button_refresh_mods = new wxButton(this, wxID_ANY, wxT("Refresh Mod List"));
+	m_button_nexus_download = new wxButton(this, ID_BUTTON_NEXUS, "Visit Nexus Mods");
+	m_button_forums_download = new wxButton(this, ID_BUTTON_FORUMS, "Visit Mod Forums");
+	m_button_refresh_mods = new wxButton(this, wxID_ANY, "Refresh Mod List");
 	m_button_launch_smapi->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchVanillaClick, this);
 	m_button_nexus_download->Bind(wxEVT_BUTTON, &cMain::OnLaunchModSiteClick, this);
@@ -191,16 +191,16 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 
 	// Banner
 	wxImage::AddHandler(new wxPNGHandler);
-	m_bitmap_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap(wxT("SDVMM2.png"), wxBITMAP_TYPE_PNG)); // TODO save in code?
+	m_bitmap_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG)); // TODO save in code?
 	wxImage::CleanUpHandlers();
 
 	// Bottom Bar - Version Info & Mod Count
-	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, wxT("SMAPI Version: " + version_smapi_)); // TODO getters/setters
-	m_stext_this_version = new wxStaticText(this, wxID_ANY, wxT("SDVMM2 Version: " + version_this_mm_));
-	m_stext_mod_count = new wxStaticText(this, wxID_ANY, wxT("Mods: " +
+	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + version_smapi_); // TODO getters/setters
+	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + version_this_mm_);
+	m_stext_mod_count = new wxStaticText(this, wxID_ANY, "Mods: " +
 		std::to_string(mod_count_["loaded"]) + "/" +
 		std::to_string(mod_count_["errored"]) + "/" +
-		std::to_string(mod_count_["total"])));
+		std::to_string(mod_count_["total"]));
 	m_sizer_mod_count = new wxBoxSizer(wxVERTICAL);
 	m_sizer_mod_count->Add(m_stext_mod_count, 0, wxALIGN_RIGHT, 0);
 	m_sizer_version_info = new wxBoxSizer(wxHORIZONTAL);
@@ -238,7 +238,7 @@ cMain::~cMain()
 	delete config_ini;
 }
 
-void cMain::SelfInitialize() // TODO add checks for each loaction
+void cMain::SelfInitialize()
 {
 	D(
 		OutputDebugString(_T("SelfInit - Begin\n"));
@@ -251,9 +251,9 @@ void cMain::SelfInitialize() // TODO add checks for each loaction
 	)
 	config_ini = new wxFileConfig(wxEmptyString,
 		wxEmptyString, appPath);
-	config_ini->SetPath(wxT("/General"));
+	config_ini->SetPath("/General");
 
-	if (wxFileExists(string(appPath)))
+	if (existsFile(string(appPath)))
 	{
 		ini_exists_ = true;
 		D(
@@ -262,19 +262,19 @@ void cMain::SelfInitialize() // TODO add checks for each loaction
 		D(
 			OutputDebugString(_T("SelfInit - Open .ini\n"));
 		)
-		set_game_directory(string(config_ini->Read(wxT("GamePath"), wxT("directory not found"))));
+		set_game_directory(string(config_ini->Read(wxT("GamePath"), "directory not found")));
 		D(
 			OutputDebugString(_T("SelfInit - .ini Game Path Read\n"));
 		)
-		set_launch_with_steam(config_ini->ReadBool(wxT("SteamLauncher"), true));
+		set_launch_with_steam(config_ini->ReadBool("SteamLauncher", true));
 		D(
 			OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
 		)
-		set_steam_directory(string(config_ini->Read(wxT("SteamPath"), wxT("directory not found"))));
+		set_steam_directory(string(config_ini->Read(wxT("SteamPath"), "directory not found")));
 		D(
 			OutputDebugString(_T("SelfInit - .ini Steam Path Read\n"));
 		)
-		set_error_mute(config_ini->ReadBool(wxT("MuteErrors"), false));
+		set_error_mute(config_ini->ReadBool("MuteErrors", false));
 		D(
 			OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
 		)
@@ -325,27 +325,28 @@ void cMain::set_launch_with_steam(bool state)
 
 void cMain::set_game_directory(fs::path filepath)
 {
-	if (!wxFileExists(filepath.string() + "\\StardewModdingAPI.exe")) // TODO make own function
+	if (!fs::exists(filepath.string() + "\\StardewModdingAPI.exe")) // TODO make own function
 	{
-		D(
-			OutputDebugString(_T("SMAPI not detected in:\n"));
-			OutputDebugStringA(filepath.string().c_str());
-			OutputDebugString(_T("\n"));
-		)
+		error_check_["smapi"] = true;
+		wxMessageDialog* error_no_smapi = new wxMessageDialog(NULL,
+			wxT("SMAPI not detected in:\n" + filepath.string()),
+			wxT("SMAPI Error"), wxOK, wxDefaultPosition);
+		error_no_smapi->ShowModal();
+		delete error_no_smapi;
 	}
 	else 
 	{ 
 		error_check_["smapi"] = false;
-		m_button_launch_smapi->SetLabel(wxT("Launch SMAPI with Mods"));
+		m_button_launch_smapi->SetLabel("Launch SMAPI with Mods");
 		m_button_launch_smapi->Enable();
 	}
 	m_textctrl_game_directory->SetLabel(filepath.string());
 	game_directory_ = filepath;
-	if (!wxFileExists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods"))
+	if (!fs::exists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods"))
 	{
 		fs::create_directory(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods");
 	}
-	if (!wxFileExists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods_disabled"))
+	if (!fs::exists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods_disabled"))
 	{
 		fs::create_directory(string(m_textctrl_game_directory->GetLineText(0)) + "\\Mods_disabled");
 	}
@@ -357,7 +358,7 @@ void cMain::set_steam_directory(fs::path filepath)
 	steam_directory_ = filepath;
 }
 
-void cMain::set_version_this_mm(wxString version)
+void cMain::set_version_this_mm(string version)
 {
 	version_this_mm_ = version;
 }
@@ -365,7 +366,7 @@ void cMain::set_version_this_mm(wxString version)
 void cMain::set_error_mute(bool state)
 {
 	m_checkbox_mute->SetValue(state);
-	error_mute_[wxT("on_refresh")] = state;
+	error_mute_["on_refresh"] = state;
 }
 
 //-----------------------------
@@ -375,16 +376,16 @@ void cMain::set_error_mute(bool state)
 void cMain::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher option
 {
 	event.Skip();
-	if (error_check_[wxT("smapi")] == true) 
+	if (error_check_["smapi"] == true) 
 	{
 		m_button_launch_smapi->Disable();
-		m_button_launch_smapi->SetLabel(wxT("SMAPI Not Found!"));
+		m_button_launch_smapi->SetLabel("SMAPI Not Found!");
 	}
 	else
 	{
 		if (launch_with_steam())
 		{
-			wxString test_str = ((this->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
+			string test_str = ((this->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
 				" \"" + game_directory().string() + "//StardewValleyAPI.exe\" %command%";
 			const char* open_command = (test_str.c_str());
 			wxExecute(open_command, wxEXEC_ASYNC, NULL);
@@ -407,7 +408,7 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event) // TODO Steam Launcher o
 	event.Skip();
 	if (launch_with_steam())
 	{
-		wxString test_str = ((this->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150";
+		string test_str = ((this->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150";
 		const char* open_command = (test_str.c_str());
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 		wxExecute(open_command , wxEXEC_ASYNC, NULL);
@@ -416,7 +417,7 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event) // TODO Steam Launcher o
 	{
 		wxString temp = wxGetCwd();
 		wxSetWorkingDirectory(this->game_directory().string());
-		wxString test_str = ((this->game_directory().string() + "\\Stardew Valley"));
+		string test_str = ((this->game_directory().string() + "\\Stardew Valley"));
 		const char* open_command = (test_str.c_str());
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 		wxSetWorkingDirectory(temp);
@@ -429,11 +430,11 @@ void cMain::OnLaunchModSiteClick(wxCommandEvent& event)
 
 	if (event.GetId() == ID_BUTTON_NEXUS)
 	{
-		wxLaunchDefaultBrowser(wxT("https://www.nexusmods.com/stardewvalley"));
+		wxLaunchDefaultBrowser("https://www.nexusmods.com/stardewvalley");
 	}
 	else if (event.GetId() == ID_BUTTON_FORUMS)
 	{
-		wxLaunchDefaultBrowser(wxT("https://community.playstarbound.com/forums/mods.215/"));
+		wxLaunchDefaultBrowser("https://community.playstarbound.com/forums/mods.215/");
 	}
 	else {}
 	event.Skip();
@@ -466,7 +467,7 @@ void cMain::OnMenuClick(wxCommandEvent& event) // TODO complete
 void cMain::OnMenuModsClick(wxCommandEvent& event)
 {
 	event.Skip();
-	wxString test_str = ("explorer " + (this->game_directory().string() + "\\Mods\\"));
+	string test_str = ("explorer " + (this->game_directory().string() + "\\Mods\\"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -481,7 +482,7 @@ void cMain::OnMenuModsClick(wxCommandEvent& event)
 void cMain::OnMenuModsDisabledClick(wxCommandEvent& event)
 {
 	event.Skip();
-	wxString test_str = ("explorer " + (this->game_directory().string() + "\\Mods_disabled"));
+	string test_str = ("explorer " + (this->game_directory().string() + "\\Mods_disabled"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 }
@@ -496,10 +497,10 @@ void cMain::OnMenuQuitClick(wxCommandEvent& event)
 void cMain::OnLauncherToggleClick(wxCommandEvent& event)
 {
 	event.Skip();
-	if (wxFileExists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
+	if (fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
 	{
 		set_launch_with_steam(m_checkbox_launcher->GetValue());
-		config_ini->Write(wxT("SteamLauncher"), m_checkbox_launcher->GetValue());
+		config_ini->Write("SteamLauncher", m_checkbox_launcher->GetValue());
 		config_ini->Flush();
 	}
 	else
@@ -529,10 +530,10 @@ void cMain::OnLauncherToggleClick(wxCommandEvent& event)
 void cMain::OnGameDirectorySaveClick(wxCommandEvent& event)
 {
 	event.Skip();
-	if (wxFileExists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Stardew Valley.exe"))
+	if (fs::exists(string(m_textctrl_game_directory->GetLineText(0)) + "\\Stardew Valley.exe"))
 	{
 		set_game_directory(string(m_textctrl_game_directory->GetLineText(0)));
-		config_ini->Write(wxT("GamePath"), wxString(game_directory().string()));
+		config_ini->Write("GamePath", wxString(game_directory().string()));
 		config_ini->Flush();
 		RefreshModLists();
 	}
@@ -551,11 +552,11 @@ void cMain::OnGameDirectoryBrowseClick(wxCommandEvent& event)
 	event.Skip();
 	if (m_dirdialog_game_browse->ShowModal() == wxID_OK)
 	{
-		if (wxFileExists(string(m_dirdialog_game_browse->GetPath()) + "\\Stardew Valley.exe"))
+		if (fs::exists(string(m_dirdialog_game_browse->GetPath()) + "\\Stardew Valley.exe"))
 		{
 			m_dirdialog_game_browse->SetPath(m_dirdialog_game_browse->GetPath());
 			set_game_directory(string(m_dirdialog_game_browse->GetPath()));
-			config_ini->Write(wxT("GamePath"), wxString(game_directory().string()));
+			config_ini->Write("GamePath", wxString(game_directory().string()));
 			config_ini->Flush();
 			RefreshModLists();
 		}
@@ -563,7 +564,7 @@ void cMain::OnGameDirectoryBrowseClick(wxCommandEvent& event)
 		{
 			m_dirdialog_game_browse->SetPath(m_dirdialog_game_browse->GetPath());
 			wxMessageDialog* game_directory_browse_fail = new wxMessageDialog(NULL,
-				wxT("Game executable not found in directory:\n" + string(m_dirdialog_game_browse->GetPath())),
+				("Game executable not found in directory:\n" + string(m_dirdialog_game_browse->GetPath())),
 				wxT("Incorrect Directory"), wxOK, wxDefaultPosition);
 			game_directory_browse_fail->ShowModal();
 			delete game_directory_browse_fail;
@@ -575,10 +576,10 @@ void cMain::OnGameDirectoryBrowseClick(wxCommandEvent& event)
 void cMain::OnSteamDirectorySaveClick(wxCommandEvent& event)
 {
 	event.Skip();
-	if (wxFileExists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
+	if (fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
 	{
 		set_steam_directory(string(m_textctrl_steam_directory->GetLineText(0)));
-		config_ini->Write(wxT("SteamPath"), wxString(steam_directory().string()));
+		config_ini->Write("SteamPath", wxString(steam_directory().string()));
 		config_ini->Flush();
 	}
 	else
@@ -596,29 +597,23 @@ void cMain::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 	event.Skip();
 	if ((m_filedialog_steam_browse->ShowModal() == wxID_OK))
 	{
-		wxString* temp = new wxString{};
-		wxFileName::SplitPath(m_filedialog_steam_browse->GetPath(), NULL, NULL, temp, NULL);
-		D(
-			OutputDebugString(_T("Specified file name: " + *temp + "\n"));
-		)
-		if ((wxFileExists(string(m_filedialog_steam_browse->GetPath()))) and
-			(*temp == wxString("Steam")))
+		if ((fs::exists(string(m_filedialog_steam_browse->GetPath()))) and
+			(fs::path(string((m_filedialog_steam_browse->GetPath()))).filename() == fs::path("Steam.exe")))
 		{
 			m_filedialog_steam_browse->SetPath(m_filedialog_steam_browse->GetPath());
 			set_steam_directory((fs::path(string(m_filedialog_steam_browse->GetPath())).parent_path()).string());
-			config_ini->Write(wxT("SteamPath"), wxString(steam_directory().string()));
+			config_ini->Write("SteamPath", wxString(steam_directory().string()));
 			config_ini->Flush();
 		}
 		else
 		{
 			m_filedialog_steam_browse->SetPath(m_filedialog_steam_browse->GetPath());
 			wxMessageDialog* steam_directory_browse_fail = new wxMessageDialog(NULL,
-				wxT("Steam executable not found:\n" + string(m_filedialog_steam_browse->GetPath())),
+				("Steam executable not found:\n" + string(m_filedialog_steam_browse->GetPath())),
 				wxT("Incorrect Directory"), wxOK, wxDefaultPosition);
 			steam_directory_browse_fail->ShowModal();
 			delete steam_directory_browse_fail;
 		}
-		delete temp;
 	}
 	else {}
 }
@@ -626,7 +621,7 @@ void cMain::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 void cMain::OnMuteModToggleClick(wxCommandEvent& event)
 {
 	event.Skip();
-	config_ini->Write(wxT("MuteErrors"), m_checkbox_mute->GetValue());
+	config_ini->Write("MuteErrors", m_checkbox_mute->GetValue());
 	config_ini->Flush();
 	set_error_mute(m_checkbox_mute->GetValue());
 }
@@ -639,7 +634,14 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 	event.Skip();
 	
 	D(
-		OutputDebugString(_T("Mod toggle called.\n"));
+		if (report_cbox_event) {
+			wxMessageDialog* event_toggle_box1 = new wxMessageDialog(NULL,
+				wxT("Mod toggled."), wxT("Event captured"),
+				wxOK, wxDefaultPosition);
+			event_toggle_box1->ShowModal();
+			delete event_toggle_box1;
+		}
+		else {}
 	)
 	wxVariant temp_path("");
 	m_dataviewlistctrl_mods->GetValue(temp_path, m_dataviewlistctrl_mods->GetSelectedRow(), 4);
@@ -647,93 +649,35 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 	fs::path parent_path = mod_path.parent_path();
 	fs::path folder_name = mod_path.filename();
 
-	while (parent_path != ((this->game_directory()) += "\\Mods") 
-		and parent_path != ((this->game_directory()) += "\\Mods_disabled"))
-	{
-
-		folder_name = (parent_path.filename() += ("\\" + folder_name.string()));
-		parent_path = parent_path.parent_path();
-	}
-
-
-	D(
-		OutputDebugString(_T("Mod toggle called.\n"));
-		OutputDebugStringA(parent_path.string().c_str());
-		OutputDebugString(_T("\n"));
-		OutputDebugStringA(folder_name.string().c_str());
-		OutputDebugString(_T("\n"));
-	)
-
 	if (parent_path == ((this->game_directory()) += "\\Mods"))
 	{
 		D(
-			OutputDebugStringA(mod_path.string().c_str());
-			OutputDebugString(_T("\n"));
-			OutputDebugStringA((string(this->game_directory().string() += "\\Mods_disabled\\") += folder_name.string()).c_str());
-			OutputDebugString(_T("\n"));
+			if (report_file_move_event) {
+				wxMessageDialog* event_toggle_box2 = new wxMessageDialog(NULL,
+					wxT("Was in Mods"), wxT("Event item info"),
+					wxOK, wxDefaultPosition);
+				event_toggle_box2->ShowModal();
+				delete event_toggle_box2;
+			}
+			else {}
 		)
 
-		// Build required parent folders for move
-		while (!fs::is_directory(((this->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path()))
-		{
-			fs::path rrename_path = ((this->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path();
-			while (!fs::is_directory(rrename_path.parent_path()))
-			{
-				rrename_path = rrename_path.parent_path();
-			}
-			fs::create_directory(rrename_path);
-		}
 		fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods_disabled\\") += folder_name));
-
-		// Delete empty nested folders
-		fs::path clean_path = mod_path.parent_path();
-		std::error_code ec;
-		while (fs::is_empty(clean_path) and (clean_path != ((this->game_directory()) += "\\Mods_disabled")))
-		{
-			fs::remove(clean_path, ec);
-			D(
-				OutputDebugString(_T("Empty folder deleted.\n"));
-				OutputDebugStringA(clean_path.string().c_str());
-				OutputDebugString(_T("\n"));
-			)
-				clean_path = clean_path.parent_path();
-		}
 	}
 	else if (parent_path == ((this->game_directory()) += "\\Mods_disabled"))
 	{
 		D(
-			OutputDebugStringA(mod_path.string().c_str());
-			OutputDebugString(_T("\n"));
-			OutputDebugStringA((string(this->game_directory().string() += "\\Mods\\") += folder_name.string()).c_str());
-			OutputDebugString(_T("\n"));
+			if (report_file_move_event) {
+				wxMessageDialog* event_toggle_box2 = new wxMessageDialog(NULL,
+					wxT("Was in Mods_disabled"), wxT("Event item info"),
+					wxOK, wxDefaultPosition);
+				event_toggle_box2->ShowModal();
+				delete event_toggle_box2;
+			}
+			else{}
 		)
 
-		// Build required parent folders for move
-		while (!fs::is_directory(((this->game_directory() += "\\Mods\\") += folder_name).parent_path()))
-		{
-			fs::path rrename_path = ((this->game_directory() += "\\Mods\\") += folder_name).parent_path();
-			while (!fs::is_directory(rrename_path.parent_path()))
-			{
-				rrename_path = rrename_path.parent_path();
-			}
-			fs::create_directory(rrename_path);
-		}
-
-		fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
-
-		// Delete empty nested folders
-		fs::path clean_path = mod_path.parent_path();
-		std::error_code ec;
-		while (fs::is_empty(clean_path) and (clean_path != ((this->game_directory()) += "\\Mods")))
-		{
-			fs::remove(clean_path, ec);
-			D(
-				OutputDebugString(_T("Empty folder deleted.\n"));
-				OutputDebugStringA(clean_path.string().c_str());
-				OutputDebugString(_T("\n"));
-			)
-			clean_path = clean_path.parent_path();
-		}
+			fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
 	}
 	else
 	{
@@ -755,9 +699,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 {
 	if (!manifest.contains("Name"))
 	{
-		error_check_[wxT("format")] = true;
-		error_check_[wxT("format_local")] = true;
-		error_count_[wxT("format")]++;
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
 		string temp = "";
 		if (manifest.contains("name"))
 		{
@@ -770,16 +714,14 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 			manifest["Name"] = temp;
 		}
 		D(
-			if (report_refresh_clean) {
-				OutputDebugStringA((error_path.string() + " Manifest Error - Name\n").c_str());
-			}
+			OutputDebugStringA((error_path.string() + " Manifest Error - Name\n").c_str());
 		)
 	}
 	if (!manifest.contains("Author"))
 	{
-		error_check_[wxT("format")] = true;
-		error_check_[wxT("format_local")] = true;
-		error_count_[wxT("format")]++;
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
 		string temp = "";
 		if (manifest.contains("author"))
 		{
@@ -792,16 +734,14 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 			manifest["Author"] = temp;
 		}
 		D(
-			if (report_refresh_clean) {
-				OutputDebugStringA((error_path.string() + " Manifest Error - Author\n").c_str());
-			}
+			OutputDebugStringA((error_path.string() + " Manifest Error - Author\n").c_str());
 		)
 	}
 	if (!manifest.contains("Version"))
 	{
-		error_check_[wxT("format")] = true;
-		error_check_[wxT("format_local")] = true;
-		error_count_[wxT("format")]++;
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
 		string temp = "";
 		if (manifest.contains("version"))
 		{
@@ -814,17 +754,15 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 			manifest["Version"] = temp;
 		}
 		D(
-			if (report_refresh_clean) {
-				OutputDebugStringA((error_path.string() + " Manifest Error - Version\n").c_str());
-			}
+			OutputDebugStringA((error_path.string() + " Manifest Error - Version\n").c_str());
 		)
 	}
 	else if (manifest["Version"].is_object())
 	{
 		// flag outdated version object and make readable
-		error_check_[wxT("semvar")] = true;
-		error_count_[wxT("semvar")]++;
-		error_locations_ += wxT("\n" + error_path.string() + " - Depreciated Versioning");
+		error_check_["semvar"] = true;
+		error_count_["semvar"]++;
+		error_locations_ += "\n" + error_path.string() + " - Depreciated Versioning";
 		string temp = "";
 		int temp_v1 = NULL;
 		int temp_v2 = NULL;
@@ -840,9 +778,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("Description"))
 	{
-		error_check_[wxT("format")] = true;
-		error_check_[wxT("format_local")] = true;
-		error_count_[wxT("format")]++;
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
 		string temp = "";
 		if (manifest.contains("description"))
 		{
@@ -855,16 +793,14 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 			manifest["Description"] = temp;
 		}
 		D(
-			if (report_refresh_clean) {
-				OutputDebugStringA((error_path.string() + " Manifest Error - Description\n").c_str());
-			}
+			OutputDebugStringA((error_path.string() + " Manifest Error - Description\n").c_str());
 		)
 	}
 	if (!manifest.contains("UniqueID"))
 	{
-		error_check_[wxT("format")] = true;
-		error_check_[wxT("format_local")] = true;
-		error_count_[wxT("format")]++;
+		error_check_["format"] = true;
+		error_check_["format_local"] = true;
+		error_count_["format"]++;
 		string temp = "";
 		if (manifest.contains("uniqueID"))
 		{
@@ -875,15 +811,13 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 			manifest["UniqueID"] = temp;
 		}
 		D(
-			if (report_refresh_clean) {
-				OutputDebugStringA((error_path.string() + " Manifest Error - UniqueID\n").c_str());
-			}
+			OutputDebugStringA((error_path.string() + " Manifest Error - UniqueID\n").c_str());
 		)
 	}
-	if (error_check_[wxT("format_local")] == true)
+	if (error_check_["format_local"] == true)
 	{
-		mod_count_[wxT("errored")]++;
-		error_locations_ += wxT("\n" + error_path.string() + " - Manifest Formatting");
+		mod_count_["errored"]++;
+		error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
 	}
 }
 
@@ -916,8 +850,10 @@ void cMain::RefreshModLists()
 	ShowRefreshErrors();
 }
 
-void cMain::LoadModsFromDir(wxString folder_name)
+void cMain::LoadModsFromDir(string folder_name) 
 {
+	// TODO group and report errors in scrollable dialogue (bad jsons, incompatible mods, etc.)
+	// TODO replace custom ioFunctions with filesystem?
 	fs::path temp_dir = (this->game_directory());
 	temp_dir += folder_name;
 	fs::path temp_path;
@@ -926,205 +862,180 @@ void cMain::LoadModsFromDir(wxString folder_name)
 	int error_json = 0; // 0 = no error, 1 = bad comma, 2 = other
 
 	D(
-		if (report_refresh_mods) {
-			OutputDebugString(_T("LoadModsFromDir - Begin Iterator at:\n"));
-			OutputDebugStringA(game_directory().string().c_str());
-			OutputDebugString(_T("\n"));
-		}
+		OutputDebugString(_T("LoadModsFromDir - Begin Iterator at:\n"));
+		OutputDebugStringA(game_directory().string().c_str());
+		OutputDebugString(_T("\n"));
 	)
-	for (auto& dir_iter : fs::recursive_directory_iterator(temp_dir))
+	for (auto& dir_iter : fs::directory_iterator(temp_dir))
 	{
-		error_check_[wxT("json")] = false;
-		error_check_[wxT("format_local")] = false;
+		error_check_["json"] = false;
+		error_check_["format_local"] = false;
 		error_path = dir_iter.path().filename();
 		temp_path = dir_iter.path();
 		D(
-			if (report_refresh_mods) {
-				OutputDebugStringA(temp_path.string().c_str());
-			}
+			OutputDebugStringA(temp_path.string().c_str());
 		)
 		if (fs::is_directory(temp_path))
 		{
 			D(
-				if (report_refresh_mods) {
-					OutputDebugString(_T(" - Is Directory\n"));
-				}
+				OutputDebugString(_T(" - Is Directory\n"));
 			)
-			mod_count_[wxT("total")]++;
+			mod_count_["total"]++;
 			temp_path += "\\manifest.json";
-			if (fs::is_regular_file(temp_path.string()))
+			ifstream json_stream(temp_path.c_str());
+			json json_manifest;
+			try 
 			{
-				ifstream json_stream(temp_path.c_str());
-				json json_manifest;
-				try
-				{
-					try
-					{ // Parse json
-						json_manifest = json::parse(json_stream); // TODO handle trailing commas
-						// Handle some minor typos and missing fields in manifest
-							CleanManifest(json_manifest, error_path);
-					}
-					catch (json::parse_error & e)
-					{ // On fail, output error and skip to next mod
-						error_check_[wxT("json")] = true;
-						error_count_[wxT("json")]++;
-						mod_count_[wxT("errored")]++;
-						string temp_exc = e.what();
-						if (e.id == 101) {
-							error_locations_ += wxT("\n" + error_path.string() + " - JSON Unexpected Char");
-							// TODO clean commas and comments, then try again
-							///*
-							D(
-								if (report_refresh_mods) {
-									OutputDebugString(_T("Json Fix Attempt\n"));
-								}
-							)
-								//std::stringstream json_sstream;
-								//json_sstream << json_stream.rdbuf();
-								string json_string = "New\n";
-							//json_string = json_sstream.str();
-							ifstream json_stream2(temp_path.c_str(), std::ios::in | std::ios::binary);
-							json_stream2.seekg(0, std::ios::end);
-							json_string.resize(json_stream2.tellg());
-							json_stream2.seekg(0, std::ios::beg);
-							json_stream2.read(&json_string[0], json_string.size());
-							json_stream2.close();
+				try 
+				{ // Parse json
+					json_manifest = json::parse(json_stream); // TODO handle trailing commas
+					// Handle some minor typos and missing fields in manifest
+					CleanManifest(json_manifest, error_path);
+				}
+				catch (json::parse_error & e) 
+				{ // On fail, output error and skip to next mod
+					error_check_["json"] = true;
+					error_count_["json"]++;
+					mod_count_["errored"]++;
+					string temp_exc = e.what();
+					if (e.id == 101) {
+						error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
+						// TODO clean commas and comments, then try again
+						///*
+						D(
+							OutputDebugString(_T("Json Fix Attempt\n"));
+						)
+						//std::stringstream json_sstream;
+						//json_sstream << json_stream.rdbuf();
+						string json_string = "New\n";
+						//json_string = json_sstream.str();
+						ifstream json_stream2(temp_path.c_str(), std::ios::in | std::ios::binary);
+						json_stream2.seekg(0, std::ios::end);
+						json_string.resize(json_stream2.tellg());
+						json_stream2.seekg(0, std::ios::beg);
+						json_stream2.read(&json_string[0], json_string.size());
+						json_stream2.close();
 
-							D(
-								if (report_refresh_mods) {
-									OutputDebugString(_T("Json Fix RAW\n"));
-									OutputDebugStringA(json_string.c_str());
-									OutputDebugString(_T("\n"));
-								}
-							)
+						D(
+							OutputDebugString(_T("Json Fix RAW\n"));
+							OutputDebugStringA(json_string.c_str());
+							OutputDebugString(_T("\n"));
+						)
 
-								try
-							{
-								json_string = stripComments(json_string, true);
-							}
-							catch (...)
-							{
-								D(
-									if (report_refresh_mods) {
-										OutputDebugString(_T("Json Fix Comment Clean Failure\n"));
-									}
-								)
-							}
-
-							D(
-								if (report_refresh_mods) {
-									OutputDebugString(_T("Json Fix Comment Cleaned\n"));
-									OutputDebugStringA(json_string.c_str());
-									OutputDebugString(_T("\n"));
-								}
-							)
-
-								try
-							{
-								json_string = stripTrailingCommas(json_string, true);
-							}
-							catch (const std::regex_error & e)
-							{
-								string temp = e.what();
-								D(
-									if (report_refresh_mods) {
-										OutputDebugString(_T("Json Fix Comma Clean Failure: " + temp + "\n"));
-									}
-								)
-							}
-							//json_sstream.clear();
-							//json_sstream.str(string());
-							//json_sstream << json_string;
-
-							D(
-								if (report_refresh_mods) {
-									OutputDebugString(_T("Json Fix Comma Cleaned\n"));
-									OutputDebugStringA(json_string.c_str());
-									OutputDebugString(_T("\n"));
-								}
-							)
-
-								try
-							{
-								json_manifest = json::parse(json_string); // TODO handle trailing commas
-								// Handle some minor typos and missing fields in manifest
-								CleanManifest(json_manifest, error_path);
-								error_check_[wxT("json")] = false;
-								D(
-									if (report_refresh_mods) {
-										OutputDebugString(_T("Json Fix Reparse Success\n"));
-									}
-								)
-							}
-							catch (...)
-							{
-								D(
-									if (report_refresh_mods) {
-										OutputDebugString(_T("Json Fix Reparse Failure\n"));
-									}
-								)
-									continue;
-							}
-							//*/
+						try
+						{
+							json_string = stripComments(json_string, true);
 						}
-						else {
-							error_locations_ += wxT("\n" + error_path.string() + " - JSON Formatting");
+						catch (...)
+						{
+							D(
+								OutputDebugString(_T("Json Fix Comment Clean Failure\n"));
+							)
+						}
+
+						D(
+							OutputDebugString(_T("Json Fix Comment Cleaned\n"));
+							OutputDebugStringA(json_string.c_str());
+							OutputDebugString(_T("\n"));
+						)
+
+						try
+						{
+							json_string = stripTrailingCommas(json_string, true);
+						}
+						catch (const std::regex_error& e)
+						{
+							string temp = e.what();
+							D(
+								OutputDebugString(_T("Json Fix Comma Clean Failure: " + temp + "\n"));
+							)
+						}
+						//json_sstream.clear();
+						//json_sstream.str(string());
+						//json_sstream << json_string;
+
+						D(
+							OutputDebugString(_T("Json Fix Comma Cleaned\n"));
+							OutputDebugStringA(json_string.c_str());
+							OutputDebugString(_T("\n"));
+						)
+
+						try
+						{
+							json_manifest = json::parse(json_string); // TODO handle trailing commas
+							// Handle some minor typos and missing fields in manifest
+							CleanManifest(json_manifest, error_path);
+							error_check_["json"] = false;
+							D(
+								OutputDebugString(_T("Json Fix Reparse Success\n"));
+							)
+						}
+						catch (...)
+						{
+							D(
+								OutputDebugString(_T("Json Fix Reparse Failure\n"));
+							)
 							continue;
 						}
+						//*/
 					}
-
-					if (wxFileExists(temp_path.string()) and (error_check_[wxT("json")] == false)) // TODO Review
-					{
-						D(
-							if (report_refresh_mods) {
-								string temp_msg1 = "";
-								string temp_msg2 = "";
-								json_manifest["Name"].get_to(temp_msg1);
-								json_manifest["Version"].get_to(temp_msg2);
-								OutputDebugStringA((temp_msg1 + " exists, " + temp_msg2 + "\n").c_str());
-							}
-						)
-
-							cMod aMod(json_manifest);
-						wxVector<wxVariant> thisMod;
-						thisMod.push_back(wxVariant(is_active));
-						thisMod.push_back(wxVariant(aMod.mod_name()));
-						thisMod.push_back(wxVariant(aMod.mod_author()));
-						thisMod.push_back(wxVariant(aMod.mod_version()));
-						thisMod.push_back(wxVariant((dir_iter.path()).string()));
-						this->m_dataviewlistctrl_mods->AppendItem(thisMod);
-						mod_count_[wxT("loaded")]++;
-						thisMod.clear();
-
-						/*
-						wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
-						m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
-
-						wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
-							if(!pStrData)
-						wxString id = pStrData->GetData();
-						*/
-
-						D(
-							if (report_refresh_mods) {
-								OutputDebugStringA((aMod.infoString()).c_str());
-							}
-						)
+					else {
+						error_locations_ += "\n" + error_path.string() + " - JSON Formatting";
+						continue;
 					}
 				}
-				catch (...)
+
+				if (existsFile(temp_path.string()) and (error_check_["json"] == false)) // TODO Review
 				{
-					error_locations_ += wxT("\n" + error_path.string() + " - Fatal");
+					D(
+						if (report_parsed_mod_data) {
+							string temp_msg1 = "";
+							string temp_msg2 = "";
+							json_manifest["Name"].get_to(temp_msg1);
+							json_manifest["Version"].get_to(temp_msg2);
+							OutputDebugStringA((temp_msg1 + " exists, " + temp_msg2 + "\n").c_str());
+						}
+						else {}
+					)
+
+					cMod aMod(json_manifest);
+					wxVector<wxVariant> thisMod;
+					thisMod.push_back(wxVariant(is_active));
+					thisMod.push_back(wxVariant(aMod.mod_name()));
+					thisMod.push_back(wxVariant(aMod.mod_author()));
+					thisMod.push_back(wxVariant(aMod.mod_version()));
+					thisMod.push_back(wxVariant((dir_iter.path()).string()));
+					this->m_dataviewlistctrl_mods->AppendItem(thisMod);
+					mod_count_["loaded"]++;
+					thisMod.clear();
+
+					/*
+					wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
+					m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
+
+					wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
+						if(!pStrData)
+					wxString id = pStrData->GetData();
+					*/
+
+					D(
+						if (report_mod_object_data) {
+							OutputDebugStringA((aMod.infoString()).c_str());
+						}
+						else {}
+					)
 				}
+			}
+			catch (...) 
+			{
+				error_locations_ += "\n" + error_path.string() + " - Fatal";
 			}
 
 		}
 		else 
 		{
 		D(
-			if (report_refresh_mods) {
-				OutputDebugString(_T(" - Is NOT Directory\n"));
-			}
+			OutputDebugString(_T(" - Is NOT Directory\n"));
 		)
 		}
 	}
@@ -1143,7 +1054,7 @@ bool cMain::ExistsModFolders()
 		OutputDebugString(_T("ExistsModFolders - Begin Checking Mod Folders\n"));
 	)
 
-	if (!(wxFileExists(game_file_path.string())))
+	if (!(fs::exists(game_file_path) and fs::is_regular_file(game_file_path)))
 	{
 		D(
 			OutputDebugString(_T("ExistsModFolders - Game Executable not Found on Path:\n"));
@@ -1155,7 +1066,7 @@ bool cMain::ExistsModFolders()
 	}
 	else
 	{
-		if (!(wxDirExists(mod_path.string())))
+		if (!(fs::exists(mod_path) and fs::is_directory(mod_path)))
 		{
 			D(
 				OutputDebugString(_T("ExistsModFolders - Mods Folder not Found\n"));
@@ -1201,7 +1112,7 @@ bool cMain::ExistsModFolders()
 
 void cMain::CheckSmapiVersion()
 {
-	wxString version = "";
+	string version = "";
 	fs::path path_smapi_logs = string(wxStandardPaths::Get().GetUserConfigDir());
 	path_smapi_logs += "\\StardewValley\\ErrorLogs\\SMAPI-latest.txt";
 	if (fs::exists(path_smapi_logs) and fs::is_regular_file(path_smapi_logs))
@@ -1226,46 +1137,46 @@ void cMain::CheckSmapiVersion()
 		D(
 			OutputDebugString(_T("CheckSmapiVersion - No Logs Found to Scrape\n"));
 		)
-		version = wxT("not found");
+		version = "not found";
 	}
-	m_stext_smapi_version->SetLabel(wxT("SMAPI Version: " + version));
+	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);
 }
 
 void cMain::ResetRefreshErrors() 
 {
-	error_locations_ = wxT("Errors at: ");
-	error_check_[wxT("json")] = false;
-	error_check_[wxT("semvar")] = false;
-	error_check_[wxT("format")] = false;
-	error_check_[wxT("format_local")] = false;
-	error_count_[wxT("json")] = 0;
-	error_count_[wxT("semvar")] = 0;
-	error_count_[wxT("format")] = 0;
-	mod_count_[wxT("total")] = 0;
-	mod_count_[wxT("errored")] = 0;
-	mod_count_[wxT("loaded")] = 0;
+	error_locations_ = "Errors at: ";
+	error_check_["json"] = false;
+	error_check_["semvar"] = false;
+	error_check_["format"] = false;
+	error_check_["format_local"] = false;
+	error_count_["json"] = 0;
+	error_count_["semvar"] = 0;
+	error_count_["format"] = 0;
+	mod_count_["total"] = 0;
+	mod_count_["errored"] = 0;
+	mod_count_["loaded"] = 0;
 }
 
 void cMain::ShowRefreshErrors()
 {
-	if ((error_mute_[wxT("on_refresh")] == false) and
-		((error_count_[wxT("json")] != 0) or (error_count_[wxT("semvar")] != 0) or (error_count_[wxT("format")] != 0)))
+	if ((error_mute_["on_refresh"] == false) and 
+		((error_count_["json"] != 0) or (error_count_["semvar"] != 0) or (error_count_["format"] != 0)))
 	{
 		// Error counter dialogue prep
-		wxString error_mod_loop_title = wxT("Errors in Mods");
-		wxString error_mod_loop_message =
-			wxT("Manifests with incorrect .json format: " + std::to_string(error_count_[wxT("json"])) +
-				"\nManifests with depreciated versioning: " + std::to_string(error_count_[wxT("semvar"])) +
-				"\nManifests with other formatting errors: " + std::to_string(error_count_[wxT("format"])));
+		string error_mod_loop_title = "Errors in Mods";
+		string error_mod_loop_message =
+			("Manifests with incorrect .json format: " + std::to_string(error_count_["json"]) +
+				"\nManifests with depreciated versioning: " + std::to_string(error_count_["semvar"]) +
+				"\nManifests with other formatting errors: " + std::to_string(error_count_["format"]));
 		// if (!is_active) { final_error_title += "_disabled"; };
 		// Error counter dialogue
 		wxMessageDialog* error_mod_loop = new wxMessageDialog(NULL,
 			error_mod_loop_message, error_mod_loop_title, wxOK, wxDefaultPosition);
 		error_mod_loop->ShowModal();
 		delete error_mod_loop;
-		if (error_check_[wxT("semvar")])
+		if (error_check_["semvar"]) 
 		{
-			error_locations_ += wxT("\n[SMAPI does not load mods with depreciated versioning.]");
+			error_locations_ += "\n[SMAPI does not load mods with depreciated versioning.]";
 		}
 		wxMessageDialog* error_mod_loop_detailed = new wxMessageDialog(NULL,
 			error_locations_, error_mod_loop_title, wxOK, wxDefaultPosition);

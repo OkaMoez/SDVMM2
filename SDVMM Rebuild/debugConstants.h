@@ -29,8 +29,6 @@ myREPORT(
 	const bool report_cbox_event = false;
 	const bool report_file_move_event = false;
 	const bool report_launcher_cbox_event = true;
-	const bool report_refresh_mods = false;
-	const bool report_refresh_clean = false;
 )
 
 myQUIET(
@@ -48,6 +46,4 @@ myQUIET(
 	const bool report_cbox_event = false;
 	const bool report_file_move_event = false;
 	const bool report_launcher_cbox_event = false;
-	const bool report_refresh_mods = false;
-	const bool report_refresh_clean = false;
 )
