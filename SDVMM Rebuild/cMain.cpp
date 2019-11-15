@@ -244,16 +244,18 @@ void cMain::SelfInitialize()
 		OutputDebugString(_T("SelfInit - Begin\n"));
 	)
 	wxFileName f(wxStandardPaths::Get().GetExecutablePath());
-	wxString appPath = (f.GetPath() + wxT("\\SDVMM2.ini"));
+	fs::path appPath = string(wxString(f.GetPath() + wxT("\\SDVMM2.ini")));
+
 	D(
 		OutputDebugString(_T("SelfInit - Checking for .ini at:\n"));
-		OutputDebugStringA(appPath + "\n");
+		OutputDebugStringA(appPath.string().c_str());
+		OutputDebugString(_T("\n"));
 	)
 	config_ini = new wxFileConfig(wxEmptyString,
-		wxEmptyString, appPath);
+		wxEmptyString, appPath.string());
 	config_ini->SetPath("/General");
 
-	if (existsFile(string(appPath)))
+	if (fs::exists(appPath))
 	{
 		ini_exists_ = true;
 		D(
@@ -262,7 +264,7 @@ void cMain::SelfInitialize()
 		D(
 			OutputDebugString(_T("SelfInit - Open .ini\n"));
 		)
-		set_game_directory(string(config_ini->Read(wxT("GamePath"), "directory not found")));
+		set_game_directory(string(config_ini->Read("GamePath", "directory not found")));
 		D(
 			OutputDebugString(_T("SelfInit - .ini Game Path Read\n"));
 		)
@@ -270,7 +272,7 @@ void cMain::SelfInitialize()
 		D(
 			OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
 		)
-		set_steam_directory(string(config_ini->Read(wxT("SteamPath"), "directory not found")));
+		set_steam_directory(string(config_ini->Read("SteamPath", "directory not found")));
 		D(
 			OutputDebugString(_T("SelfInit - .ini Steam Path Read\n"));
 		)
@@ -649,36 +651,93 @@ void cMain::ToggleMod(wxDataViewEvent& event)
 	fs::path mod_path = string(temp_path);
 	fs::path parent_path = mod_path.parent_path();
 	fs::path folder_name = mod_path.filename();
+	while (parent_path != ((this->game_directory()) += "\\Mods")
+		and parent_path != ((this->game_directory()) += "\\Mods_disabled"))
+	{
+
+		folder_name = (parent_path.filename() += ("\\" + folder_name.string()));
+		parent_path = parent_path.parent_path();
+	}
+
+
+	D(
+		OutputDebugString(_T("Mod toggle called.\n"));
+		OutputDebugStringA(parent_path.string().c_str());
+		OutputDebugString(_T("\n"));
+		OutputDebugStringA(folder_name.string().c_str());
+		OutputDebugString(_T("\n"));
+	)
 
 	if (parent_path == ((this->game_directory()) += "\\Mods"))
 	{
 		D(
-			if (report_file_move_event) {
-				wxMessageDialog* event_toggle_box2 = new wxMessageDialog(NULL,
-					wxT("Was in Mods"), wxT("Event item info"),
-					wxOK, wxDefaultPosition);
-				event_toggle_box2->ShowModal();
-				delete event_toggle_box2;
-			}
-			else {}
+			OutputDebugStringA(mod_path.string().c_str());
+		OutputDebugString(_T("\n"));
+		OutputDebugStringA((string(this->game_directory().string() += "\\Mods_disabled\\") += folder_name.string()).c_str());
+		OutputDebugString(_T("\n"));
 		)
 
+			// Build required parent folders for move
+			while (!fs::is_directory(((this->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path()))
+			{
+				fs::path rrename_path = ((this->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path();
+				while (!fs::is_directory(rrename_path.parent_path()))
+				{
+					rrename_path = rrename_path.parent_path();
+				}
+				fs::create_directory(rrename_path);
+			}
 		fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods_disabled\\") += folder_name));
+
+		// Delete empty nested folders
+		fs::path clean_path = mod_path.parent_path();
+		std::error_code ec;
+		while (fs::is_empty(clean_path) and (clean_path != ((this->game_directory()) += "\\Mods")))
+		{
+			fs::remove(clean_path, ec);
+			D(
+				OutputDebugString(_T("Empty folder deleted.\n"));
+			OutputDebugStringA(clean_path.string().c_str());
+			OutputDebugString(_T("\n"));
+			)
+				clean_path = clean_path.parent_path();
+		}
 	}
 	else if (parent_path == ((this->game_directory()) += "\\Mods_disabled"))
 	{
 		D(
-			if (report_file_move_event) {
-				wxMessageDialog* event_toggle_box2 = new wxMessageDialog(NULL,
-					wxT("Was in Mods_disabled"), wxT("Event item info"),
-					wxOK, wxDefaultPosition);
-				event_toggle_box2->ShowModal();
-				delete event_toggle_box2;
-			}
-			else{}
+			OutputDebugStringA(mod_path.string().c_str());
+		OutputDebugString(_T("\n"));
+		OutputDebugStringA((string(this->game_directory().string() += "\\Mods\\") += folder_name.string()).c_str());
+		OutputDebugString(_T("\n"));
 		)
 
-			fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
+			// Build required parent folders for move
+			while (!fs::is_directory(((this->game_directory() += "\\Mods\\") += folder_name).parent_path()))
+			{
+				fs::path rrename_path = ((this->game_directory() += "\\Mods\\") += folder_name).parent_path();
+				while (!fs::is_directory(rrename_path.parent_path()))
+				{
+					rrename_path = rrename_path.parent_path();
+				}
+				fs::create_directory(rrename_path);
+			}
+
+		fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
+
+		// Delete empty nested folders
+		fs::path clean_path = mod_path.parent_path();
+		std::error_code ec;
+		while (fs::is_empty(clean_path) and (clean_path != ((this->game_directory()) += "\\Mods_disabled")))
+		{
+			fs::remove(clean_path, ec);
+			D(
+				OutputDebugString(_T("Empty folder deleted.\n"));
+			OutputDebugStringA(clean_path.string().c_str());
+			OutputDebugString(_T("\n"));
+			)
+				clean_path = clean_path.parent_path();
+		}
 	}
 	else
 	{
@@ -869,7 +928,7 @@ void cMain::LoadModsFromDir(string folder_name)
 		OutputDebugStringA(game_directory().string().c_str());
 		OutputDebugString(_T("\n"));
 	)
-	for (auto& dir_iter : fs::directory_iterator(temp_dir))
+	for (auto& dir_iter : fs::recursive_directory_iterator(temp_dir))
 	{
 		error_check_["json"] = false;
 		error_check_["format_local"] = false;
@@ -885,155 +944,157 @@ void cMain::LoadModsFromDir(string folder_name)
 			)
 			mod_count_["total"]++;
 			temp_path += "\\manifest.json";
-			ifstream json_stream(temp_path.c_str());
-			json json_manifest;
-			try 
+			if (fs::exists(temp_path))
 			{
-				try 
-				{ // Parse json
-					json_manifest = json::parse(json_stream); // TODO handle trailing commas
-					// Handle some minor typos and missing fields in manifest
-					CleanManifest(json_manifest, error_path);
-				}
-				catch (json::parse_error & e) 
-				{ // On fail, output error and skip to next mod
-					error_check_["json"] = true;
-					error_count_["json"]++;
-					mod_count_["errored"]++;
-					string temp_exc = e.what();
-					if (e.id == 101) {
-						error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
-						// TODO clean commas and comments, then try again
-						///*
-						D(
-							OutputDebugString(_T("Json Fix Attempt\n"));
-						)
-						//std::stringstream json_sstream;
-						//json_sstream << json_stream.rdbuf();
-						string json_string = "New\n";
-						//json_string = json_sstream.str();
-						ifstream json_stream2(temp_path.c_str(), std::ios::in | std::ios::binary);
-						json_stream2.seekg(0, std::ios::end);
-						json_string.resize(json_stream2.tellg());
-						json_stream2.seekg(0, std::ios::beg);
-						json_stream2.read(&json_string[0], json_string.size());
-						json_stream2.close();
+				ifstream json_stream(temp_path.c_str());
+				json json_manifest;
+				try
+				{
+					try
+					{ // Parse json
+						json_manifest = json::parse(json_stream); // TODO handle trailing commas
+						// Handle some minor typos and missing fields in manifest
+						CleanManifest(json_manifest, error_path);
+					}
+					catch (json::parse_error & e)
+					{ // On fail, output error and skip to next mod
+						error_check_["json"] = true;
+						error_count_["json"]++;
+						mod_count_["errored"]++;
+						string temp_exc = e.what();
+						if (e.id == 101) {
+							error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
+							// TODO clean commas and comments, then try again
+							///*
+							D(
+								OutputDebugString(_T("Json Fix Attempt\n"));
+							)
+								//std::stringstream json_sstream;
+								//json_sstream << json_stream.rdbuf();
+								string json_string = "New\n";
+							//json_string = json_sstream.str();
+							ifstream json_stream2(temp_path.c_str(), std::ios::in | std::ios::binary);
+							json_stream2.seekg(0, std::ios::end);
+							json_string.resize(json_stream2.tellg());
+							json_stream2.seekg(0, std::ios::beg);
+							json_stream2.read(&json_string[0], json_string.size());
+							json_stream2.close();
 
-						D(
-							OutputDebugString(_T("Json Fix RAW\n"));
+							D(
+								OutputDebugString(_T("Json Fix RAW\n"));
 							OutputDebugStringA(json_string.c_str());
 							OutputDebugString(_T("\n"));
-						)
-
-						try
-						{
-							json_string = stripComments(json_string, true);
-						}
-						catch (...)
-						{
-							D(
-								OutputDebugString(_T("Json Fix Comment Clean Failure\n"));
 							)
-						}
 
-						D(
-							OutputDebugString(_T("Json Fix Comment Cleaned\n"));
+								try
+							{
+								json_string = stripComments(json_string, true);
+							}
+							catch (...)
+							{
+								D(
+									OutputDebugString(_T("Json Fix Comment Clean Failure\n"));
+								)
+							}
+
+							D(
+								OutputDebugString(_T("Json Fix Comment Cleaned\n"));
 							OutputDebugStringA(json_string.c_str());
 							OutputDebugString(_T("\n"));
-						)
-
-						try
-						{
-							json_string = stripTrailingCommas(json_string, true);
-						}
-						catch (const std::regex_error& e)
-						{
-							string temp = e.what();
-							D(
-								OutputDebugString(_T("Json Fix Comma Clean Failure: " + temp + "\n"));
 							)
-						}
-						//json_sstream.clear();
-						//json_sstream.str(string());
-						//json_sstream << json_string;
 
-						D(
-							OutputDebugString(_T("Json Fix Comma Cleaned\n"));
+								try
+							{
+								json_string = stripTrailingCommas(json_string, true);
+							}
+							catch (const std::regex_error & e)
+							{
+								string temp = e.what();
+								D(
+									OutputDebugString(_T("Json Fix Comma Clean Failure: " + temp + "\n"));
+								)
+							}
+							//json_sstream.clear();
+							//json_sstream.str(string());
+							//json_sstream << json_string;
+
+							D(
+								OutputDebugString(_T("Json Fix Comma Cleaned\n"));
 							OutputDebugStringA(json_string.c_str());
 							OutputDebugString(_T("\n"));
-						)
+							)
 
-						try
-						{
-							json_manifest = json::parse(json_string); // TODO handle trailing commas
-							// Handle some minor typos and missing fields in manifest
-							CleanManifest(json_manifest, error_path);
-							error_check_["json"] = false;
-							D(
-								OutputDebugString(_T("Json Fix Reparse Success\n"));
-							)
+								try
+							{
+								json_manifest = json::parse(json_string); // TODO handle trailing commas
+								// Handle some minor typos and missing fields in manifest
+								CleanManifest(json_manifest, error_path);
+								error_check_["json"] = false;
+								D(
+									OutputDebugString(_T("Json Fix Reparse Success\n"));
+								)
+							}
+							catch (...)
+							{
+								D(
+									OutputDebugString(_T("Json Fix Reparse Failure\n"));
+								)
+									continue;
+							}
+							//*/
 						}
-						catch (...)
-						{
-							D(
-								OutputDebugString(_T("Json Fix Reparse Failure\n"));
-							)
+						else {
+							error_locations_ += "\n" + error_path.string() + " - JSON Formatting";
 							continue;
 						}
-						//*/
 					}
-					else {
-						error_locations_ += "\n" + error_path.string() + " - JSON Formatting";
-						continue;
+
+					if (fs::exists(temp_path) and (error_check_["json"] == false)) // TODO Review
+					{
+						D(
+							if (report_parsed_mod_data) {
+								string temp_msg1 = "";
+								string temp_msg2 = "";
+								json_manifest["Name"].get_to(temp_msg1);
+								json_manifest["Version"].get_to(temp_msg2);
+								OutputDebugStringA((temp_msg1 + " exists, " + temp_msg2 + "\n").c_str());
+							}
+							else {}
+						)
+
+							cMod aMod(json_manifest);
+						wxVector<wxVariant> thisMod;
+						thisMod.push_back(wxVariant(is_active));
+						thisMod.push_back(wxVariant(aMod.mod_name()));
+						thisMod.push_back(wxVariant(aMod.mod_author()));
+						thisMod.push_back(wxVariant(aMod.mod_version()));
+						thisMod.push_back(wxVariant((dir_iter.path()).string()));
+						this->m_dataviewlistctrl_mods->AppendItem(thisMod);
+						mod_count_["loaded"]++;
+						thisMod.clear();
+
+						/*
+						wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
+						m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
+
+						wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
+							if(!pStrData)
+						wxString id = pStrData->GetData();
+						*/
+
+						D(
+							if (report_mod_object_data) {
+								OutputDebugStringA((aMod.infoString()).c_str());
+							}
+							else {}
+						)
 					}
 				}
-
-				if (existsFile(temp_path.string()) and (error_check_["json"] == false)) // TODO Review
+				catch (...)
 				{
-					D(
-						if (report_parsed_mod_data) {
-							string temp_msg1 = "";
-							string temp_msg2 = "";
-							json_manifest["Name"].get_to(temp_msg1);
-							json_manifest["Version"].get_to(temp_msg2);
-							OutputDebugStringA((temp_msg1 + " exists, " + temp_msg2 + "\n").c_str());
-						}
-						else {}
-					)
-
-					cMod aMod(json_manifest);
-					wxVector<wxVariant> thisMod;
-					thisMod.push_back(wxVariant(is_active));
-					thisMod.push_back(wxVariant(aMod.mod_name()));
-					thisMod.push_back(wxVariant(aMod.mod_author()));
-					thisMod.push_back(wxVariant(aMod.mod_version()));
-					thisMod.push_back(wxVariant((dir_iter.path()).string()));
-					this->m_dataviewlistctrl_mods->AppendItem(thisMod);
-					mod_count_["loaded"]++;
-					thisMod.clear();
-
-					/*
-					wxStringClientData *ldata = new wxStringClientData(wxT("MyID123"));
-					m_listCtrl->AppendItem(data, (wxUIntPtr)ldata);
-
-					wxStringClientData *pStrData = (wxStringClientData*) m_listCtrl->GetItemData(m_listCtrl->GetCurrentItem());
-						if(!pStrData)
-					wxString id = pStrData->GetData();
-					*/
-
-					D(
-						if (report_mod_object_data) {
-							OutputDebugStringA((aMod.infoString()).c_str());
-						}
-						else {}
-					)
+					error_locations_ += "\n" + error_path.string() + " - Fatal";
 				}
 			}
-			catch (...) 
-			{
-				error_locations_ += "\n" + error_path.string() + " - Fatal";
-			}
-
 		}
 		else 
 		{

@@ -2,19 +2,26 @@
 
 #include <wx/wx.h>
 #include <wx/menu.h>
+#include <wx/event.h>
 #include <wx/notebook.h>
 #include <wx/dataview.h>
 #include <wx/checkbox.h>
+#include <wx/fileconf.h>
+#include <wx/wupdlock.h>
+#include <wx/textfile.h>
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
-#include <wx/event.h>
-#include <wx/fileconf.h>
 #include <wx/stdpaths.h>
-#include <sstream>
-#include <wx/filefn.h> 
+#include <wx/filefn.h>
+#include <fileapi.h>
+#include <fstream>
+#include <iomanip>
+#include <sstream> 
 #include <filesystem>
-#include "ioFunctions.h"
+#include "cMod.h"
 namespace fs = std::filesystem;
+using std::istream;
+using std::ifstream;
 
 
 class cMain : public wxFrame // TODO Organize privacy
@@ -25,7 +32,7 @@ private:
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.9";
+	string version_this_mm_ = "0.5.0-alpha.10";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
 		{"on_refresh", true}
