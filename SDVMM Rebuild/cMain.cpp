@@ -285,6 +285,7 @@ void cMain::SelfInitialize()
 				OutputDebugString(_T("SelfInit - Refreshing Mod List\n"));
 			)
 			RefreshModLists();
+			m_dataviewlistctrl_mods->Refresh();
 			D(
 				OutputDebugString(_T("Refreshed Mod List\n"));
 			)
@@ -325,7 +326,7 @@ void cMain::set_launch_with_steam(bool state)
 
 void cMain::set_game_directory(fs::path filepath)
 {
-	if (!fs::exists(filepath.string() + "\\StardewModdingAPI.exe")) // TODO make own function
+	if (!fs::exists(filepath.string() + "\\StardewModdingAPI.exe"))
 	{
 		error_check_["smapi"] = true;
 		wxMessageDialog* error_no_smapi = new wxMessageDialog(NULL,
@@ -842,6 +843,8 @@ void cMain::RefreshModLists()
 		error_load_modsd->ShowModal();
 		delete error_load_modsd;
 	}
+	m_dataviewlistctrl_mods->GetColumn(1)->SetSortOrder(true);
+	m_dataviewlistctrl_mods->GetModel()->Resort();
 	string temp_mod = "Mods: " +
 		std::to_string(mod_count_["loaded"]) + "/" +
 		std::to_string(mod_count_["errored"]) + "/" +
