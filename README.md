@@ -31,6 +31,7 @@ In order of importance.
 * Handle relaxed manifest.json format errors [COMPLETE]
 * Add mod counter [COMPLETE]
 * Recognize nested mod folders [COMPLETE]
+* Sort by columns [COMPLETE]
 * Handle other exceptions (see bug reports) [PARTIAL]
 
 #### Before first full release:
