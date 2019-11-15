@@ -32,7 +32,7 @@ private:
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.10";
+	string version_this_mm_ = "0.5.0-alpha.11";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
 		{"on_refresh", true}
@@ -157,6 +157,9 @@ private:
 	void OnLaunchVanillaClick(wxCommandEvent& event);
 	void OnLaunchModSiteClick(wxCommandEvent& event);
 	void OnRefreshClick(wxCommandEvent& event);
+	// Mod List Buttons
+	void OnToggleClick(wxDataViewEvent& event);
+	void OnSortClick(wxDataViewEvent& event);
 	// Menu Bar Buttons
 	void OnMenuClick(wxCommandEvent& event); // TODO complete
 	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
@@ -171,7 +174,6 @@ private:
 	void OnMuteModToggleClick(wxCommandEvent& event);
 	
 public:
-	void ToggleMod(wxDataViewEvent& event);
 	void CleanManifest(json& manifest, fs::path error_path);
 	void CleanJson(); // TODO tranfer code to function
 	void RefreshModLists(); // TODO give some indication of the refresh
