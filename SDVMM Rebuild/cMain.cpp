@@ -3,8 +3,10 @@
 
 cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	wxDefaultPosition, wxSize(750, 500),
-	wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX))
+	wxDEFAULT_FRAME_STYLE)
 {
+	SetMinSize(wxSize(750, 500));
+
 	//---------------------------
 	//  Notebook Implementation
 	//---------------------------
@@ -28,7 +30,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	// Tab 1 - List - Vertical Sizers + Title Text
 	m_sizer_notebook_tab1a_mods = new wxBoxSizer(wxVERTICAL);
 	m_sizer_notebook_tab1a_mods->AddSpacer(5);
-	m_sizer_notebook_tab1a_mods->Add(m_dataviewlistctrl_mods, 1, 0, 0);
+	m_sizer_notebook_tab1a_mods->Add(m_dataviewlistctrl_mods, 1, wxEXPAND, 0);
 	m_sizer_notebook_tab1a_mods->AddSpacer(6);
 
 	// Tab 1 - List - Horizontal Sizer
@@ -74,8 +76,10 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_checkbox_launcher = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "  (uncheck if you have the GOG version)");
 	m_checkbox_launcher->Bind(wxEVT_CHECKBOX, &cMain::OnLauncherToggleClick, this);
 	m_sizer_notebook_tab3_launcher = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_notebook_tab3_launcher->Add(m_stext_launcher, 3, wxALIGN_CENTER_VERTICAL, 0);
-	m_sizer_notebook_tab3_launcher->Add(m_checkbox_launcher, 7, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_launcher->Add(m_stext_launcher, 0, wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_launcher->AddSpacer(20);
+	m_sizer_notebook_tab3_launcher->Add(m_checkbox_launcher, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_launcher->AddStretchSpacer(1);
 
 
 	// Tab 3 - Game Directory Sizer
@@ -113,17 +117,21 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_checkbox_mute = new wxCheckBox(m_panel_notebook_tab3, wxID_ANY, "  (unmute for debugging)");
 	m_checkbox_mute->Bind(wxEVT_CHECKBOX, &cMain::OnMuteModToggleClick, this);
 	m_sizer_notebook_tab3_mute = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_notebook_tab3_mute->Add(m_stext_mute, 3, wxALIGN_CENTER_VERTICAL, 0);
-	m_sizer_notebook_tab3_mute->Add(m_checkbox_mute, 7, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_mute->Add(m_stext_mute, 0, wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_mute->AddSpacer(5);
+	m_sizer_notebook_tab3_mute->Add(m_checkbox_mute, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 0);
+	m_sizer_notebook_tab3_mute->AddStretchSpacer(1);
 
 	// Tab 3 - Vertical Sizer // TODO change layout
 	m_sizer_notebook_tab3_items = new wxBoxSizer(wxVERTICAL);
-	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_launcher, 1, wxEXPAND, 0);
-	m_sizer_notebook_tab3_items->AddStretchSpacer(0);
-	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_game_directory, 1, wxEXPAND, 0);
-	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_steam_directory, 1, wxEXPAND, 0);
-	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_mute, 1, wxEXPAND, 0);
-	m_sizer_notebook_tab3_items->AddStretchSpacer(3);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_launcher, 0, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->AddSpacer(5);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_game_directory, 0, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->AddSpacer(5);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_steam_directory, 0, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->AddSpacer(5);
+	m_sizer_notebook_tab3_items->Add(m_sizer_notebook_tab3_mute, 0, wxEXPAND, 0);
+	m_sizer_notebook_tab3_items->AddStretchSpacer(1);
 
 	// Tab 3 - Dummy Sizers for Margins
 	m_sizer_notebook_tab3_left = new wxBoxSizer(wxVERTICAL);
@@ -157,12 +165,13 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	this->Bind(wxEVT_MENU, &cMain::OnMenuClick, this, ID_MENU_MODS, ID_MENU_QUIT);
 
 	// Right side buttons
-	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
-	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
-	m_button_add_mod = new wxButton(this, wxID_ANY, ""); // TODO "Add Mod from File/Archive" // REMOVED FOR 0.5.0-ALPHA RELEASE
-	m_button_nexus_download = new wxButton(this, ID_BUTTON_NEXUS, "Visit Nexus Mods");
-	m_button_forums_download = new wxButton(this, ID_BUTTON_FORUMS, "Visit Mod Forums");
-	m_button_refresh_mods = new wxButton(this, wxID_ANY, "Refresh Mod List");
+	m_panel_buttons_right = new wxPanel(this);
+	m_button_launch_smapi = new wxButton(m_panel_buttons_right, wxID_ANY, "Launch SMAPI with Mods");
+	m_button_launch_vanilla = new wxButton(m_panel_buttons_right, wxID_ANY, "Launch Stardew Valley");
+	m_button_add_mod = new wxButton(m_panel_buttons_right, wxID_ANY, ""); // TODO "Add Mod from File/Archive" // REMOVED FOR 0.5.0-ALPHA RELEASE
+	m_button_nexus_download = new wxButton(m_panel_buttons_right, ID_BUTTON_NEXUS, "Visit Nexus Mods");
+	m_button_forums_download = new wxButton(m_panel_buttons_right, ID_BUTTON_FORUMS, "Visit Mod Forums");
+	m_button_refresh_mods = new wxButton(m_panel_buttons_right, wxID_ANY, "Refresh Mod List");
 	m_button_launch_smapi->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
 	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchVanillaClick, this);
 	m_button_nexus_download->Bind(wxEVT_BUTTON, &cMain::OnLaunchModSiteClick, this);
@@ -170,38 +179,42 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_button_refresh_mods->Bind(wxEVT_BUTTON, &cMain::OnRefreshClick, this);
 
 	// Right side button - sizer
-	int prop_rBtns = 10;
-	int prop_rSpace = 1;
+	int proportion_button = 10;
+	int proportion_spacer = 1;
 	m_sizer_buttons_right = new wxBoxSizer(wxVERTICAL);
-	m_sizer_buttons_right->Add(m_button_launch_smapi, prop_rBtns, wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_launch_vanilla, prop_rBtns, wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_add_mod, (prop_rBtns / 2), wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_nexus_download, (prop_rBtns / 2), wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_forums_download, (prop_rBtns / 2), wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(prop_rSpace);
-	m_sizer_buttons_right->Add(m_button_refresh_mods, prop_rBtns, wxEXPAND, 0);
+	m_sizer_buttons_right->Add(m_button_launch_smapi, proportion_button, wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
+	m_sizer_buttons_right->Add(m_button_launch_vanilla, proportion_button, wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
+	m_sizer_buttons_right->Add(m_button_add_mod, (proportion_button / 2), wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
+	m_sizer_buttons_right->Add(m_button_nexus_download, (proportion_button / 2), wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
+	m_sizer_buttons_right->Add(m_button_forums_download, (proportion_button / 2), wxEXPAND, 0);
+	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
+	m_sizer_buttons_right->Add(m_button_refresh_mods, proportion_button, wxEXPAND, 0);
+	m_panel_buttons_right->SetSizer(m_sizer_buttons_right);
+	m_panel_buttons_right->SetMaxSize(wxSize(250, 500));
 
 	// Window layout horizontal
 	m_sizer_main_horizontal = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_main_horizontal->Add(m_notebook, 2, wxEXPAND | wxLEFT | wxRIGHT, 10);
-	m_sizer_main_horizontal->Add(m_sizer_buttons_right, 1, wxEXPAND | wxRIGHT, 10);
+	m_sizer_main_horizontal->Add(m_panel_buttons_right, 1, wxEXPAND | wxRIGHT, 10);
 
 	// Banner
 	wxImage::AddHandler(new wxPNGHandler);
 	m_bitmap_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG)); // TODO save in code?
 	wxImage::CleanUpHandlers();
+	m_sizer_banner_horizontal = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_banner_horizontal->Add(m_bitmap_banner, 0, wxEXPAND, 0);
+	m_sizer_banner_horizontal->AddStretchSpacer(1);
 
 	// Bottom Bar - Version Info & Mod Count
 	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + version_smapi_); // TODO getters/setters
 	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + version_this_mm_);
-	m_stext_mod_count = new wxStaticText(this, wxID_ANY, "Mods: " +
+	m_stext_mod_count = new wxStaticText(this, wxID_ANY,
 		std::to_string(mod_count_["loaded"]) + "/" +
-		std::to_string(mod_count_["errored"]) + "/" +
-		std::to_string(mod_count_["total"]));
+		std::to_string(mod_count_["total"]) + " Mods Loaded");
 	m_sizer_mod_count = new wxBoxSizer(wxVERTICAL);
 	m_sizer_mod_count->Add(m_stext_mod_count, 0, wxALIGN_RIGHT, 0);
 	m_sizer_version_info = new wxBoxSizer(wxHORIZONTAL);
@@ -212,14 +225,14 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 
 	// Window layout Vertical + insert banner
 	m_sizer_main_vertical = new wxBoxSizer(wxVERTICAL);
-	m_sizer_main_vertical->Add(m_bitmap_banner, 16, wxEXPAND | wxALL, 10);
+	m_sizer_main_vertical->Add(m_sizer_banner_horizontal, 0, wxEXPAND | wxALL , 10);
 	m_sizer_main_vertical->Add(m_sizer_main_horizontal, 40, wxEXPAND, 0);
-	m_sizer_main_vertical->Add(m_sizer_version_info, 3, wxEXPAND, 0); // for static text
+	m_sizer_main_vertical->Add(m_sizer_version_info, 0, wxEXPAND, 0); // for static text
 	SetSizer(m_sizer_main_vertical);
 
 	// Setting background colour as needed
-	m_bg_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500));
 	wxColour* m_colour_grey = new wxColour(240, 240, 240, wxALPHA_OPAQUE);
+	SetBackgroundColour(*m_colour_grey);
 	m_panel_notebook_tab1->SetBackgroundColour(wxColour(*wxWHITE));
 	m_stext_smapi_version->SetBackgroundColour(wxColour(*m_colour_grey));
 	m_stext_this_version->SetBackgroundColour(wxColour(*m_colour_grey));
@@ -959,10 +972,9 @@ void cMain::RefreshModLists()
 		delete error_load_modsd;
 	}
 	m_dataviewlistctrl_mods->GetModel()->Resort();
-	string temp_mod = "Mods: " +
-		std::to_string(mod_count_["loaded"]) + "/" +
-		std::to_string(mod_count_["errored"]) + "/" +
-		std::to_string(mod_count_["total"]);
+	// Pull out this from the main contructor
+	string temp_mod = std::to_string(mod_count_["loaded"]) + "/" +
+		std::to_string(mod_count_["total"]) + " Mods Successfully Loaded";
 	m_stext_mod_count->SetLabel(temp_mod);
 	ShowRefreshErrors();
 }

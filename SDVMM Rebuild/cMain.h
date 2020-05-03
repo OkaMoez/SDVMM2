@@ -32,7 +32,7 @@ private:
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.12";
+	string version_this_mm_ = "0.6";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
 		{"on_refresh", true}
@@ -137,15 +137,16 @@ public:
 	wxButton* m_button_forums_download = nullptr;
 	wxButton* m_button_refresh_mods = nullptr;
 	wxBoxSizer* m_sizer_buttons_right = nullptr;
+	wxPanel* m_panel_buttons_right = nullptr;
 
 	// Other Layout
 	wxStaticBitmap* m_bitmap_banner = nullptr;
+	wxBoxSizer* m_sizer_banner_horizontal = nullptr;
 	wxStaticText* m_stext_smapi_version = nullptr;
 	wxStaticText* m_stext_this_version = nullptr;
 	wxStaticText* m_stext_mod_count = nullptr;
 	wxBoxSizer* m_sizer_mod_count = nullptr;
 	wxBoxSizer* m_sizer_version_info = nullptr;
-	wxPanel* m_bg_panel = nullptr;
 
 	// Main Layout Sizers
 	wxBoxSizer* m_sizer_main_horizontal = nullptr;
