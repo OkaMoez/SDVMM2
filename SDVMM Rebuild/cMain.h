@@ -32,7 +32,7 @@ private:
 	fs::path game_directory_ = "";
 	fs::path steam_directory_ = "";
 	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.5.0-alpha.11";
+	string version_this_mm_ = "0.5.0-alpha.12";
 	string error_locations_ = "Errors at: ";
 	std::map<string, bool> error_mute_{
 		{"on_refresh", true}

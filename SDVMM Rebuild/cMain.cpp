@@ -464,8 +464,8 @@ void cMain::OnToggleClick(wxDataViewEvent& event)
 			delete event_toggle_box1;
 		}
 		else {}
-	)
-		wxVariant temp_path("");
+	);
+	wxVariant temp_path("");
 	m_dataviewlistctrl_mods->GetValue(temp_path, m_dataviewlistctrl_mods->GetSelectedRow(), 4);
 	fs::path mod_path = string(temp_path);
 	fs::path parent_path = mod_path.parent_path();
@@ -481,96 +481,96 @@ void cMain::OnToggleClick(wxDataViewEvent& event)
 
 	D(
 		OutputDebugString(_T("Mod toggle called.\n"));
-	OutputDebugStringA(parent_path.string().c_str());
-	OutputDebugString(_T("\n"));
-	OutputDebugStringA(folder_name.string().c_str());
-	OutputDebugString(_T("\n"));
-	)
+		OutputDebugStringA(parent_path.string().c_str());
+		OutputDebugString(_T("\n"));
+		OutputDebugStringA(folder_name.string().c_str());
+		OutputDebugString(_T("\n"));
+	);
 
-		if (parent_path == ((this->game_directory()) += "\\Mods"))
+	if (parent_path == ((this->game_directory()) += "\\Mods"))
+	{
+		D(
+			OutputDebugStringA(mod_path.string().c_str());
+		OutputDebugString(_T("\n"));
+		OutputDebugStringA((string(this->game_directory().string() += "\\Mods_disabled\\") += folder_name.string()).c_str());
+		OutputDebugString(_T("\n"));
+		);
+
+		// Build required parent folders for move
+		while (!fs::is_directory(((this->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path()))
 		{
-			D(
-				OutputDebugStringA(mod_path.string().c_str());
-			OutputDebugString(_T("\n"));
-			OutputDebugStringA((string(this->game_directory().string() += "\\Mods_disabled\\") += folder_name.string()).c_str());
-			OutputDebugString(_T("\n"));
-			)
-
-				// Build required parent folders for move
-				while (!fs::is_directory(((this->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path()))
-				{
-					fs::path rrename_path = ((this->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path();
-					while (!fs::is_directory(rrename_path.parent_path()))
-					{
-						rrename_path = rrename_path.parent_path();
-					}
-					fs::create_directory(rrename_path);
-				}
-			fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods_disabled\\") += folder_name));
-
-			// Delete empty nested folders
-			fs::path clean_path = mod_path.parent_path();
-			std::error_code ec;
-			while (fs::is_empty(clean_path) and (clean_path != ((this->game_directory()) += "\\Mods")))
+			fs::path rrename_path = ((this->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path();
+			while (!fs::is_directory(rrename_path.parent_path()))
 			{
-				fs::remove(clean_path, ec);
-				D(
-					OutputDebugString(_T("Empty folder deleted.\n"));
+				rrename_path = rrename_path.parent_path();
+			}
+			fs::create_directory(rrename_path);
+		}
+		fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods_disabled\\") += folder_name));
+
+		// Delete empty nested folders
+		fs::path clean_path = mod_path.parent_path();
+		std::error_code ec;
+		while (fs::is_empty(clean_path) and (clean_path != ((this->game_directory()) += "\\Mods")))
+		{
+			fs::remove(clean_path, ec);
+			D(
+				OutputDebugString(_T("Empty folder deleted.\n"));
 				OutputDebugStringA(clean_path.string().c_str());
 				OutputDebugString(_T("\n"));
-				)
-					clean_path = clean_path.parent_path();
-			}
+			);
+			clean_path = clean_path.parent_path();
 		}
-		else if (parent_path == ((this->game_directory()) += "\\Mods_disabled"))
-		{
-			D(
-				OutputDebugStringA(mod_path.string().c_str());
+	}
+	else if (parent_path == ((this->game_directory()) += "\\Mods_disabled"))
+	{
+		D(
+			OutputDebugStringA(mod_path.string().c_str());
 			OutputDebugString(_T("\n"));
 			OutputDebugStringA((string(this->game_directory().string() += "\\Mods\\") += folder_name.string()).c_str());
 			OutputDebugString(_T("\n"));
-			)
+		);
 
-				// Build required parent folders for move
-				while (!fs::is_directory(((this->game_directory() += "\\Mods\\") += folder_name).parent_path()))
-				{
-					fs::path rrename_path = ((this->game_directory() += "\\Mods\\") += folder_name).parent_path();
-					while (!fs::is_directory(rrename_path.parent_path()))
-					{
-						rrename_path = rrename_path.parent_path();
-					}
-					fs::create_directory(rrename_path);
-				}
-
-			fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
-
-			// Delete empty nested folders
-			fs::path clean_path = mod_path.parent_path();
-			std::error_code ec;
-			while (fs::is_empty(clean_path) and (clean_path != ((this->game_directory()) += "\\Mods_disabled")))
+		// Build required parent folders for move
+		while (!fs::is_directory(((this->game_directory() += "\\Mods\\") += folder_name).parent_path()))
+		{
+			fs::path rrename_path = ((this->game_directory() += "\\Mods\\") += folder_name).parent_path();
+			while (!fs::is_directory(rrename_path.parent_path()))
 			{
-				fs::remove(clean_path, ec);
-				D(
-					OutputDebugString(_T("Empty folder deleted.\n"));
+				rrename_path = rrename_path.parent_path();
+			}
+			fs::create_directory(rrename_path);
+		}
+
+		fs::rename(mod_path, (fs::path(this->game_directory() += "\\Mods\\") += folder_name));
+
+		// Delete empty nested folders
+		fs::path clean_path = mod_path.parent_path();
+		std::error_code ec;
+		while (fs::is_empty(clean_path) and (clean_path != ((this->game_directory()) += "\\Mods_disabled")))
+		{
+			fs::remove(clean_path, ec);
+			D(
+				OutputDebugString(_T("Empty folder deleted.\n"));
 				OutputDebugStringA(clean_path.string().c_str());
 				OutputDebugString(_T("\n"));
-				)
-					clean_path = clean_path.parent_path();
+			);
+			clean_path = clean_path.parent_path();
+		}
+	}
+	else
+	{
+		D(
+			if (report_file_move_event) {
+				wxMessageDialog* event_toggle_ebox1 = new wxMessageDialog(NULL,
+					wxT("Bad path"), wxT("Event item info"),
+					wxOK, wxDefaultPosition);
+				event_toggle_ebox1->ShowModal();
+				delete event_toggle_ebox1;
 			}
-		}
-		else
-		{
-			D(
-				if (report_file_move_event) {
-					wxMessageDialog* event_toggle_ebox1 = new wxMessageDialog(NULL,
-						wxT("Bad path"), wxT("Event item info"),
-						wxOK, wxDefaultPosition);
-					event_toggle_ebox1->ShowModal();
-					delete event_toggle_ebox1;
-				}
-				else {}
-			)
-		}
+			else {}
+		);
+	}
 	RefreshModLists();
 }
 
@@ -680,20 +680,20 @@ void cMain::OnMenuQuitClick(wxCommandEvent& event)
 void cMain::OnLauncherToggleClick(wxCommandEvent& event)
 {
 	event.Skip();
-	if (fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
+	set_launch_with_steam(m_checkbox_launcher->GetValue());
+	config_ini->Write("SteamLauncher", m_checkbox_launcher->GetValue());
+	config_ini->Flush();
+	if (!fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
 	{
-		set_launch_with_steam(m_checkbox_launcher->GetValue());
-		config_ini->Write("SteamLauncher", m_checkbox_launcher->GetValue());
-		config_ini->Flush();
-	}
-	else
-	{
-		set_launch_with_steam(false);
-		wxMessageDialog* event_launcher_toggle_box1 = new wxMessageDialog(NULL,
-			wxT("No Steam files found. \nPlease save the Steam path below and retry."), 
-			wxT("Launcher Option"),	wxOK, wxDefaultPosition);
-		event_launcher_toggle_box1->ShowModal();
-		delete event_launcher_toggle_box1;
+		if (launch_with_steam())
+		{
+			wxMessageDialog* event_launcher_toggle_box1 = new wxMessageDialog(NULL,
+				wxT("No Steam files found. \nPlease save the Steam path below and retry."), 
+				wxT("Launcher Option"),	wxOK, wxDefaultPosition);
+			event_launcher_toggle_box1->ShowModal();
+			delete event_launcher_toggle_box1;
+			set_launch_with_steam(false);
+		}
 	}
 	if (launch_with_steam())
 	{
@@ -759,13 +759,11 @@ void cMain::OnGameDirectoryBrowseClick(wxCommandEvent& event)
 void cMain::OnSteamDirectorySaveClick(wxCommandEvent& event)
 {
 	event.Skip();
-	if (fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe"))
-	{
-		set_steam_directory(string(m_textctrl_steam_directory->GetLineText(0)));
-		config_ini->Write("SteamPath", wxString(steam_directory().string()));
-		config_ini->Flush();
-	}
-	else
+	set_steam_directory(string(m_textctrl_steam_directory->GetLineText(0)));
+	config_ini->Write("SteamPath", wxString(steam_directory().string()));
+	config_ini->Flush();
+	if (!fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe") and 
+		!fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\steam.exe"))
 	{
 		wxMessageDialog* event_bad_steam_directory = new wxMessageDialog(NULL,
 			wxT("Steam files not found in: " + string(m_textctrl_steam_directory->GetLineText(0))),
@@ -781,7 +779,8 @@ void cMain::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 	if ((m_filedialog_steam_browse->ShowModal() == wxID_OK))
 	{
 		if ((fs::exists(string(m_filedialog_steam_browse->GetPath()))) and
-			(fs::path(string((m_filedialog_steam_browse->GetPath()))).filename() == fs::path("Steam.exe")))
+			((fs::path(string((m_filedialog_steam_browse->GetPath()))).filename() == fs::path("Steam.exe")) or
+			(fs::path(string((m_filedialog_steam_browse->GetPath()))).filename() == fs::path("steam.exe"))))
 		{
 			m_filedialog_steam_browse->SetPath(m_filedialog_steam_browse->GetPath());
 			set_steam_directory((fs::path(string(m_filedialog_steam_browse->GetPath())).parent_path()).string());
