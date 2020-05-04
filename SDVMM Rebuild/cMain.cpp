@@ -231,13 +231,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	SetSizer(m_sizer_main_vertical);
 
 	// Setting background colour as needed
-	wxColour* m_colour_grey = new wxColour(240, 240, 240, wxALPHA_OPAQUE);
-	SetBackgroundColour(*m_colour_grey);
-	m_panel_notebook_tab1->SetBackgroundColour(wxColour(*wxWHITE));
-	m_stext_smapi_version->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_stext_this_version->SetBackgroundColour(wxColour(*m_colour_grey));
-	m_stext_mod_count->SetBackgroundColour(wxColour(*m_colour_grey));
-	delete m_colour_grey;
+	SetBackgroundColour(wxColour(240, 240, 240, wxALPHA_OPAQUE));
 
 	SelfInitialize();
 }
