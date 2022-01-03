@@ -4,8 +4,7 @@
 #include "SettingsPanel.h"
 
 MenuBar::MenuBar(MainFrame* parentWindow)
-	: mainWindow(parentWindow)
-{
+	: mainWindow(parentWindow) {
 	// Menubar - File, Help, etc
 	m_menubar_file = new wxMenu;
 	//m_menubar_help = new wxMenu; // REMOVED FOR 0.5.0-ALPHA RELEASE
@@ -18,25 +17,19 @@ MenuBar::MenuBar(MainFrame* parentWindow)
 }
 
 // Menu Bar Buttons
-void MenuBar::OnMenuClick(wxCommandEvent& event) // TODO complete
-{
-	if (event.GetId() == (ID_MENU_MODS))
-	{
+void MenuBar::OnMenuClick(wxCommandEvent& event){ // TODO complete 
+	if (event.GetId() == (ID_MENU_MODS)) {
 		OnMenuModsClick(event);
 	}
-	else if (event.GetId() == (ID_MENU_DMODS))
-	{
+	else if (event.GetId() == (ID_MENU_DMODS)) {
 		OnMenuModsDisabledClick(event);
 	}
-	else if (event.GetId() == (ID_MENU_QUIT))
-	{
+	else if (event.GetId() == (ID_MENU_QUIT)) {
 		OnMenuQuitClick(event);
 	}
-	else {}
 }
 
-void MenuBar::OnMenuModsClick(wxCommandEvent& event)
-{
+void MenuBar::OnMenuModsClick(wxCommandEvent& event) {
 	event.Skip();
 	std::string test_str = ("explorer " + (mainWindow->m_settings_panel->game_directory().string() + "\\Mods\\"));
 	const char* open_command = (test_str.c_str());
@@ -50,16 +43,14 @@ void MenuBar::OnMenuModsClick(wxCommandEvent& event)
 	*/
 }
 
-void MenuBar::OnMenuModsDisabledClick(wxCommandEvent& event)
-{
+void MenuBar::OnMenuModsDisabledClick(wxCommandEvent& event) {
 	event.Skip();
 	std::string test_str = ("explorer " + (mainWindow->m_settings_panel->game_directory().string() + "\\Mods_disabled"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 }
 
-void MenuBar::OnMenuQuitClick(wxCommandEvent& event)
-{
+void MenuBar::OnMenuQuitClick(wxCommandEvent& event) {
 	event.Skip();
 	this->Close();
 }

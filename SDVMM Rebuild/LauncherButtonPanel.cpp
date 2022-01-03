@@ -40,26 +40,21 @@ LauncherButtonPanel::LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, 
 }
 
 // Top Level Buttons
-void LauncherButtonPanel::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher option
-{
+void LauncherButtonPanel::OnLaunchSMAPIClick(wxCommandEvent& event) { // TODO Steam Launcher option
 	event.Skip();
-	if (mainWindow->error_check_[mod_errors::smapi] == true)
-	{
+	if (mainWindow->error_check_[mod_errors::smapi] == true) {
 		m_button_launch_smapi->Disable();
 		m_button_launch_smapi->SetLabel("SMAPI Not Found!");
 	}
-	else
-	{
-		if (mainWindow->m_settings_panel->launch_with_steam())
-		{
+	else {
+		if (mainWindow->m_settings_panel->launch_with_steam()) {
 			string test_str = ((mainWindow->m_settings_panel->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
 				" \"" + mainWindow->m_settings_panel->game_directory().string() + "//StardewValleyAPI.exe\" %command%";
 			const char* open_command = (test_str.c_str());
 			wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
 		}
-		else
-		{
+		else {
 			wxString temp = wxGetCwd();
 			wxSetWorkingDirectory(mainWindow->m_settings_panel->game_directory().string());
 			string test_str = ((mainWindow->m_settings_panel->game_directory().string() + "\\StardewModdingAPI"));
@@ -70,18 +65,15 @@ void LauncherButtonPanel::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Stea
 	}
 }
 
-void LauncherButtonPanel::OnLaunchVanillaClick(wxCommandEvent& event) // TODO Steam Launcher option
-{
+void LauncherButtonPanel::OnLaunchVanillaClick(wxCommandEvent& event) { // TODO Steam Launcher option
 	event.Skip();
-	if (mainWindow->m_settings_panel->launch_with_steam())
-	{
+	if (mainWindow->m_settings_panel->launch_with_steam()) {
 		string test_str = ((mainWindow->m_settings_panel->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150";
 		const char* open_command = (test_str.c_str());
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 	}
-	else
-	{
+	else {
 		wxString temp = wxGetCwd();
 		wxSetWorkingDirectory(mainWindow->m_settings_panel->game_directory().string());
 		string test_str = ((mainWindow->m_settings_panel->game_directory().string() + "\\Stardew Valley"));
@@ -92,23 +84,18 @@ void LauncherButtonPanel::OnLaunchVanillaClick(wxCommandEvent& event) // TODO St
 
 }
 
-void LauncherButtonPanel::OnLaunchModSiteClick(wxCommandEvent& event)
-{
+void LauncherButtonPanel::OnLaunchModSiteClick(wxCommandEvent& event) {
 
-	if (event.GetId() == ID_BUTTON_NEXUS)
-	{
+	if (event.GetId() == ID_BUTTON_NEXUS) {
 		wxLaunchDefaultBrowser("https://www.nexusmods.com/stardewvalley");
 	}
-	else if (event.GetId() == ID_BUTTON_FORUMS)
-	{
+	else if (event.GetId() == ID_BUTTON_FORUMS) {
 		wxLaunchDefaultBrowser("https://community.playstarbound.com/forums/mods.215/");
 	}
-	else {}
 	event.Skip();
 }
 
-void LauncherButtonPanel::OnRefreshClick(wxCommandEvent& event) // TODO give some indication of the refresh
-{
+void LauncherButtonPanel::OnRefreshClick(wxCommandEvent& event) { // TODO give some indication of the refresh
 	event.Skip();
 	mainWindow->RefreshModLists();
 }

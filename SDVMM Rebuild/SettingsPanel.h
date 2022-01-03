@@ -35,8 +35,7 @@ public:
 
 	wxFileConfig* config_ini = nullptr;
 
-	std::unordered_map<std::string, bool> error_mute_
-	{
+	std::unordered_map<std::string, bool> error_mute_ {
 		{"on_refresh", true}
 	};
 

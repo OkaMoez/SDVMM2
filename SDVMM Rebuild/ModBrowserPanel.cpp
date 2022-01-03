@@ -5,8 +5,7 @@
 
 ModBrowserPanel::ModBrowserPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
 	: wxPanel(parent, windowID)
-	, mainWindow(parentWindow)
-{
+	, mainWindow(parentWindow) {
 	// Tab 1 - List Control - Creation w/ Columns
 	m_dataviewlistctrl_mods = new wxDataViewListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(465, 200), wxLC_REPORT);
 	m_dataviewlistctrl_mods->AppendToggleColumn("Active", wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE);
@@ -37,8 +36,7 @@ ModBrowserPanel::ModBrowserPanel(wxWindow* parent, wxWindowID windowID, MainFram
 	this->SetSizer(m_sizer_notebook_tab1);
 }
 // Mod List Buttons
-void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event)
-{
+void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 	event.Skip();
 
 	D(
@@ -49,7 +47,6 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event)
 			event_toggle_box1->ShowModal();
 			delete event_toggle_box1;
 		}
-		else {}
 	);
 	wxVariant temp_path("");
 	m_dataviewlistctrl_mods->GetValue(temp_path, m_dataviewlistctrl_mods->GetSelectedRow(), 4);
@@ -57,37 +54,23 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event)
 	fs::path parent_path = mod_path.parent_path();
 	fs::path folder_name = mod_path.filename();
 	while (parent_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods")
-		and parent_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled"))
-	{
+		and parent_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled")) {
 
 		folder_name = (parent_path.filename() += ("\\" + folder_name.string()));
 		parent_path = parent_path.parent_path();
 	}
 
 
-	D(
-		OutputDebugString(_T("Mod toggle called.\n"));
-	OutputDebugStringA(parent_path.string().c_str());
-	OutputDebugString(_T("\n"));
-	OutputDebugStringA(folder_name.string().c_str());
-	OutputDebugString(_T("\n"));
-	);
+	DPRINT("Mod toggle called.\n" + parent_path.string() + "\n" + folder_name.string() + "\n");
 
-	if (parent_path == ((mainWindow->m_settings_panel->game_directory()) += "\\Mods"))
-	{
-		D(
-			OutputDebugStringA(mod_path.string().c_str());
-			OutputDebugString(_T("\n"));
-			OutputDebugStringA((string(mainWindow->m_settings_panel->game_directory().string() += "\\Mods_disabled\\") += folder_name.string()).c_str());
-			OutputDebugString(_T("\n"));
-		);
+	if (parent_path == ((mainWindow->m_settings_panel->game_directory()) += "\\Mods")) {
+		DPRINT(mod_path.string() + "\n" + mainWindow->m_settings_panel->game_directory().string() 
+			+ "\\Mods_disabled\\" + folder_name.string() + "\n");
 
 		// Build required parent folders for move
-		while (!fs::is_directory(((mainWindow->m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path()))
-		{
+		while (!fs::is_directory(((mainWindow->m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path())) {
 			fs::path rrename_path = ((mainWindow->m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path();
-			while (!fs::is_directory(rrename_path.parent_path()))
-			{
+			while (!fs::is_directory(rrename_path.parent_path())) {
 				rrename_path = rrename_path.parent_path();
 			}
 			fs::create_directory(rrename_path);
@@ -97,32 +80,19 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event)
 		// Delete empty nested folders
 		fs::path clean_path = mod_path.parent_path();
 		std::error_code ec;
-		while (fs::is_empty(clean_path) and (clean_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods")))
-		{
+		while (fs::is_empty(clean_path) and (clean_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods"))) {
 			fs::remove(clean_path, ec);
-			D(
-				OutputDebugString(_T("Empty folder deleted.\n"));
-			OutputDebugStringA(clean_path.string().c_str());
-			OutputDebugString(_T("\n"));
-			);
+			DPRINT("Empty folder deleted.\n" + clean_path.string() + "\n");
 			clean_path = clean_path.parent_path();
 		}
 	}
-	else if (parent_path == ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled"))
-	{
-		D(
-			OutputDebugStringA(mod_path.string().c_str());
-			OutputDebugString(_T("\n"));
-			OutputDebugStringA((string(mainWindow->m_settings_panel->game_directory().string() += "\\Mods\\") += folder_name.string()).c_str());
-			OutputDebugString(_T("\n"));
-		);
+	else if (parent_path == ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled")) {
+		DPRINT(mod_path.string() + "\n" + mainWindow->m_settings_panel->game_directory().string() + "\\Mods\\" + folder_name.string() + "\n");
 
 		// Build required parent folders for move
-		while (!fs::is_directory(((mainWindow->m_settings_panel->game_directory() += "\\Mods\\") += folder_name).parent_path()))
-		{
+		while (!fs::is_directory(((mainWindow->m_settings_panel->game_directory() += "\\Mods\\") += folder_name).parent_path())) {
 			fs::path rrename_path = ((mainWindow->m_settings_panel->game_directory() += "\\Mods\\") += folder_name).parent_path();
-			while (!fs::is_directory(rrename_path.parent_path()))
-			{
+			while (!fs::is_directory(rrename_path.parent_path())) {
 				rrename_path = rrename_path.parent_path();
 			}
 			fs::create_directory(rrename_path);
@@ -133,19 +103,13 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event)
 		// Delete empty nested folders
 		fs::path clean_path = mod_path.parent_path();
 		std::error_code ec;
-		while (fs::is_empty(clean_path) and (clean_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled")))
-		{
+		while (fs::is_empty(clean_path) and (clean_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled"))) {
 			fs::remove(clean_path, ec);
-			D(
-				OutputDebugString(_T("Empty folder deleted.\n"));
-				OutputDebugStringA(clean_path.string().c_str());
-				OutputDebugString(_T("\n"));
-			);
+			DPRINT("Empty folder deleted.\n" + clean_path.string() + "\n");
 			clean_path = clean_path.parent_path();
 		}
 	}
-	else
-	{
+	else {
 		D(
 			if (report_file_move_event) {
 				wxMessageDialog* event_toggle_ebox1 = new wxMessageDialog(NULL,
@@ -154,64 +118,47 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event)
 				event_toggle_ebox1->ShowModal();
 				delete event_toggle_ebox1;
 			}
-			else {}
 		);
 	}
 	mainWindow->RefreshModLists();
 }
 
-void ModBrowserPanel::OnSortClick(wxDataViewEvent& event)
-{
+void ModBrowserPanel::OnSortClick(wxDataViewEvent& event) {
 	const unsigned idx = event.GetColumn();
 
-	D(
-		OutputDebugString(_T("OnSortClick Event - Col "));
-	OutputDebugStringA(std::to_string(idx).c_str());
-	)
+	DPRINT("OnSortClick Event - Col " + std::to_string(idx));
 
 		// default handling for the column click is to sort by this column or
 		// toggle its sort order
 		wxDataViewColumn* const col = m_dataviewlistctrl_mods->GetColumn(idx);
-	if (!col->IsSortable())
-	{
-		D(
-			OutputDebugString(_T(" - Not Sortable\n"));
-		)
+	if (!col->IsSortable()) {
+		DPRINT(" - Not Sortable\n");
 			// no default handling for non-sortable columns
 			event.Skip();
 		return;
 	}
 
-	if (col->IsSortKey())
-	{
+	if (col->IsSortKey()) {
 		// already acending order, just change the order
-		D(
-			OutputDebugString(_T(" - Old"));
-		)
+		DPRINT(" - Old");
 			col->ToggleSortOrder();
 	}
-	else // not using this column for sorting yet
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			if (m_dataviewlistctrl_mods->GetColumn(i)->IsSortKey())
-			{
+	else { // not using this column for sorting yet
+		for (int i = 0; i < 5; i++) {
+			if (m_dataviewlistctrl_mods->GetColumn(i)->IsSortKey()) {
 				m_dataviewlistctrl_mods->GetColumn(i)->UnsetAsSortKey();
 			}
 		}
 		col->SetSortOrder(false);
-		D(
-			OutputDebugString(_T(" - New"));
-		)
+		DPRINT(" - New");
 	}
 
 	wxDataViewModel* const model = m_dataviewlistctrl_mods->GetModel();
-	if (model)
+	if (model) {
 		model->Resort();
+	}
 
 	m_dataviewlistctrl_mods->OnColumnChange(idx);
-	D(
-		OutputDebugString(_T(" - Sorted\n"));
-	)
+	DPRINT(" - Sorted\n");
 }
 
