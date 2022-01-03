@@ -51,6 +51,7 @@ SettingsPanel::SettingsPanel(wxWindow* parent, wxWindowID windowID, MainFrame* p
 	// Tab 3 - Error Mute Sizer
 	m_stext_mute = new wxStaticText(this, wxID_ANY, "Mute Mod List Errors:");
 	m_checkbox_mute = new wxCheckBox(this, wxID_ANY, "  (unmute for debugging)");
+	m_checkbox_mute->SetValue(true); // Mute by default
 	m_checkbox_mute->Bind(wxEVT_CHECKBOX, &SettingsPanel::OnMuteModToggleClick, this);
 	m_sizer_notebook_tab3_mute = new wxBoxSizer(wxHORIZONTAL);
 	m_sizer_notebook_tab3_mute->Add(m_stext_mute, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -97,35 +98,39 @@ void SettingsPanel::SelfInitialize()
 
 	DPRINT("SelfInit - Open .ini\n");
 
+	// Check game directory
 	game_directory_ = std::string(config_ini->Read("GamePath", "directory not found"));
 	m_textctrl_game_directory->ChangeValue(game_directory_.string());
 	DPRINT("SelfInit - .ini Game Path Read\n");
 
+	// Check "launch with steam" setting
 	launch_with_steam_ = config_ini->ReadBool("SteamLauncher", true);
 	m_checkbox_launcher->SetValue(launch_with_steam_["on_refresh"]);
 	DPRINT("SelfInit - .ini Launcher Preference Read\n");
 
+	// Check steam directory
 	steam_directory_ = std::string(config_ini->Read("SteamPath", "directory not found"));
 	m_textctrl_steam_directory->ChangeValue(steam_directory_.string());
 	DPRINT("SelfInit - .ini Steam Path Read\n");
 
+	// Check mute errors setting
 	error_mute_["on_refresh"] = config_ini->ReadBool("MuteErrors", false);
 	m_checkbox_mute->SetValue(error_mute_["on_refresh"]);
 	DPRINT("SelfInit - .ini Launcher Preference Read\n");
 
-		if (mainWindow->ExistsModFolders())
-		{
-			DPRINT("SelfInit - Refreshing Mod List\n");
-			mainWindow->m_mod_browser_panel->m_dataviewlistctrl_mods->GetColumn(1)->SetSortOrder(true);
-			mainWindow->RefreshModLists();
-			DPRINT("Refreshed Mod List\n");
-		}
-		else
-		{
-			DPRINT("SelfInit - No Mod Folders Found\n");
-		}
+	if (mainWindow->ExistsModFolders())
+	{
+		DPRINT("SelfInit - Refreshing Mod List\n");
+		mainWindow->m_mod_browser_panel->m_dataviewlistctrl_mods->GetColumn(1)->SetSortOrder(true);
+		mainWindow->RefreshModLists();
+		DPRINT("Refreshed Mod List\n");
+	}
+	else
+	{
+		DPRINT("SelfInit - No Mod Folders Found\n");
+	}
 	DPRINT("SelfInit - Game Directory\n" + game_directory().string() + "\n" + "SelfInit - Checking SMAPI Version\n");
-		mainWindow->CheckSmapiVersion();
+	mainWindow->CheckSmapiVersion();
 	DPRINT("SelfInit - Checked SMAPI Version\n");
 }
 
@@ -239,9 +244,9 @@ void SettingsPanel::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 		fs::path browsed_steam_file = fs::path(browsed_steam_path).filename();
 		bool steam_file_exists = fs::exists(browsed_steam_path);
 		bool steam_executable_exists = (browsed_steam_file == fs::path("Steam.exe"))
-				or (browsed_steam_file == fs::path("steam.exe"));
+			or (browsed_steam_file == fs::path("steam.exe"));
 
-		if ( steam_file_exists and steam_executable_exists)
+		if (steam_file_exists and steam_executable_exists)
 		{
 			std::string browsed_steam_directory = fs::path(browsed_steam_path).parent_path().string();
 			m_filedialog_steam_browse->SetPath(m_filedialog_steam_browse->GetPath());
