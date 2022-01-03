@@ -18,12 +18,15 @@
 #include <iomanip>
 #include <sstream> 
 #include "cMod.h"
-#include "SettingsPanel.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
 using std::istream;
 using std::ifstream;
+
+class MenuBar;
+class ModBrowserPanel;
+class SettingsPanel;
 
 enum class mod_errors {
 	json,
@@ -68,9 +71,6 @@ private:
 	};
 
 	// TODO Rename?
-	int ID_MENU_MODS = wxNewId();
-	int ID_MENU_DMODS = wxNewId();
-	int ID_MENU_QUIT = wxNewId();
 	int ID_BUTTON_NEXUS = wxNewId();
 	int ID_BUTTON_FORUMS = wxNewId();
 
@@ -83,12 +83,7 @@ public:
 	// Notebook
 	wxNotebook* m_notebook = nullptr;
 	// Tab 1
-	wxPanel* m_panel_notebook_tab1 = nullptr;
-	wxDataViewListCtrl* m_dataviewlistctrl_mods = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab1a_mods = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab1 = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab1a = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab1b = nullptr;
+	ModBrowserPanel* m_mod_browser_panel = nullptr;
 	// Tab 2
 	wxPanel* m_panel_notebook_tab2 = nullptr;
 	wxListBox* m_list_xnb_mods = nullptr;
@@ -98,9 +93,7 @@ public:
 	SettingsPanel* m_settings_panel = nullptr;
 
 	// m_menubar
-	wxMenuBar* m_menubar = nullptr;
-	wxMenu* m_menubar_file = nullptr;
-	wxMenu* m_menubar_help = nullptr;
+	MenuBar* m_menubar = nullptr;
 
 	// Right side buttons
 	wxButton* m_button_launch_smapi = nullptr;
@@ -131,14 +124,6 @@ private:
 	void OnLaunchVanillaClick(wxCommandEvent& event);
 	void OnLaunchModSiteClick(wxCommandEvent& event);
 	void OnRefreshClick(wxCommandEvent& event);
-	// Mod List Buttons
-	void OnToggleClick(wxDataViewEvent& event);
-	void OnSortClick(wxDataViewEvent& event);
-	// Menu Bar Buttons
-	void OnMenuClick(wxCommandEvent& event); // TODO complete
-	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
-	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
-	void OnMenuQuitClick(wxCommandEvent& event);
 	
 public:
 	void CleanManifest(json& manifest, fs::path error_path);

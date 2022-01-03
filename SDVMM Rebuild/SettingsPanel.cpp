@@ -1,5 +1,7 @@
 #include "SettingsPanel.h"
+
 #include "cMain.h"
+#include "ModBrowserPanel.h"
 
 SettingsPanel::SettingsPanel(wxWindow* parent, wxWindowID windowID, cMain* parentWindow)
 	: wxPanel(parent, windowID)
@@ -122,7 +124,7 @@ void SettingsPanel::SelfInitialize()
 			D(
 				OutputDebugString(_T("SelfInit - Refreshing Mod List\n"));
 			)
-			mainWindow->m_dataviewlistctrl_mods->GetColumn(1)->SetSortOrder(true);
+			mainWindow->m_mod_browser_panel->m_dataviewlistctrl_mods->GetColumn(1)->SetSortOrder(true);
 			mainWindow->RefreshModLists();
 			D(
 				OutputDebugString(_T("Refreshed Mod List\n"));
