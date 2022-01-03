@@ -9,7 +9,7 @@ public:
 	LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
 
 private:
-	MainFrame* mainWindow = nullptr;
+	MainFrame* _mMainWindow = nullptr;
 
 	// Top Level Buttons
 	void OnLaunchSMAPIClick(wxCommandEvent& event);

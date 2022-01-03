@@ -5,7 +5,7 @@
 
 LauncherButtonPanel::LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
 	: wxPanel(parent, windowID)
-	, mainWindow(parentWindow)
+	, _mMainWindow(parentWindow)
 {
 	m_button_launch_smapi = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
 	m_button_launch_vanilla = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
@@ -42,22 +42,22 @@ LauncherButtonPanel::LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, 
 // Top Level Buttons
 void LauncherButtonPanel::OnLaunchSMAPIClick(wxCommandEvent& event) { // TODO Steam Launcher option
 	event.Skip();
-	if (mainWindow->error_check_[mod_errors::smapi] == true) {
+	if (_mMainWindow->mErrorChecks[ModErrors::smapi] == true) {
 		m_button_launch_smapi->Disable();
 		m_button_launch_smapi->SetLabel("SMAPI Not Found!");
 	}
 	else {
-		if (mainWindow->m_settings_panel->launch_with_steam()) {
-			string test_str = ((mainWindow->m_settings_panel->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
-				" \"" + mainWindow->m_settings_panel->game_directory().string() + "//StardewValleyAPI.exe\" %command%";
+		if (_mMainWindow->mSettingsPanel->shouldLaunchWithSteam()) {
+			std::string test_str = ((_mMainWindow->mSettingsPanel->steamDirectory().string() + "\\Steam.exe")) + " -applaunch 413150" +
+				" \"" + _mMainWindow->mSettingsPanel->gameDirectory().string() + "//StardewValleyAPI.exe\" %command%";
 			const char* open_command = (test_str.c_str());
 			wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
 		}
 		else {
 			wxString temp = wxGetCwd();
-			wxSetWorkingDirectory(mainWindow->m_settings_panel->game_directory().string());
-			string test_str = ((mainWindow->m_settings_panel->game_directory().string() + "\\StardewModdingAPI"));
+			wxSetWorkingDirectory(_mMainWindow->mSettingsPanel->gameDirectory().string());
+			std::string test_str = ((_mMainWindow->mSettingsPanel->gameDirectory().string() + "\\StardewModdingAPI"));
 			const char* open_command = (test_str.c_str());
 			wxExecute(open_command, wxEXEC_ASYNC, NULL);
 			wxSetWorkingDirectory(temp);
@@ -67,16 +67,16 @@ void LauncherButtonPanel::OnLaunchSMAPIClick(wxCommandEvent& event) { // TODO St
 
 void LauncherButtonPanel::OnLaunchVanillaClick(wxCommandEvent& event) { // TODO Steam Launcher option
 	event.Skip();
-	if (mainWindow->m_settings_panel->launch_with_steam()) {
-		string test_str = ((mainWindow->m_settings_panel->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150";
+	if (_mMainWindow->mSettingsPanel->shouldLaunchWithSteam()) {
+		std::string test_str = ((_mMainWindow->mSettingsPanel->steamDirectory().string() + "\\Steam.exe")) + " -applaunch 413150";
 		const char* open_command = (test_str.c_str());
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 	}
 	else {
 		wxString temp = wxGetCwd();
-		wxSetWorkingDirectory(mainWindow->m_settings_panel->game_directory().string());
-		string test_str = ((mainWindow->m_settings_panel->game_directory().string() + "\\Stardew Valley"));
+		wxSetWorkingDirectory(_mMainWindow->mSettingsPanel->gameDirectory().string());
+		std::string test_str = ((_mMainWindow->mSettingsPanel->gameDirectory().string() + "\\Stardew Valley"));
 		const char* open_command = (test_str.c_str());
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 		wxSetWorkingDirectory(temp);
@@ -97,6 +97,6 @@ void LauncherButtonPanel::OnLaunchModSiteClick(wxCommandEvent& event) {
 
 void LauncherButtonPanel::OnRefreshClick(wxCommandEvent& event) { // TODO give some indication of the refresh
 	event.Skip();
-	mainWindow->RefreshModLists();
+	_mMainWindow->mRefreshModLists();
 }
 

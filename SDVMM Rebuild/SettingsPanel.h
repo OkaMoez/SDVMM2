@@ -1,5 +1,5 @@
 #pragma once
-#include "debugConstants.h"
+#include "DebugTools.h"
 
 #include <wx/wx.h>
 #include <wx/dataview.h>
@@ -17,63 +17,63 @@ public:
 	SettingsPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
 	~SettingsPanel();
 
-	void SelfInitialize();
-	bool ini_exists() { return ini_exists_; }
-	bool launch_with_steam() { return launch_with_steam_; }
-	fs::path game_directory() { return game_directory_; }
-	fs::path steam_directory() { return steam_directory_; }
-	std::string version_smapi() { return version_smapi_; }
-	std::string version_this_mm() { return version_this_mm_; }
+	void tryLoadSettings();
+	bool iniExists() { return _mIniExists; }
+	bool shouldLaunchWithSteam() { return _mLaunchWithSteam; }
+	fs::path gameDirectory() { return _mGameDirectory; }
+	fs::path steamDirectory() { return _mSteamDirectory; }
+	std::string versionSmapi() { return _mVersionSmapi; }
+	std::string versionModManager() { return _mVersionModManager; }
 
 	// Settings Buttons
-	void OnLauncherToggleClick(wxCommandEvent& event);
-	void OnGameDirectorySaveClick(wxCommandEvent& event);
-	void OnGameDirectoryBrowseClick(wxCommandEvent& event);
-	void OnSteamDirectorySaveClick(wxCommandEvent& event);
-	void OnSteamDirectoryBrowseClick(wxCommandEvent& event);
-	void OnMuteModToggleClick(wxCommandEvent& event);
+	void onLauncherToggleClick(wxCommandEvent& event);
+	void onGameDirectorySaveClick(wxCommandEvent& event);
+	void onGameDirectoryBrowseClick(wxCommandEvent& event);
+	void onSteamDirectorySaveClick(wxCommandEvent& event);
+	void onSteamDirectoryBrowseClick(wxCommandEvent& event);
+	void onMuteModToggleClick(wxCommandEvent& event);
 
-	wxFileConfig* config_ini = nullptr;
+	wxFileConfig* configIni = nullptr;
 
-	std::unordered_map<std::string, bool> error_mute_ {
+	std::unordered_map<std::string, bool> muteErrors {
 		{"on_refresh", true}
 	};
 
 private:
-	bool ini_exists_ = false;
-	bool launch_with_steam_ = false;
-	fs::path game_directory_ = "";
-	fs::path steam_directory_ = "";
-	std::string version_smapi_ = "not found";
-	std::string version_this_mm_ = "0.6";
+	bool _mIniExists = false;
+	bool _mLaunchWithSteam = false;
+	fs::path _mGameDirectory = "";
+	fs::path _mSteamDirectory = "";
+	std::string _mVersionSmapi = "not found";
+	std::string _mVersionModManager = "0.6";
 
-	MainFrame* mainWindow = nullptr;
+	MainFrame* _mMainWindow = nullptr;
 
 	// Tab 3 - Launcher Option
-	wxStaticText* m_stext_launcher = nullptr;
-	wxCheckBox* m_checkbox_launcher = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3_launcher = nullptr;
+	wxStaticText* _mLauncherChoiceStext = nullptr;
+	wxCheckBox* _mLauncherChoiceCheckbox = nullptr;
+	wxBoxSizer* _mLauncherChoiceSizer = nullptr;
 	// Tab 3 - Game Directory
-	wxStaticText* m_stext_game_directory = nullptr;
-	wxTextCtrl* m_textctrl_game_directory = nullptr;
-	wxDirDialog* m_dirdialog_game_browse = nullptr;
-	wxButton* m_button_game_directory_save = nullptr;
-	wxButton* m_button_game_directory_browse = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3_game_directory = nullptr;
+	wxStaticText* _mGameDirectoryStext = nullptr;
+	wxTextCtrl* _mGameDirectoryTextctrl = nullptr;
+	wxDirDialog* _mGameDirectoryDirdialog = nullptr;
+	wxButton* _mGameDirectorySaveButton = nullptr;
+	wxButton* _mGameDirectoryBrowseButton = nullptr;
+	wxBoxSizer* _mGameDirectorySizer = nullptr;
 	// Tab 3 - Steam Directory
-	wxStaticText* m_stext_steam_directory = nullptr;
-	wxTextCtrl* m_textctrl_steam_directory = nullptr;
-	wxFileDialog* m_filedialog_steam_browse = nullptr;
-	wxButton* m_button_steam_directory_save = nullptr;
-	wxButton* m_button_steam_directory_browse = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3_steam_directory = nullptr;
+	wxStaticText* _mSteamDirectoryStext = nullptr;
+	wxTextCtrl* _mSteamDirectoryTextctrl = nullptr;
+	wxFileDialog* _mSteamDirectoryFiledialog = nullptr;
+	wxButton* _mSteamDirectorySaveButton = nullptr;
+	wxButton* _mSteamDirectoryBrowseButton = nullptr;
+	wxBoxSizer* _mSteamDirectorySizer = nullptr;
 	// Tab 3 - Error Mute Option
-	wxStaticText* m_stext_mute = nullptr;
-	wxCheckBox* m_checkbox_mute = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3_mute = nullptr;
+	wxStaticText* _mMuteErrorsStext = nullptr;
+	wxCheckBox* _mMuteErrorsCheckbox = nullptr;
+	wxBoxSizer* _mMuteErrorsSizer = nullptr;
 	// Tab 3 - Layout
-	wxBoxSizer* m_sizer_notebook_tab3_items = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3_left = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3_right = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab3 = nullptr;
+	wxBoxSizer* _mSettingsFieldsSizer = nullptr;
+	wxBoxSizer* _mLeftSpacerSizer = nullptr;
+	wxBoxSizer* _mRightSpacerSizer = nullptr;
+	wxBoxSizer* _mSettingsPanelSizer = nullptr;
 };

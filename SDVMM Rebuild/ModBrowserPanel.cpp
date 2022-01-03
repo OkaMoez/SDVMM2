@@ -5,7 +5,7 @@
 
 ModBrowserPanel::ModBrowserPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
 	: wxPanel(parent, windowID)
-	, mainWindow(parentWindow) {
+	, _mMainWindow(parentWindow) {
 	// Tab 1 - List Control - Creation w/ Columns
 	m_dataviewlistctrl_mods = new wxDataViewListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(465, 200), wxLC_REPORT);
 	m_dataviewlistctrl_mods->AppendToggleColumn("Active", wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE);
@@ -40,7 +40,7 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 	event.Skip();
 
 	D(
-		if (report_cbox_event) {
+		if (REPORT_CBOX_EVENTS) {
 			wxMessageDialog* event_toggle_box1 = new wxMessageDialog(NULL,
 				wxT("Mod toggled."), wxT("Event captured"),
 				wxOK, wxDefaultPosition);
@@ -50,11 +50,11 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 	);
 	wxVariant temp_path("");
 	m_dataviewlistctrl_mods->GetValue(temp_path, m_dataviewlistctrl_mods->GetSelectedRow(), 4);
-	fs::path mod_path = string(temp_path);
+	fs::path mod_path = std::string(temp_path);
 	fs::path parent_path = mod_path.parent_path();
 	fs::path folder_name = mod_path.filename();
-	while (parent_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods")
-		and parent_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled")) {
+	while (parent_path != ((_mMainWindow->mSettingsPanel->gameDirectory()) += "\\Mods")
+		and parent_path != ((_mMainWindow->mSettingsPanel->gameDirectory()) += "\\Mods_disabled")) {
 
 		folder_name = (parent_path.filename() += ("\\" + folder_name.string()));
 		parent_path = parent_path.parent_path();
@@ -63,47 +63,47 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 
 	DPRINT("Mod toggle called.\n" + parent_path.string() + "\n" + folder_name.string() + "\n");
 
-	if (parent_path == ((mainWindow->m_settings_panel->game_directory()) += "\\Mods")) {
-		DPRINT(mod_path.string() + "\n" + mainWindow->m_settings_panel->game_directory().string() 
+	if (parent_path == ((_mMainWindow->mSettingsPanel->gameDirectory()) += "\\Mods")) {
+		DPRINT(mod_path.string() + "\n" + _mMainWindow->mSettingsPanel->gameDirectory().string() 
 			+ "\\Mods_disabled\\" + folder_name.string() + "\n");
 
 		// Build required parent folders for move
-		while (!fs::is_directory(((mainWindow->m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path())) {
-			fs::path rrename_path = ((mainWindow->m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path();
+		while (!fs::is_directory(((_mMainWindow->mSettingsPanel->gameDirectory() += "\\Mods_disabled\\") += folder_name).parent_path())) {
+			fs::path rrename_path = ((_mMainWindow->mSettingsPanel->gameDirectory() += "\\Mods_disabled\\") += folder_name).parent_path();
 			while (!fs::is_directory(rrename_path.parent_path())) {
 				rrename_path = rrename_path.parent_path();
 			}
 			fs::create_directory(rrename_path);
 		}
-		fs::rename(mod_path, (fs::path(mainWindow->m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name));
+		fs::rename(mod_path, (fs::path(_mMainWindow->mSettingsPanel->gameDirectory() += "\\Mods_disabled\\") += folder_name));
 
 		// Delete empty nested folders
 		fs::path clean_path = mod_path.parent_path();
 		std::error_code ec;
-		while (fs::is_empty(clean_path) and (clean_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods"))) {
+		while (fs::is_empty(clean_path) and (clean_path != ((_mMainWindow->mSettingsPanel->gameDirectory()) += "\\Mods"))) {
 			fs::remove(clean_path, ec);
 			DPRINT("Empty folder deleted.\n" + clean_path.string() + "\n");
 			clean_path = clean_path.parent_path();
 		}
 	}
-	else if (parent_path == ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled")) {
-		DPRINT(mod_path.string() + "\n" + mainWindow->m_settings_panel->game_directory().string() + "\\Mods\\" + folder_name.string() + "\n");
+	else if (parent_path == ((_mMainWindow->mSettingsPanel->gameDirectory()) += "\\Mods_disabled")) {
+		DPRINT(mod_path.string() + "\n" + _mMainWindow->mSettingsPanel->gameDirectory().string() + "\\Mods\\" + folder_name.string() + "\n");
 
 		// Build required parent folders for move
-		while (!fs::is_directory(((mainWindow->m_settings_panel->game_directory() += "\\Mods\\") += folder_name).parent_path())) {
-			fs::path rrename_path = ((mainWindow->m_settings_panel->game_directory() += "\\Mods\\") += folder_name).parent_path();
+		while (!fs::is_directory(((_mMainWindow->mSettingsPanel->gameDirectory() += "\\Mods\\") += folder_name).parent_path())) {
+			fs::path rrename_path = ((_mMainWindow->mSettingsPanel->gameDirectory() += "\\Mods\\") += folder_name).parent_path();
 			while (!fs::is_directory(rrename_path.parent_path())) {
 				rrename_path = rrename_path.parent_path();
 			}
 			fs::create_directory(rrename_path);
 		}
 
-		fs::rename(mod_path, (fs::path(mainWindow->m_settings_panel->game_directory() += "\\Mods\\") += folder_name));
+		fs::rename(mod_path, (fs::path(_mMainWindow->mSettingsPanel->gameDirectory() += "\\Mods\\") += folder_name));
 
 		// Delete empty nested folders
 		fs::path clean_path = mod_path.parent_path();
 		std::error_code ec;
-		while (fs::is_empty(clean_path) and (clean_path != ((mainWindow->m_settings_panel->game_directory()) += "\\Mods_disabled"))) {
+		while (fs::is_empty(clean_path) and (clean_path != ((_mMainWindow->mSettingsPanel->gameDirectory()) += "\\Mods_disabled"))) {
 			fs::remove(clean_path, ec);
 			DPRINT("Empty folder deleted.\n" + clean_path.string() + "\n");
 			clean_path = clean_path.parent_path();
@@ -111,7 +111,7 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 	}
 	else {
 		D(
-			if (report_file_move_event) {
+			if (REPORT_FILE_MOVE_EVENT) {
 				wxMessageDialog* event_toggle_ebox1 = new wxMessageDialog(NULL,
 					wxT("Bad path"), wxT("Event item info"),
 					wxOK, wxDefaultPosition);
@@ -120,7 +120,7 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 			}
 		);
 	}
-	mainWindow->RefreshModLists();
+	_mMainWindow->mRefreshModLists();
 }
 
 void ModBrowserPanel::OnSortClick(wxDataViewEvent& event) {

@@ -23,8 +23,8 @@
     <ClCompile Include="MenuBar.cpp" />
     <ClCompile Include="ModManagerApp.cpp" />
     <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="cMod.cpp" />
-    <ClCompile Include="ioFunctions.cpp" />
+    <ClCompile Include="SmapiMod.cpp" />
+    <ClCompile Include="IoFunctions.cpp" />
     <ClCompile Include="SettingsPanel.cpp" />
     <ClCompile Include="ModBrowserPanel.cpp" />
   </ItemGroup>
@@ -35,11 +35,11 @@
     <ClInclude Include="SettingsPanel.h" />
     <ClInclude Include="ModManagerApp.h" />
     <ClInclude Include="MainFrame.h" />
-    <ClInclude Include="cMod.h" />
-    <ClInclude Include="debugConstants.h" />
-    <ClInclude Include="ioFunctions.h" />
+    <ClInclude Include="SmapiMod.h" />
+    <ClInclude Include="DebugTools.h" />
+    <ClInclude Include="IoFunctions.h" />
     <ClInclude Include="json.hpp" />
-    <ClInclude Include="strip.h" />
+    <ClInclude Include="JsonCleaner.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="E:\Image Edits\SDVMM\SDVMM2.png">

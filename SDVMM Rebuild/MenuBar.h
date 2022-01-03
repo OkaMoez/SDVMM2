@@ -8,7 +8,7 @@ public:
 	MenuBar(MainFrame* parentWindow);
 
 private:
-	MainFrame* mainWindow = nullptr;
+	MainFrame* _mMainWindow = nullptr;
 
 	// Menu Bar Buttons
 	void OnMenuClick(wxCommandEvent& event); // TODO complete
@@ -16,8 +16,8 @@ private:
 	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
 	void OnMenuQuitClick(wxCommandEvent& event);
 
-	wxMenu* m_menubar_file = nullptr;
-	wxMenu* m_menubar_help = nullptr;
+	wxMenu* mMenubar_file = nullptr;
+	wxMenu* mMenubar_help = nullptr;
 
 	// TODO Rename?
 	int ID_MENU_MODS = wxNewId();

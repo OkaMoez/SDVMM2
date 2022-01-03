@@ -12,7 +12,7 @@ public:
 	wxDataViewListCtrl* m_dataviewlistctrl_mods = nullptr;
 
 private:
-	MainFrame* mainWindow = nullptr;
+	MainFrame* _mMainWindow = nullptr;
 
 	// Mod List Buttons
 	void OnToggleClick(wxDataViewEvent& event);

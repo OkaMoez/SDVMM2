@@ -152,7 +152,7 @@ std::string stripCommentsImpl(const std::string& str, StripFunc strip) {
 	return ret;
 }
 
-std::string stripTrailingCommas(const std::string& str, bool whitespace) { //
+std::string stripTrailingCommas(const std::string& str, bool whitespace) {
 	std::regex regexTrailingCommas("((\\}|\\])|\")(\\s*),(\\s*)(?=(\\}|\\]))",
 		std::regex_constants::ECMAScript);
 	return std::regex_replace(str, regexTrailingCommas, "$1");
