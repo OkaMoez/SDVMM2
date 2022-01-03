@@ -93,65 +93,40 @@ void SettingsPanel::SelfInitialize()
 	// TODO: handle init with/out ini differently
 	// have mute init true if no ini is found
 	ini_exists_ = true;
-	D(
-		OutputDebugString(_T("SelfInit - .ini Exists\n"));
-	)
+	DPRINT("SelfInit - .ini Exists\n");
 
-	D(
-		OutputDebugString(_T("SelfInit - Open .ini\n"));
-	)
+	DPRINT("SelfInit - Open .ini\n");
 
 	game_directory_ = std::string(config_ini->Read("GamePath", "directory not found"));
 	m_textctrl_game_directory->ChangeValue(game_directory_.string());
-	D(
-		OutputDebugString(_T("SelfInit - .ini Game Path Read\n"));
-	)
+	DPRINT("SelfInit - .ini Game Path Read\n");
 
 	launch_with_steam_ = config_ini->ReadBool("SteamLauncher", true);
 	m_checkbox_launcher->SetValue(launch_with_steam_["on_refresh"]);
-	D(
-		OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
-	)
+	DPRINT("SelfInit - .ini Launcher Preference Read\n");
 
 	steam_directory_ = std::string(config_ini->Read("SteamPath", "directory not found"));
 	m_textctrl_steam_directory->ChangeValue(steam_directory_.string());
-	D(
-		OutputDebugString(_T("SelfInit - .ini Steam Path Read\n"));
-	)
+	DPRINT("SelfInit - .ini Steam Path Read\n");
 
 	error_mute_["on_refresh"] = config_ini->ReadBool("MuteErrors", false);
 	m_checkbox_mute->SetValue(error_mute_["on_refresh"]);
-	D(
-		OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
-	)
+	DPRINT("SelfInit - .ini Launcher Preference Read\n");
 
 		if (mainWindow->ExistsModFolders())
 		{
-			D(
-				OutputDebugString(_T("SelfInit - Refreshing Mod List\n"));
-			)
+			DPRINT("SelfInit - Refreshing Mod List\n");
 			mainWindow->m_mod_browser_panel->m_dataviewlistctrl_mods->GetColumn(1)->SetSortOrder(true);
 			mainWindow->RefreshModLists();
-			D(
-				OutputDebugString(_T("Refreshed Mod List\n"));
-			)
+			DPRINT("Refreshed Mod List\n");
 		}
 		else
 		{
-			D(
-				OutputDebugString(_T("SelfInit - No Mod Folders Found\n"));
-			)
+			DPRINT("SelfInit - No Mod Folders Found\n");
 		}
-	D(
-		OutputDebugString(_T("SelfInit - Game Directory\n"));
-		OutputDebugStringA(game_directory().string().c_str());
-		OutputDebugString(_T("\n"));
-		OutputDebugString(_T("SelfInit - Checking SMAPI Version\n"));
-	)
+	DPRINT("SelfInit - Game Directory\n" + game_directory().string() + "\n" + "SelfInit - Checking SMAPI Version\n");
 		mainWindow->CheckSmapiVersion();
-	D(
-		OutputDebugString(_T("SelfInit - Checked SMAPI Version\n"));
-	)
+	DPRINT("SelfInit - Checked SMAPI Version\n");
 }
 
 // Settings Buttons

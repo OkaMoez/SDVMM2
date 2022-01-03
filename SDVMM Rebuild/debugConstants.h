@@ -1,6 +1,10 @@
 #pragma once
 #ifdef _DEBUG 
+#include <wx/string.h>
+#include "debugConstants.h"
 #define D(x) x
+#define DPRINT(x, ...) OutputDebugString(wxString(x))
+#define DPRINTIF(x, y) if(x){OutputDebugString(wxString(y));}
 
 // Define R for reports, and Q for quiet
 #define myLOUD
@@ -8,6 +12,9 @@
 #define myREPORT(x) x
 #define myQUIET(y)
 #else
+#define D(x) x
+#define DPRINT(x, ...)
+#define DPRINTIF(x, y)
 #define myREPORT(x)
 #define myQUIET(y) y
 #endif

@@ -1,11 +1,4 @@
 #pragma once
-#ifdef _DEBUG 
-#define D(x) x
-#include "debugConstants.h"
-#else 
-#define D(x)
-#endif
-
 #include <string>
 #include <wx/listctrl.h>
 #include "json.hpp"
