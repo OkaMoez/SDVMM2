@@ -23,8 +23,10 @@
     <ClCompile Include="cMain.cpp" />
     <ClCompile Include="cMod.cpp" />
     <ClCompile Include="ioFunctions.cpp" />
+    <ClCompile Include="SettingsPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SettingsPanel.h" />
     <ClInclude Include="ModManagerApp.h" />
     <ClInclude Include="cMain.h" />
     <ClInclude Include="cMod.h" />
