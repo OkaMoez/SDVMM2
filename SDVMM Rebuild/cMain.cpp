@@ -137,8 +137,8 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_sizer_banner_horizontal->AddStretchSpacer(1);
 
 	// Bottom Bar - Version Info & Mod Count
-	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + version_smapi_); // TODO getters/setters
-	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + version_this_mm_);
+	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_panel_notebook_tab3->version_smapi()); // TODO getters/setters
+	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_panel_notebook_tab3->version_this_mm());
 	m_stext_mod_count = new wxStaticText(this, wxID_ANY,
 		std::to_string(mod_count_["loaded"]) + "/" +
 		std::to_string(mod_count_["total"]) + " Mods Loaded");
@@ -183,9 +183,9 @@ void cMain::SelfInitialize()
 		OutputDebugStringA(appPath.string().c_str());
 		OutputDebugString(_T("\n"));
 	)
-	config_ini = new wxFileConfig(wxEmptyString,
+	m_panel_notebook_tab3->config_ini = new wxFileConfig(wxEmptyString,
 		wxEmptyString, appPath.string());
-	config_ini->SetPath("/General");
+	m_panel_notebook_tab3->config_ini->SetPath("/General");
 
 	if (fs::exists(appPath))
 	{

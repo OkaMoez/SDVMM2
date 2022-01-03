@@ -33,6 +33,7 @@ public:
 	void OnSteamDirectoryBrowseClick(wxCommandEvent& event);
 	void OnMuteModToggleClick(wxCommandEvent& event);
 
+	wxFileConfig* config_ini = nullptr;
 private:
 	bool ini_exists_ = false;
 	bool launch_with_steam_ = false;
@@ -70,7 +71,6 @@ private:
 		{"loaded", 0}
 	};
 
-	wxFileConfig* config_ini = nullptr;
 	cMain* mainWindow = nullptr;
 
 	// Tab 3 - Launcher Option

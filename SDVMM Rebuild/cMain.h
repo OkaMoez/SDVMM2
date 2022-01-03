@@ -29,33 +29,6 @@ using std::ifstream;
 class cMain : public wxFrame // TODO Organize privacy
 {
 private:
-	bool ini_exists_ = false;
-	bool launch_with_steam_ = false;
-	fs::path game_directory_ = "";
-	fs::path steam_directory_ = "";
-	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.6";
-	string error_locations_ = "Errors at: ";
-	std::map<string, bool> error_mute_{
-		{"on_refresh", true}
-	};
-	std::map<string, bool> error_check_{
-		{"json", false},
-		{"semvar", false},
-		{"format", false},
-		{"format_local", false},
-		{"smapi", false}
-	};
-	std::map<string, int> error_count_{
-		{"json", 0},
-		{"semvar", 0},
-		{"format", 0}
-	};
-	std::map<string, int> mod_count_{
-		{"total", 0},
-		{"errored", 0},
-		{"loaded", 0}
-	};
 
 	// TODO Rename?
 	int ID_MENU_MODS = wxNewId();
@@ -70,7 +43,6 @@ public:
 	void SelfInitialize();
 
 public:
-	wxFileConfig* config_ini = nullptr;
 	// Notebook
 	wxNotebook* m_notebook = nullptr;
 	// Tab 1
