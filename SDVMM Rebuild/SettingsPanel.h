@@ -1,11 +1,77 @@
 #pragma once
+#include "debugConstants.h"
 
 #include <wx/wx.h>
 #include <wx/dataview.h>
+#include <wx/fileconf.h>
+
+// TODO: Remove windows specific libraries
+#include <filesystem>
+namespace fs = std::filesystem;
+
+class cMain;
 
 class SettingsPanel : public wxPanel {
 
-	SettingsPanel(wxWindow* parent, wxWindowID windowID);
+public:
+	SettingsPanel(wxWindow* parent, wxWindowID windowID, cMain* parentWindow);
+	~SettingsPanel();
+
+	void SelfInitialize();
+	bool ini_exists() { return ini_exists_; }
+	bool launch_with_steam() { return launch_with_steam_; }
+	fs::path game_directory() { return game_directory_; }
+	fs::path steam_directory() { return steam_directory_; }
+	std::string version_smapi() { return version_smapi_; }
+	std::string version_this_mm() { return version_this_mm_; }
+
+	// Settings Buttons
+	void OnLauncherToggleClick(wxCommandEvent& event);
+	void OnGameDirectorySaveClick(wxCommandEvent& event);
+	void OnGameDirectoryBrowseClick(wxCommandEvent& event);
+	void OnSteamDirectorySaveClick(wxCommandEvent& event);
+	void OnSteamDirectoryBrowseClick(wxCommandEvent& event);
+	void OnMuteModToggleClick(wxCommandEvent& event);
+
+private:
+	bool ini_exists_ = false;
+	bool launch_with_steam_ = false;
+	fs::path game_directory_ = "";
+	fs::path steam_directory_ = "";
+	std::string version_smapi_ = "not found";
+	std::string version_this_mm_ = "0.6";
+	std::string error_locations_ = "Errors at: ";
+
+	std::unordered_map<std::string, bool> error_mute_
+	{
+		{"on_refresh", true}
+	};
+
+	std::unordered_map<std::string, bool> error_check_
+	{
+		{"json", false},
+		{"semvar", false},
+		{"format", false},
+		{"format_local", false},
+		{"smapi", false}
+	};
+
+	std::unordered_map<std::string, int> error_count_
+	{
+		{"json", 0},
+		{"semvar", 0},
+		{"format", 0}
+	};
+
+	std::unordered_map<std::string, int> mod_count_
+	{
+		{"total", 0},
+		{"errored", 0},
+		{"loaded", 0}
+	};
+
+	wxFileConfig* config_ini = nullptr;
+	cMain* mainWindow = nullptr;
 
 	// Tab 3 - Launcher Option
 	wxStaticText* m_stext_launcher = nullptr;

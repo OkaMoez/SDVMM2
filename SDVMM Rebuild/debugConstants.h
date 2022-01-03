@@ -1,4 +1,7 @@
 #pragma once
+#ifdef _DEBUG 
+#define D(x) x
+
 // Define R for reports, and Q for quiet
 #define myLOUD
 #ifdef myLOUD
@@ -8,7 +11,6 @@
 #define myREPORT(x)
 #define myQUIET(y) y
 #endif
-
 
 // Individual Debug Toggles
 // ModManagerApp
@@ -47,3 +49,7 @@ myQUIET(
 	const bool report_file_move_event = false;
 	const bool report_launcher_cbox_event = false;
 )
+
+#else 
+#define D(x)
+#endif
