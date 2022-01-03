@@ -324,12 +324,15 @@ void cMain::LoadModsFromDir(string folder_name)
 		if (fs::is_directory(temp_path))
 		{
 			D(
-				OutputDebugString(_T(" - Is Directory\n"));
+				if (report_identify_directories)
+				{
+					OutputDebugString(_T(" - Is Directory\n"));
+				}
 			)
-			mod_count_[mod_status::total]++;
 			temp_path += "\\manifest.json";
 			if (fs::exists(temp_path))
 			{
+				mod_count_[mod_status::total]++;
 				ifstream json_stream(temp_path.c_str());
 				json json_manifest;
 				try
@@ -353,9 +356,9 @@ void cMain::LoadModsFromDir(string folder_name)
 							D(
 								OutputDebugString(_T("Json Fix Attempt\n"));
 							)
-								//std::stringstream json_sstream;
-								//json_sstream << json_stream.rdbuf();
-								string json_string = "New\n";
+							//std::stringstream json_sstream;
+							//json_sstream << json_stream.rdbuf();
+							string json_string = "New\n";
 							//json_string = json_sstream.str();
 							ifstream json_stream2(temp_path.c_str(), std::ios::in | std::ios::binary);
 							json_stream2.seekg(0, std::ios::end);
@@ -366,8 +369,8 @@ void cMain::LoadModsFromDir(string folder_name)
 
 							D(
 								OutputDebugString(_T("Json Fix RAW\n"));
-							OutputDebugStringA(json_string.c_str());
-							OutputDebugString(_T("\n"));
+								OutputDebugStringA(json_string.c_str());
+								OutputDebugString(_T("\n"));
 							)
 
 								try
@@ -383,8 +386,8 @@ void cMain::LoadModsFromDir(string folder_name)
 
 							D(
 								OutputDebugString(_T("Json Fix Comment Cleaned\n"));
-							OutputDebugStringA(json_string.c_str());
-							OutputDebugString(_T("\n"));
+								OutputDebugStringA(json_string.c_str());
+								OutputDebugString(_T("\n"));
 							)
 
 								try
@@ -404,8 +407,8 @@ void cMain::LoadModsFromDir(string folder_name)
 
 							D(
 								OutputDebugString(_T("Json Fix Comma Cleaned\n"));
-							OutputDebugStringA(json_string.c_str());
-							OutputDebugString(_T("\n"));
+								OutputDebugStringA(json_string.c_str());
+								OutputDebugString(_T("\n"));
 							)
 
 								try
@@ -443,7 +446,6 @@ void cMain::LoadModsFromDir(string folder_name)
 								json_manifest["Version"].get_to(temp_msg2);
 								OutputDebugStringA((temp_msg1 + " exists, " + temp_msg2 + "\n").c_str());
 							}
-							else {}
 						)
 
 						cMod aMod(json_manifest);
@@ -483,7 +485,10 @@ void cMain::LoadModsFromDir(string folder_name)
 		else 
 		{
 		D(
-			OutputDebugString(_T(" - Is NOT Directory\n"));
+			if (report_identify_directories)
+			{
+				OutputDebugString(_T(" - Is NOT Directory\n"));
+			}
 		)
 		}
 	}
