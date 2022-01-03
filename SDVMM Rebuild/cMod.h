@@ -44,7 +44,7 @@ public:
 	string infoString() const {
 		return (mod_name_ + " / " + mod_author_ + " / "
 			+ mod_version_ + " / " + mod_description_ + " / "
-			+ mod_unique_id_ + "/n"); }
+			+ mod_unique_id_ + "\n"); }
 
 	void set_mod_name(string name);
 	void set_mod_author(string auth);

@@ -1,4 +1,4 @@
-#include "cMain.h"
+#include "MainFrame.h"
 
 #include "LauncherButtonPanel.h"
 #include "MenuBar.h"
@@ -7,7 +7,7 @@
 
 #include "strip.h"
 
-cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
+MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	wxDefaultPosition, wxSize(750, 500),
 	wxDEFAULT_FRAME_STYLE)
 {
@@ -16,60 +16,31 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	//---------------------------
 	//  Notebook Implementation
 	//---------------------------
-	// Tab 1, 2, 3 = Active/Inactive Mods, XNB Mods, Settings
 	m_notebook = new wxNotebook(this, -1);
 
-	// Tab 1
 	m_mod_browser_panel = new ModBrowserPanel(m_notebook, wxID_ANY, this);
-
-	/* // REMOVED FOR 0.5.0-ALPHA RELEASE
-	// Tab 2
-	m_panel_notebook_tab2 = new wxPanel(m_notebook, wxID_ANY);
-
-	// Tab 2 - List Box
-	m_list_xnb_mods = new wxListBox(m_panel_notebook_tab2, wxID_ANY);
-	m_list_xnb_mods->Append(wxT("Not Implemented"));  // TODO XNB support
-
-	// Tab 2 - Horizontal Sizer
-	m_sizer_notebook_tab2a = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_notebook_tab2a->AddStretchSpacer(1);
-	m_sizer_notebook_tab2a->Add(m_list_xnb_mods, 2, wxEXPAND, 0);
-	m_sizer_notebook_tab2a->AddStretchSpacer(1);
-
-
-	// Tab 2 - Vertical Sizer
-	m_sizer_notebook_tab2 = new wxBoxSizer(wxVERTICAL);
-	m_sizer_notebook_tab2->AddSpacer(10);
-	m_sizer_notebook_tab2->Add(m_sizer_notebook_tab2a, 1, wxEXPAND, 0);
-	m_sizer_notebook_tab2->AddSpacer(10);
-	m_panel_notebook_tab2->SetSizer(m_sizer_notebook_tab2);
-	*/
-
-	// Tab 3
-	m_settings_panel = new SettingsPanel(m_notebook, wxID_ANY, this);
-
-	// Notebook Tabs
 	m_notebook->AddPage(m_mod_browser_panel, "SMAPI Mods", true);
-	//m_notebook->AddPage(m_panel_notebook_tab2, "XNB Mods", false); // REMOVED FOR 0.5.0-ALPHA RELEASE
+
+	m_settings_panel = new SettingsPanel(m_notebook, wxID_ANY, this);
 	m_notebook->AddPage(m_settings_panel, "Settings", false);
 
 	//---------------------------------
 	//  Additional GUI Implementation
 	//---------------------------------
 
+	// Launcher buttons
+	m_launcher_panel = new LauncherButtonPanel(this, wxID_ANY, this);
+
+	// Horizontal layout
+	m_sizer_main_horizontal = new wxBoxSizer(wxHORIZONTAL);
+	m_sizer_main_horizontal->Add(m_notebook, 2, wxEXPAND | wxLEFT | wxRIGHT, 10);
+	m_sizer_main_horizontal->Add(m_launcher_panel, 1, wxEXPAND | wxRIGHT, 10);
+
 	// Menubar - File, Help, etc
 	m_menubar = new MenuBar(this);
 	SetMenuBar(m_menubar);
 
-	// Right side buttons
-	m_panel_buttons_right = new LauncherButtonPanel(this, wxID_ANY, this);
-
-	// Window layout horizontal
-	m_sizer_main_horizontal = new wxBoxSizer(wxHORIZONTAL);
-	m_sizer_main_horizontal->Add(m_notebook, 2, wxEXPAND | wxLEFT | wxRIGHT, 10);
-	m_sizer_main_horizontal->Add(m_panel_buttons_right, 1, wxEXPAND | wxRIGHT, 10);
-
-	// Banner
+	// Title banner
 	wxImage::AddHandler(new wxPNGHandler);
 	m_bitmap_banner = new wxStaticBitmap(this, wxID_ANY, wxBitmap("SDVMM2.png", wxBITMAP_TYPE_PNG)); // TODO save in code?
 	wxImage::CleanUpHandlers();
@@ -90,7 +61,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_sizer_version_info->AddStretchSpacer(10);
 	m_sizer_version_info->Add(m_sizer_mod_count, 5, wxEXPAND | wxRIGHT, 10);
 
-	// Window layout Vertical + insert banner
+	// Vertical layout
 	m_sizer_main_vertical = new wxBoxSizer(wxVERTICAL);
 	m_sizer_main_vertical->Add(m_sizer_banner_horizontal, 0, wxEXPAND | wxALL , 10);
 	m_sizer_main_vertical->Add(m_sizer_main_horizontal, 40, wxEXPAND, 0);
@@ -106,11 +77,11 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 //-------------------
 // MEMBER FUNCTIONS
 //-------------------
-cMain::~cMain()
+MainFrame::~MainFrame()
 {
 }
 
-void cMain::SelfInitialize()
+void MainFrame::SelfInitialize()
 {
 	D(
 		OutputDebugString(_T("SelfInit - Begin\n"));
@@ -141,7 +112,7 @@ void cMain::SelfInitialize()
 //--------------------
 // Backend Functions
 //--------------------
-void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move check to refresh and make flag
+void MainFrame::CleanManifest(json& manifest, fs::path error_path) // TODO move check to refresh and make flag
 {
 	if (!manifest.contains("Name"))
 	{
@@ -267,7 +238,7 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 }
 
-void cMain::RefreshModLists()
+void MainFrame::RefreshModLists()
 {
 	ResetRefreshErrors();
 	wxWindowUpdateLocker noUpdates(m_mod_browser_panel->m_dataviewlistctrl_mods);
@@ -296,7 +267,7 @@ void cMain::RefreshModLists()
 	ShowRefreshErrors();
 }
 
-void cMain::LoadModsFromDir(string folder_name) 
+void MainFrame::LoadModsFromDir(string folder_name) 
 {
 	// TODO group and report errors in scrollable dialogue (bad jsons, incompatible mods, etc.)
 	// TODO replace custom ioFunctions with filesystem?
@@ -494,7 +465,7 @@ void cMain::LoadModsFromDir(string folder_name)
 	}
 }
 
-bool cMain::ExistsModFolders()
+bool MainFrame::ExistsModFolders()
 {
 	fs::path mod_path = m_settings_panel->game_directory();
 	fs::path mod_d_path = m_settings_panel->game_directory();
@@ -563,7 +534,7 @@ bool cMain::ExistsModFolders()
 	return true;
 }
 
-void cMain::CheckSmapiVersion()
+void MainFrame::CheckSmapiVersion()
 {
 	string version = "";
 	fs::path path_smapi_logs = string(wxStandardPaths::Get().GetUserConfigDir());
@@ -595,7 +566,7 @@ void cMain::CheckSmapiVersion()
 	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);
 }
 
-void cMain::ResetRefreshErrors() 
+void MainFrame::ResetRefreshErrors() 
 {
 	error_locations_ = "Errors at: ";
 	error_check_[mod_errors::json] = false;
@@ -610,7 +581,7 @@ void cMain::ResetRefreshErrors()
 	mod_count_[mod_status::loaded] = 0;
 }
 
-void cMain::ShowRefreshErrors()
+void MainFrame::ShowRefreshErrors()
 {
 	if ((m_settings_panel->error_mute_["on_refresh"] == false) and
 		((error_count_[mod_errors::json] != 0) or (error_count_[mod_errors::semvar] != 0) or (error_count_[mod_errors::format] != 0)))

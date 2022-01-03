@@ -1,9 +1,9 @@
 #include "ModBrowserPanel.h"
 
-#include "cMain.h"
+#include "MainFrame.h"
 #include "SettingsPanel.h"
 
-ModBrowserPanel::ModBrowserPanel(wxWindow* parent, wxWindowID windowID, cMain* parentWindow)
+ModBrowserPanel::ModBrowserPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
 	: wxPanel(parent, windowID)
 	, mainWindow(parentWindow)
 {

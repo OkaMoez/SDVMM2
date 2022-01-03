@@ -1,9 +1,9 @@
 #include "LauncherButtonPanel.h"
 
-#include "cMain.h"
+#include "MainFrame.h"
 #include "SettingsPanel.h"
 
-LauncherButtonPanel::LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, cMain* parentWindow)
+LauncherButtonPanel::LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
 	: wxPanel(parent, windowID)
 	, mainWindow(parentWindow)
 {

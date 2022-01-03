@@ -1,9 +1,9 @@
 #include "SettingsPanel.h"
 
-#include "cMain.h"
+#include "MainFrame.h"
 #include "ModBrowserPanel.h"
 
-SettingsPanel::SettingsPanel(wxWindow* parent, wxWindowID windowID, cMain* parentWindow)
+SettingsPanel::SettingsPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
 	: wxPanel(parent, windowID)
 	, mainWindow(parentWindow)
 {
@@ -90,6 +90,8 @@ SettingsPanel::~SettingsPanel()
 
 void SettingsPanel::SelfInitialize()
 {
+	// TODO: handle init with/out ini differently
+	// have mute init true if no ini is found
 	ini_exists_ = true;
 	D(
 		OutputDebugString(_T("SelfInit - .ini Exists\n"));

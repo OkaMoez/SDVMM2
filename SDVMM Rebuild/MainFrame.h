@@ -44,7 +44,7 @@ enum class mod_status {
 	loaded
 };
 
-class cMain : public wxFrame // TODO Organize privacy
+class MainFrame : public wxFrame // TODO Organize privacy
 {
 public:
 	std::string error_locations_ = "Errors at: ";
@@ -73,8 +73,8 @@ public:
 	};
 
 public:
-	cMain();
-	~cMain();
+	MainFrame();
+	~MainFrame();
 	void SelfInitialize();
 
 public:
@@ -94,7 +94,7 @@ public:
 	MenuBar* m_menubar = nullptr;
 
 	// Right side buttons
-	LauncherButtonPanel* m_panel_buttons_right = nullptr;
+	LauncherButtonPanel* m_launcher_panel = nullptr;
 
 	// Other Layout
 	wxStaticBitmap* m_bitmap_banner = nullptr;

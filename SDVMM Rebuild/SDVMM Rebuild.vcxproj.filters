@@ -30,7 +30,7 @@
     <ClCompile Include="cMod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cMain.cpp">
+    <ClCompile Include="MainFrame.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="SettingsPanel.cpp">
@@ -71,7 +71,7 @@
     <ClInclude Include="SettingsPanel.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="cMain.h">
+    <ClInclude Include="MainFrame.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="MenuBar.h">

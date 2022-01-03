@@ -9,12 +9,12 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-class cMain;
+class MainFrame;
 
 class SettingsPanel : public wxPanel {
 
 public:
-	SettingsPanel(wxWindow* parent, wxWindowID windowID, cMain* parentWindow);
+	SettingsPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
 	~SettingsPanel();
 
 	void SelfInitialize();
@@ -48,7 +48,7 @@ private:
 	std::string version_smapi_ = "not found";
 	std::string version_this_mm_ = "0.6";
 
-	cMain* mainWindow = nullptr;
+	MainFrame* mainWindow = nullptr;
 
 	// Tab 3 - Launcher Option
 	wxStaticText* m_stext_launcher = nullptr;

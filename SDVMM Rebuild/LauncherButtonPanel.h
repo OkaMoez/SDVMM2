@@ -1,15 +1,15 @@
 #pragma once
 #include <wx/wx.h>
 
-class cMain;
+class MainFrame;
 
 class LauncherButtonPanel : public wxPanel
 {
 public:
-	LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, cMain* parentWindow);
+	LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
 
 private:
-	cMain* mainWindow = nullptr;
+	MainFrame* mainWindow = nullptr;
 
 	// Top Level Buttons
 	void OnLaunchSMAPIClick(wxCommandEvent& event);

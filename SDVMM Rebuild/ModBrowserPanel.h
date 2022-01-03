@@ -2,17 +2,17 @@
 #include <wx/wx.h>
 #include <wx/dataview.h>
 
-class cMain;
+class MainFrame;
 
 class ModBrowserPanel : public wxPanel
 {
 public:
-	ModBrowserPanel(wxWindow* parent, wxWindowID windowID, cMain* parentWindow);
+	ModBrowserPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
 
 	wxDataViewListCtrl* m_dataviewlistctrl_mods = nullptr;
 
 private:
-	cMain* mainWindow = nullptr;
+	MainFrame* mainWindow = nullptr;
 
 	// Mod List Buttons
 	void OnToggleClick(wxDataViewEvent& event);

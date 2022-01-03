@@ -1,9 +1,9 @@
 #include "MenuBar.h"
 
-#include "cMain.h"
+#include "MainFrame.h"
 #include "SettingsPanel.h"
 
-MenuBar::MenuBar(cMain* parentWindow)
+MenuBar::MenuBar(MainFrame* parentWindow)
 	: mainWindow(parentWindow)
 {
 	// Menubar - File, Help, etc

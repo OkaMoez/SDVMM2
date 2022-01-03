@@ -1,14 +1,14 @@
 #pragma once
 #include <wx/wx.h>
 
-class cMain;
+class MainFrame;
 
 class MenuBar : public wxMenuBar {
 public:
-	MenuBar(cMain* parentWindow);
+	MenuBar(MainFrame* parentWindow);
 
 private:
-	cMain* mainWindow = nullptr;
+	MainFrame* mainWindow = nullptr;
 
 	// Menu Bar Buttons
 	void OnMenuClick(wxCommandEvent& event); // TODO complete
