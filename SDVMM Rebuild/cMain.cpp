@@ -69,12 +69,12 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	*/
 
 	// Tab 3
-	m_panel_notebook_tab3 = new SettingsPanel(m_notebook, wxID_ANY, this);
+	m_settings_panel = new SettingsPanel(m_notebook, wxID_ANY, this);
 
 	// Notebook Tabs
 	m_notebook->AddPage(m_panel_notebook_tab1, "SMAPI Mods", true);
 	//m_notebook->AddPage(m_panel_notebook_tab2, "XNB Mods", false); // REMOVED FOR 0.5.0-ALPHA RELEASE
-	m_notebook->AddPage(m_panel_notebook_tab3, "Settings", false);
+	m_notebook->AddPage(m_settings_panel, "Settings", false);
 
 	//---------------------------------
 	//  Additional GUI Implementation
@@ -137,11 +137,10 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	m_sizer_banner_horizontal->AddStretchSpacer(1);
 
 	// Bottom Bar - Version Info & Mod Count
-	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + version_smapi_); // TODO getters/setters
-	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + version_this_mm_);
+	m_stext_smapi_version = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + m_settings_panel->version_smapi()); // TODO getters/setters
+	m_stext_this_version = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + m_settings_panel->version_this_mm());
 	m_stext_mod_count = new wxStaticText(this, wxID_ANY,
-		std::to_string(mod_count_["loaded"]) + "/" +
-		std::to_string(mod_count_["total"]) + " Mods Loaded");
+		std::to_string(mod_count_[mod_status::loaded]) + "/" + std::to_string(mod_count_[mod_status::total]) + " Mods Loaded");
 	m_sizer_mod_count = new wxBoxSizer(wxVERTICAL);
 	m_sizer_mod_count->Add(m_stext_mod_count, 0, wxALIGN_RIGHT, 0);
 	m_sizer_version_info = new wxBoxSizer(wxHORIZONTAL);
@@ -183,13 +182,12 @@ void cMain::SelfInitialize()
 		OutputDebugStringA(appPath.string().c_str());
 		OutputDebugString(_T("\n"));
 	)
-	config_ini = new wxFileConfig(wxEmptyString,
-		wxEmptyString, appPath.string());
-	config_ini->SetPath("/General");
+	m_settings_panel->config_ini = new wxFileConfig(wxEmptyString, wxEmptyString, appPath.string());
+	m_settings_panel->config_ini->SetPath("/General");
 
 	if (fs::exists(appPath))
 	{
-		m_panel_notebook_tab3->SelfInitialize();
+		m_settings_panel->SelfInitialize();
 	}
 	else
 	{
@@ -206,17 +204,17 @@ void cMain::SelfInitialize()
 void cMain::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher option
 {
 	event.Skip();
-	if (error_check_["smapi"] == true) 
+	if (error_check_[mod_errors::smapi] == true) 
 	{
 		m_button_launch_smapi->Disable();
 		m_button_launch_smapi->SetLabel("SMAPI Not Found!");
 	}
 	else
 	{
-		if (m_panel_notebook_tab3->launch_with_steam())
+		if (m_settings_panel->launch_with_steam())
 		{
-			string test_str = ((this->m_panel_notebook_tab3->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
-				" \"" + m_panel_notebook_tab3->game_directory().string() + "//StardewValleyAPI.exe\" %command%";
+			string test_str = ((this->m_settings_panel->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
+				" \"" + m_settings_panel->game_directory().string() + "//StardewValleyAPI.exe\" %command%";
 			const char* open_command = (test_str.c_str());
 			wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -224,8 +222,8 @@ void cMain::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher opt
 		else
 		{
 			wxString temp = wxGetCwd();
-			wxSetWorkingDirectory(this->m_panel_notebook_tab3->game_directory().string());
-			string test_str = ((this->m_panel_notebook_tab3->game_directory().string() + "\\StardewModdingAPI"));
+			wxSetWorkingDirectory(this->m_settings_panel->game_directory().string());
+			string test_str = ((this->m_settings_panel->game_directory().string() + "\\StardewModdingAPI"));
 			const char* open_command = (test_str.c_str());
 			wxExecute(open_command, wxEXEC_ASYNC, NULL);
 			wxSetWorkingDirectory(temp);
@@ -236,9 +234,9 @@ void cMain::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher opt
 void cMain::OnLaunchVanillaClick(wxCommandEvent& event) // TODO Steam Launcher option
 {
 	event.Skip();
-	if (m_panel_notebook_tab3->launch_with_steam())
+	if (m_settings_panel->launch_with_steam())
 	{
-		string test_str = ((m_panel_notebook_tab3->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150";
+		string test_str = ((m_settings_panel->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150";
 		const char* open_command = (test_str.c_str());
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 		wxExecute(open_command , wxEXEC_ASYNC, NULL);
@@ -246,8 +244,8 @@ void cMain::OnLaunchVanillaClick(wxCommandEvent& event) // TODO Steam Launcher o
 	else 
 	{
 		wxString temp = wxGetCwd();
-		wxSetWorkingDirectory(m_panel_notebook_tab3->game_directory().string());
-		string test_str = ((m_panel_notebook_tab3->game_directory().string() + "\\Stardew Valley"));
+		wxSetWorkingDirectory(m_settings_panel->game_directory().string());
+		string test_str = ((m_settings_panel->game_directory().string() + "\\Stardew Valley"));
 		const char* open_command = (test_str.c_str());
 		wxExecute(open_command, wxEXEC_ASYNC, NULL);
 		wxSetWorkingDirectory(temp);
@@ -296,8 +294,8 @@ void cMain::OnToggleClick(wxDataViewEvent& event)
 	fs::path mod_path = string(temp_path);
 	fs::path parent_path = mod_path.parent_path();
 	fs::path folder_name = mod_path.filename();
-	while (parent_path != ((m_panel_notebook_tab3->game_directory()) += "\\Mods")
-		and parent_path != ((m_panel_notebook_tab3->game_directory()) += "\\Mods_disabled"))
+	while (parent_path != ((m_settings_panel->game_directory()) += "\\Mods")
+		and parent_path != ((m_settings_panel->game_directory()) += "\\Mods_disabled"))
 	{
 
 		folder_name = (parent_path.filename() += ("\\" + folder_name.string()));
@@ -313,31 +311,31 @@ void cMain::OnToggleClick(wxDataViewEvent& event)
 		OutputDebugString(_T("\n"));
 	);
 
-	if (parent_path == ((m_panel_notebook_tab3->game_directory()) += "\\Mods"))
+	if (parent_path == ((m_settings_panel->game_directory()) += "\\Mods"))
 	{
 		D(
 			OutputDebugStringA(mod_path.string().c_str());
 		OutputDebugString(_T("\n"));
-		OutputDebugStringA((string(m_panel_notebook_tab3->game_directory().string() += "\\Mods_disabled\\") += folder_name.string()).c_str());
+		OutputDebugStringA((string(m_settings_panel->game_directory().string() += "\\Mods_disabled\\") += folder_name.string()).c_str());
 		OutputDebugString(_T("\n"));
 		);
 
 		// Build required parent folders for move
-		while (!fs::is_directory(((m_panel_notebook_tab3->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path()))
+		while (!fs::is_directory(((m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path()))
 		{
-			fs::path rrename_path = ((m_panel_notebook_tab3->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path();
+			fs::path rrename_path = ((m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name).parent_path();
 			while (!fs::is_directory(rrename_path.parent_path()))
 			{
 				rrename_path = rrename_path.parent_path();
 			}
 			fs::create_directory(rrename_path);
 		}
-		fs::rename(mod_path, (fs::path(m_panel_notebook_tab3->game_directory() += "\\Mods_disabled\\") += folder_name));
+		fs::rename(mod_path, (fs::path(m_settings_panel->game_directory() += "\\Mods_disabled\\") += folder_name));
 
 		// Delete empty nested folders
 		fs::path clean_path = mod_path.parent_path();
 		std::error_code ec;
-		while (fs::is_empty(clean_path) and (clean_path != ((m_panel_notebook_tab3->game_directory()) += "\\Mods")))
+		while (fs::is_empty(clean_path) and (clean_path != ((m_settings_panel->game_directory()) += "\\Mods")))
 		{
 			fs::remove(clean_path, ec);
 			D(
@@ -348,19 +346,19 @@ void cMain::OnToggleClick(wxDataViewEvent& event)
 			clean_path = clean_path.parent_path();
 		}
 	}
-	else if (parent_path == ((m_panel_notebook_tab3->game_directory()) += "\\Mods_disabled"))
+	else if (parent_path == ((m_settings_panel->game_directory()) += "\\Mods_disabled"))
 	{
 		D(
 			OutputDebugStringA(mod_path.string().c_str());
 			OutputDebugString(_T("\n"));
-			OutputDebugStringA((string(m_panel_notebook_tab3->game_directory().string() += "\\Mods\\") += folder_name.string()).c_str());
+			OutputDebugStringA((string(m_settings_panel->game_directory().string() += "\\Mods\\") += folder_name.string()).c_str());
 			OutputDebugString(_T("\n"));
 		);
 
 		// Build required parent folders for move
-		while (!fs::is_directory(((m_panel_notebook_tab3->game_directory() += "\\Mods\\") += folder_name).parent_path()))
+		while (!fs::is_directory(((m_settings_panel->game_directory() += "\\Mods\\") += folder_name).parent_path()))
 		{
-			fs::path rrename_path = ((m_panel_notebook_tab3->game_directory() += "\\Mods\\") += folder_name).parent_path();
+			fs::path rrename_path = ((m_settings_panel->game_directory() += "\\Mods\\") += folder_name).parent_path();
 			while (!fs::is_directory(rrename_path.parent_path()))
 			{
 				rrename_path = rrename_path.parent_path();
@@ -368,12 +366,12 @@ void cMain::OnToggleClick(wxDataViewEvent& event)
 			fs::create_directory(rrename_path);
 		}
 
-		fs::rename(mod_path, (fs::path(m_panel_notebook_tab3->game_directory() += "\\Mods\\") += folder_name));
+		fs::rename(mod_path, (fs::path(m_settings_panel->game_directory() += "\\Mods\\") += folder_name));
 
 		// Delete empty nested folders
 		fs::path clean_path = mod_path.parent_path();
 		std::error_code ec;
-		while (fs::is_empty(clean_path) and (clean_path != ((m_panel_notebook_tab3->game_directory()) += "\\Mods_disabled")))
+		while (fs::is_empty(clean_path) and (clean_path != ((m_settings_panel->game_directory()) += "\\Mods_disabled")))
 		{
 			fs::remove(clean_path, ec);
 			D(
@@ -476,7 +474,7 @@ void cMain::OnMenuClick(wxCommandEvent& event) // TODO complete
 void cMain::OnMenuModsClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ("explorer " + (m_panel_notebook_tab3->game_directory().string() + "\\Mods\\"));
+	string test_str = ("explorer " + (m_settings_panel->game_directory().string() + "\\Mods\\"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 
@@ -491,7 +489,7 @@ void cMain::OnMenuModsClick(wxCommandEvent& event)
 void cMain::OnMenuModsDisabledClick(wxCommandEvent& event)
 {
 	event.Skip();
-	string test_str = ("explorer " + (m_panel_notebook_tab3->game_directory().string() + "\\Mods_disabled"));
+	string test_str = ("explorer " + (m_settings_panel->game_directory().string() + "\\Mods_disabled"));
 	const char* open_command = (test_str.c_str());
 	wxExecute(open_command, wxEXEC_ASYNC, NULL);
 }
@@ -509,9 +507,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 {
 	if (!manifest.contains("Name"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[mod_errors::format] = true;
+		error_check_[mod_errors::format_local] = true;
+		error_count_[mod_errors::format]++;
 		string temp = "";
 		if (manifest.contains("name"))
 		{
@@ -529,9 +527,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("Author"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[mod_errors::format] = true;
+		error_check_[mod_errors::format_local] = true;
+		error_count_[mod_errors::format]++;
 		string temp = "";
 		if (manifest.contains("author"))
 		{
@@ -549,9 +547,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("Version"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[mod_errors::format] = true;
+		error_check_[mod_errors::format_local] = true;
+		error_count_[mod_errors::format]++;
 		string temp = "";
 		if (manifest.contains("version"))
 		{
@@ -570,8 +568,8 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	else if (manifest["Version"].is_object())
 	{
 		// flag outdated version object and make readable
-		error_check_["semvar"] = true;
-		error_count_["semvar"]++;
+		error_check_[mod_errors::semvar] = true;
+		error_count_[mod_errors::semvar]++;
 		error_locations_ += "\n" + error_path.string() + " - Depreciated Versioning";
 		string temp = "";
 		int temp_v1 = NULL;
@@ -588,9 +586,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("Description"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[mod_errors::format] = true;
+		error_check_[mod_errors::format_local] = true;
+		error_count_[mod_errors::format]++;
 		string temp = "";
 		if (manifest.contains("description"))
 		{
@@ -608,9 +606,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 	}
 	if (!manifest.contains("UniqueID"))
 	{
-		error_check_["format"] = true;
-		error_check_["format_local"] = true;
-		error_count_["format"]++;
+		error_check_[mod_errors::format] = true;
+		error_check_[mod_errors::format_local] = true;
+		error_count_[mod_errors::format]++;
 		string temp = "";
 		if (manifest.contains("uniqueID"))
 		{
@@ -624,9 +622,9 @@ void cMain::CleanManifest(json& manifest, fs::path error_path) // TODO move chec
 			OutputDebugStringA((error_path.string() + " Manifest Error - UniqueID\n").c_str());
 		)
 	}
-	if (error_check_["format_local"] == true)
+	if (error_check_[mod_errors::format_local] == true)
 	{
-		mod_count_["errored"]++;
+		mod_count_[mod_status::errored]++;
 		error_locations_ += "\n" + error_path.string() + " - Manifest Formatting";
 	}
 }
@@ -654,8 +652,8 @@ void cMain::RefreshModLists()
 	}
 	m_dataviewlistctrl_mods->GetModel()->Resort();
 	// Pull out this from the main contructor
-	string temp_mod = std::to_string(mod_count_["loaded"]) + "/" +
-		std::to_string(mod_count_["total"]) + " Mods Successfully Loaded";
+	string temp_mod = std::to_string(mod_count_[mod_status::loaded]) + "/" +
+		std::to_string(mod_count_[mod_status::total]) + " Mods Successfully Loaded";
 	m_stext_mod_count->SetLabel(temp_mod);
 	ShowRefreshErrors();
 }
@@ -664,7 +662,7 @@ void cMain::LoadModsFromDir(string folder_name)
 {
 	// TODO group and report errors in scrollable dialogue (bad jsons, incompatible mods, etc.)
 	// TODO replace custom ioFunctions with filesystem?
-	fs::path temp_dir = (m_panel_notebook_tab3->game_directory());
+	fs::path temp_dir = (m_settings_panel->game_directory());
 	temp_dir += folder_name;
 	fs::path temp_path;
 	fs::path error_path;
@@ -673,13 +671,13 @@ void cMain::LoadModsFromDir(string folder_name)
 
 	D(
 		OutputDebugString(_T("LoadModsFromDir - Begin Iterator at:\n"));
-		OutputDebugStringA(m_panel_notebook_tab3->game_directory().string().c_str());
+		OutputDebugStringA(m_settings_panel->game_directory().string().c_str());
 		OutputDebugString(_T("\n"));
 	)
 	for (auto& dir_iter : fs::recursive_directory_iterator(temp_dir))
 	{
-		error_check_["json"] = false;
-		error_check_["format_local"] = false;
+		error_check_[mod_errors::json] = false;
+		error_check_[mod_errors::format_local] = false;
 		error_path = dir_iter.path().filename();
 		temp_path = dir_iter.path();
 		D(
@@ -690,7 +688,7 @@ void cMain::LoadModsFromDir(string folder_name)
 			D(
 				OutputDebugString(_T(" - Is Directory\n"));
 			)
-			mod_count_["total"]++;
+			mod_count_[mod_status::total]++;
 			temp_path += "\\manifest.json";
 			if (fs::exists(temp_path))
 			{
@@ -706,9 +704,9 @@ void cMain::LoadModsFromDir(string folder_name)
 					}
 					catch (json::parse_error & e)
 					{ // On fail, output error and skip to next mod
-						error_check_["json"] = true;
-						error_count_["json"]++;
-						mod_count_["errored"]++;
+						error_check_[mod_errors::json] = true;
+						error_count_[mod_errors::json]++;
+						mod_count_[mod_status::errored]++;
 						string temp_exc = e.what();
 						if (e.id == 101) {
 							error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
@@ -777,7 +775,7 @@ void cMain::LoadModsFromDir(string folder_name)
 								json_manifest = json::parse(json_string); // TODO handle trailing commas
 								// Handle some minor typos and missing fields in manifest
 								CleanManifest(json_manifest, error_path);
-								error_check_["json"] = false;
+								error_check_[mod_errors::json] = false;
 								D(
 									OutputDebugString(_T("Json Fix Reparse Success\n"));
 								)
@@ -797,7 +795,7 @@ void cMain::LoadModsFromDir(string folder_name)
 						}
 					}
 
-					if (fs::exists(temp_path) and (error_check_["json"] == false)) // TODO Review
+					if (fs::exists(temp_path) and (error_check_[mod_errors::json] == false)) // TODO Review
 					{
 						D(
 							if (report_parsed_mod_data) {
@@ -818,7 +816,7 @@ void cMain::LoadModsFromDir(string folder_name)
 						thisMod.push_back(wxVariant(aMod.mod_version()));
 						thisMod.push_back(wxVariant((dir_iter.path()).string()));
 						this->m_dataviewlistctrl_mods->AppendItem(thisMod);
-						mod_count_["loaded"]++;
+						mod_count_[mod_status::loaded]++;
 						thisMod.clear();
 
 						/*
@@ -855,9 +853,9 @@ void cMain::LoadModsFromDir(string folder_name)
 
 bool cMain::ExistsModFolders()
 {
-	fs::path mod_path = m_panel_notebook_tab3->game_directory();
-	fs::path mod_d_path = m_panel_notebook_tab3->game_directory();
-	fs::path game_file_path = m_panel_notebook_tab3->game_directory();
+	fs::path mod_path = m_settings_panel->game_directory();
+	fs::path mod_d_path = m_settings_panel->game_directory();
+	fs::path game_file_path = m_settings_panel->game_directory();
 	mod_path += "\\Mods";
 	mod_d_path += "\\Mods_disabled";
 	game_file_path += "\\Stardew Valley.exe"; // TODO Make crossplatform?
@@ -957,36 +955,36 @@ void cMain::CheckSmapiVersion()
 void cMain::ResetRefreshErrors() 
 {
 	error_locations_ = "Errors at: ";
-	error_check_["json"] = false;
-	error_check_["semvar"] = false;
-	error_check_["format"] = false;
-	error_check_["format_local"] = false;
-	error_count_["json"] = 0;
-	error_count_["semvar"] = 0;
-	error_count_["format"] = 0;
-	mod_count_["total"] = 0;
-	mod_count_["errored"] = 0;
-	mod_count_["loaded"] = 0;
+	error_check_[mod_errors::json] = false;
+	error_check_[mod_errors::semvar] = false;
+	error_check_[mod_errors::format] = false;
+	error_check_[mod_errors::format_local] = false;
+	error_count_[mod_errors::json] = 0;
+	error_count_[mod_errors::semvar] = 0;
+	error_count_[mod_errors::format] = 0;
+	mod_count_[mod_status::total] = 0;
+	mod_count_[mod_status::errored] = 0;
+	mod_count_[mod_status::loaded] = 0;
 }
 
 void cMain::ShowRefreshErrors()
 {
-	if ((error_mute_["on_refresh"] == false) and 
-		((error_count_["json"] != 0) or (error_count_["semvar"] != 0) or (error_count_["format"] != 0)))
+	if ((m_settings_panel->error_mute_["on_refresh"] == false) and
+		((error_count_[mod_errors::json] != 0) or (error_count_[mod_errors::semvar] != 0) or (error_count_[mod_errors::format] != 0)))
 	{
 		// Error counter dialogue prep
 		string error_mod_loop_title = "Errors in Mods";
 		string error_mod_loop_message =
-			("Manifests with incorrect .json format: " + std::to_string(error_count_["json"]) +
-				"\nManifests with depreciated versioning: " + std::to_string(error_count_["semvar"]) +
-				"\nManifests with other formatting errors: " + std::to_string(error_count_["format"]));
+			("Manifests with incorrect .json format: " + std::to_string(error_count_[mod_errors::json]) +
+				"\nManifests with depreciated versioning: " + std::to_string(error_count_[mod_errors::semvar]) +
+				"\nManifests with other formatting errors: " + std::to_string(error_count_[mod_errors::format]));
 		// if (!is_active) { final_error_title += "_disabled"; };
 		// Error counter dialogue
 		wxMessageDialog* error_mod_loop = new wxMessageDialog(NULL,
 			error_mod_loop_message, error_mod_loop_title, wxOK, wxDefaultPosition);
 		error_mod_loop->ShowModal();
 		delete error_mod_loop;
-		if (error_check_["semvar"]) 
+		if (error_check_[mod_errors::semvar]) 
 		{
 			error_locations_ += "\n[SMAPI does not load mods with depreciated versioning.]";
 		}

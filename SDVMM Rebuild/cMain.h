@@ -25,36 +25,46 @@ namespace fs = std::filesystem;
 using std::istream;
 using std::ifstream;
 
+enum class mod_errors {
+	json,
+	semvar,
+	format,
+	format_local,
+	smapi
+};
+
+enum class mod_status {
+	total,
+	errored,
+	loaded
+};
 
 class cMain : public wxFrame // TODO Organize privacy
 {
 private:
-	bool ini_exists_ = false;
-	bool launch_with_steam_ = false;
-	fs::path game_directory_ = "";
-	fs::path steam_directory_ = "";
-	string version_smapi_ = "not found";
-	string version_this_mm_ = "0.6";
-	string error_locations_ = "Errors at: ";
-	std::map<string, bool> error_mute_{
-		{"on_refresh", true}
+	std::string error_locations_ = "Errors at: ";
+
+	std::unordered_map<mod_errors, bool> error_check_
+	{
+		{mod_errors::json, false},
+		{mod_errors::semvar, false},
+		{mod_errors::format, false},
+		{mod_errors::format_local, false},
+		{mod_errors::smapi, false}
 	};
-	std::map<string, bool> error_check_{
-		{"json", false},
-		{"semvar", false},
-		{"format", false},
-		{"format_local", false},
-		{"smapi", false}
+
+	std::unordered_map<mod_errors, int> error_count_
+	{
+		{mod_errors::json, 0},
+		{mod_errors::semvar, 0},
+		{mod_errors::format, 0}
 	};
-	std::map<string, int> error_count_{
-		{"json", 0},
-		{"semvar", 0},
-		{"format", 0}
-	};
-	std::map<string, int> mod_count_{
-		{"total", 0},
-		{"errored", 0},
-		{"loaded", 0}
+
+	std::unordered_map<mod_status, int> mod_count_
+	{
+		{mod_status::total, 0},
+		{mod_status::errored, 0},
+		{mod_status::loaded, 0}
 	};
 
 	// TODO Rename?
@@ -70,7 +80,6 @@ public:
 	void SelfInitialize();
 
 public:
-	wxFileConfig* config_ini = nullptr;
 	// Notebook
 	wxNotebook* m_notebook = nullptr;
 	// Tab 1
@@ -86,7 +95,7 @@ public:
 	wxBoxSizer* m_sizer_notebook_tab2a = nullptr;
 	wxBoxSizer* m_sizer_notebook_tab2 = nullptr;
 	// Tab 3
-	SettingsPanel* m_panel_notebook_tab3 = nullptr;
+	SettingsPanel* m_settings_panel = nullptr;
 
 	// m_menubar
 	wxMenuBar* m_menubar = nullptr;

@@ -33,6 +33,13 @@ public:
 	void OnSteamDirectoryBrowseClick(wxCommandEvent& event);
 	void OnMuteModToggleClick(wxCommandEvent& event);
 
+	wxFileConfig* config_ini = nullptr;
+
+	std::unordered_map<std::string, bool> error_mute_
+	{
+		{"on_refresh", true}
+	};
+
 private:
 	bool ini_exists_ = false;
 	bool launch_with_steam_ = false;
@@ -40,37 +47,7 @@ private:
 	fs::path steam_directory_ = "";
 	std::string version_smapi_ = "not found";
 	std::string version_this_mm_ = "0.6";
-	std::string error_locations_ = "Errors at: ";
 
-	std::unordered_map<std::string, bool> error_mute_
-	{
-		{"on_refresh", true}
-	};
-
-	std::unordered_map<std::string, bool> error_check_
-	{
-		{"json", false},
-		{"semvar", false},
-		{"format", false},
-		{"format_local", false},
-		{"smapi", false}
-	};
-
-	std::unordered_map<std::string, int> error_count_
-	{
-		{"json", 0},
-		{"semvar", 0},
-		{"format", 0}
-	};
-
-	std::unordered_map<std::string, int> mod_count_
-	{
-		{"total", 0},
-		{"errored", 0},
-		{"loaded", 0}
-	};
-
-	wxFileConfig* config_ini = nullptr;
 	cMain* mainWindow = nullptr;
 
 	// Tab 3 - Launcher Option
