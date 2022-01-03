@@ -4,15 +4,15 @@
 #include "SettingsPanel.h"
 
 MenuBar::MenuBar(MainFrame* parentWindow)
-	: mainWindow(parentWindow) {
+	: _mMainWindow(parentWindow) {
 	// Menubar - File, Help, etc
-	m_menubar_file = new wxMenu;
-	//m_menubar_help = new wxMenu; // REMOVED FOR 0.5.0-ALPHA RELEASE
-	this->Append(m_menubar_file, wxT("&File"));
-	m_menubar_file->Append(ID_MENU_MODS, wxT("&Open Mods Folder"), wxEmptyString, wxITEM_NORMAL);
-	m_menubar_file->Append(ID_MENU_DMODS, wxT("&Open Disabled Mods Folder"), wxEmptyString, wxITEM_NORMAL);
-	m_menubar_file->Append(ID_MENU_QUIT, wxT("&Quit"), wxEmptyString, wxITEM_NORMAL);
-	//this->Append(m_menubar_help, wxT("&Help")); // REMOVED FOR 0.5.0-ALPHA RELEASE
+	mMenubar_file = new wxMenu;
+	//mMenubar_help = new wxMenu; // REMOVED FOR 0.5.0-ALPHA RELEASE
+	this->Append(mMenubar_file, wxT("&File"));
+	mMenubar_file->Append(ID_MENU_MODS, wxT("&Open Mods Folder"), wxEmptyString, wxITEM_NORMAL);
+	mMenubar_file->Append(ID_MENU_DMODS, wxT("&Open Disabled Mods Folder"), wxEmptyString, wxITEM_NORMAL);
+	mMenubar_file->Append(ID_MENU_QUIT, wxT("&Quit"), wxEmptyString, wxITEM_NORMAL);
+	//this->Append(mMenubar_help, wxT("&Help")); // REMOVED FOR 0.5.0-ALPHA RELEASE
 	this->Bind(wxEVT_MENU, &MenuBar::OnMenuClick, this, ID_MENU_MODS, ID_MENU_QUIT);
 }
 
@@ -31,9 +31,9 @@ void MenuBar::OnMenuClick(wxCommandEvent& event){ // TODO complete
 
 void MenuBar::OnMenuModsClick(wxCommandEvent& event) {
 	event.Skip();
-	std::string test_str = ("explorer " + (mainWindow->m_settings_panel->game_directory().string() + "\\Mods\\"));
-	const char* open_command = (test_str.c_str());
-	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+	std::string testString = ("explorer " + (_mMainWindow->mSettingsPanel->gameDirectory().string() + "\\Mods\\"));
+	const char* openCommand = (testString.c_str());
+	wxExecute(openCommand, wxEXEC_ASYNC, NULL);
 
 
 	/*
@@ -45,9 +45,9 @@ void MenuBar::OnMenuModsClick(wxCommandEvent& event) {
 
 void MenuBar::OnMenuModsDisabledClick(wxCommandEvent& event) {
 	event.Skip();
-	std::string test_str = ("explorer " + (mainWindow->m_settings_panel->game_directory().string() + "\\Mods_disabled"));
-	const char* open_command = (test_str.c_str());
-	wxExecute(open_command, wxEXEC_ASYNC, NULL);
+	std::string testString = ("explorer " + (_mMainWindow->mSettingsPanel->gameDirectory().string() + "\\Mods_disabled"));
+	const char* openCommand = (testString.c_str());
+	wxExecute(openCommand, wxEXEC_ASYNC, NULL);
 }
 
 void MenuBar::OnMenuQuitClick(wxCommandEvent& event) {

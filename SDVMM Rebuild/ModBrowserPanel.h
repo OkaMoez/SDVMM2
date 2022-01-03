@@ -9,16 +9,15 @@ class ModBrowserPanel : public wxPanel
 public:
 	ModBrowserPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
 
-	wxDataViewListCtrl* m_dataviewlistctrl_mods = nullptr;
+	wxDataViewListCtrl* mModBrowserDataviewlistctrl = nullptr;
 
 private:
-	MainFrame* mainWindow = nullptr;
+	MainFrame* _mMainWindow = nullptr;
 
 	// Mod List Buttons
 	void OnToggleClick(wxDataViewEvent& event);
 	void OnSortClick(wxDataViewEvent& event);
-	wxBoxSizer* m_sizer_notebook_tab1a_mods = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab1 = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab1a = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab1b = nullptr;
+	wxBoxSizer* _mModBrowserSizer = nullptr;
+	wxBoxSizer* _mModBrowserHorizontalSizer = nullptr;
+	wxBoxSizer* _mModBrowserVerticalSizer = nullptr;
 };

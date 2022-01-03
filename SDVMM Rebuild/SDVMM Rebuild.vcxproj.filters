@@ -24,10 +24,10 @@
     <ClCompile Include="ModManagerApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ioFunctions.cpp">
+    <ClCompile Include="IoFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cMod.cpp">
+    <ClCompile Include="SmapiMod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainFrame.cpp">
@@ -50,19 +50,19 @@
     <ClInclude Include="ModManagerApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cMod.h">
+    <ClInclude Include="SmapiMod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ioFunctions.h">
+    <ClInclude Include="IoFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="debugConstants.h">
+    <ClInclude Include="DebugTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="strip.h">
+    <ClInclude Include="JsonCleaner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ModBrowserPanel.h">

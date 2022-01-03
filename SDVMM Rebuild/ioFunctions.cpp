@@ -1,19 +1,17 @@
-#include "ioFunctions.h"
+#include "IoFunctions.h"
 
-string GetIniDirectory(FILE* ini)
-{
+std::string IoFunctions::getIniDirectory(FILE* ini) {
 	char iniBuffer[100];
 	fgets(iniBuffer, 100, ini);
-	string temp_string = string(iniBuffer);
-	size_t temp_pos = temp_string.find('=');
-	temp_string = temp_string.substr(temp_pos + 1, temp_string.size());
-	temp_string.erase(std::remove(temp_string.begin(), temp_string.end(), '"'), temp_string.end());
-	return temp_string;
+	std::string tempString = std::string(iniBuffer);
+	size_t tempPos = tempString.find('=');
+	tempString = tempString.substr(tempPos + 1, tempString.size());
+	tempString.erase(std::remove(tempString.begin(), tempString.end(), '"'), tempString.end());
+	return tempString;
 }
 
-bool existsFile(string file_path)
-{
-	if (FILE * iniFile = fopen(file_path.c_str(), "r")) {
+bool IoFunctions::existsFile(std::string filePath) {
+	if (FILE * iniFile = fopen(filePath.c_str(), "r")) {
 		fclose(iniFile);
 		return true;
 	}

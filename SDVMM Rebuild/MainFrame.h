@@ -17,7 +17,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream> 
-#include "cMod.h"
+#include "SmapiMod.h"
 
 // TODO? migrate this to wxFileSystem
 #include <filesystem>
@@ -30,15 +30,15 @@ class MenuBar;
 class ModBrowserPanel;
 class SettingsPanel;
 
-enum class mod_errors {
+enum class ModErrors {
 	json,
 	semvar,
 	format,
-	format_local,
+	formatLocal,
 	smapi
 };
 
-enum class mod_status {
+enum class ModStatus {
 	total,
 	errored,
 	loaded
@@ -47,76 +47,71 @@ enum class mod_status {
 class MainFrame : public wxFrame // TODO Organize privacy
 {
 public:
-	std::string error_locations_ = "Errors at: ";
+	std::string mErrorLocations = "Errors at: ";
 
-	std::unordered_map<mod_errors, bool> error_check_
+	std::unordered_map<ModErrors, bool> mErrorChecks
 	{
-		{mod_errors::json, false},
-		{mod_errors::semvar, false},
-		{mod_errors::format, false},
-		{mod_errors::format_local, false},
-		{mod_errors::smapi, false}
+		{ModErrors::json, false},
+		{ModErrors::semvar, false},
+		{ModErrors::format, false},
+		{ModErrors::formatLocal, false},
+		{ModErrors::smapi, false}
 	};
 
-	std::unordered_map<mod_errors, int> error_count_
+	std::unordered_map<ModErrors, int> mErrorCount
 	{
-		{mod_errors::json, 0},
-		{mod_errors::semvar, 0},
-		{mod_errors::format, 0}
+		{ModErrors::json, 0},
+		{ModErrors::semvar, 0},
+		{ModErrors::format, 0}
 	};
 
-	std::unordered_map<mod_status, int> mod_count_
+	std::unordered_map<ModStatus, int> mModCount
 	{
-		{mod_status::total, 0},
-		{mod_status::errored, 0},
-		{mod_status::loaded, 0}
+		{ModStatus::total, 0},
+		{ModStatus::errored, 0},
+		{ModStatus::loaded, 0}
 	};
 
 public:
 	MainFrame();
 	~MainFrame();
-	void SelfInitialize();
+	void tryLoadSettings();
 
 public:
 	// Notebook
-	wxNotebook* m_notebook = nullptr;
+	wxNotebook* mTabbedNotebook = nullptr;
 	// Tab 1
-	ModBrowserPanel* m_mod_browser_panel = nullptr;
-	// Tab 2
-	wxPanel* m_panel_notebook_tab2 = nullptr;
-	wxListBox* m_list_xnb_mods = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab2a = nullptr;
-	wxBoxSizer* m_sizer_notebook_tab2 = nullptr;
+	ModBrowserPanel* mModBrowserPanel = nullptr;
 	// Tab 3
-	SettingsPanel* m_settings_panel = nullptr;
+	SettingsPanel* mSettingsPanel = nullptr;
 
-	// m_menubar
-	MenuBar* m_menubar = nullptr;
+	// mMenubar
+	MenuBar* mMenubar = nullptr;
 
 	// Right side buttons
-	LauncherButtonPanel* m_launcher_panel = nullptr;
+	LauncherButtonPanel* mLauncherPanel = nullptr;
 
 	// Other Layout
-	wxStaticBitmap* m_bitmap_banner = nullptr;
-	wxBoxSizer* m_sizer_banner_horizontal = nullptr;
-	wxStaticText* m_stext_smapi_version = nullptr;
-	wxStaticText* m_stext_this_version = nullptr;
-	wxStaticText* m_stext_mod_count = nullptr;
-	wxBoxSizer* m_sizer_mod_count = nullptr;
-	wxBoxSizer* m_sizer_version_info = nullptr;
+	wxStaticBitmap* mBitmapBanner = nullptr;
+	wxBoxSizer* mHorizontalBannerSizer = nullptr;
+	wxStaticText* mVersionSmapiStext = nullptr;
+	wxStaticText* mModManagerStext = nullptr;
+	wxStaticText* mModCountStext = nullptr;
+	wxBoxSizer* mModCountSizer = nullptr;
+	wxBoxSizer* mVersionSizer = nullptr;
 
 	// Main Layout Sizers
-	wxBoxSizer* m_sizer_main_horizontal = nullptr;
-	wxBoxSizer* m_sizer_main_vertical = nullptr;
+	wxBoxSizer* mMainFrameHorizontalSizer = nullptr;
+	wxBoxSizer* mMainFrameVerticalSizer = nullptr;
 	
 public:
-	void CleanManifest(json& manifest, fs::path error_path);
-	void CleanJson(); // TODO tranfer code to function
-	void RefreshModLists(); // TODO give some indication of the refresh
-	void LoadModsFromDir(string folder_name);
-	bool ExistsModFolders();
-	void CheckSmapiVersion();
-	void ResetRefreshErrors(); // TODO format and move to getters/setters?
-	void ShowRefreshErrors();
+	void mCleanManifest(json& manifest, fs::path error_path);
+	void mCleanJson(); // TODO tranfer code to function
+	void mRefreshModLists(); // TODO give some indication of the refresh
+	void mLoadModsFromDir(std::string folderName);
+	bool mExistsModFolders();
+	void mCheckSmapiVersion();
+	void mResetRefreshErrors(); // TODO format and move to getters/setters?
+	void mShowRefreshErrors();
 };
 

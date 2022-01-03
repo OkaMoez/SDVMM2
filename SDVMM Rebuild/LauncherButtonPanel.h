@@ -9,7 +9,7 @@ public:
 	LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
 
 private:
-	MainFrame* mainWindow = nullptr;
+	MainFrame* _mMainWindow = nullptr;
 
 	// Top Level Buttons
 	void OnLaunchSMAPIClick(wxCommandEvent& event);
@@ -22,13 +22,13 @@ private:
 	int ID_BUTTON_FORUMS = wxNewId();
 
 	// Right side buttons
-	wxButton* m_button_launch_smapi = nullptr;
-	wxButton* m_button_launch_vanilla = nullptr;
-	wxButton* m_button_add_mod = nullptr;
-	wxButton* m_button_nexus_download = nullptr;
-	wxButton* m_button_forums_download = nullptr;
-	wxButton* m_button_refresh_mods = nullptr;
-	wxBoxSizer* m_sizer_buttons_right = nullptr;
+	wxButton* _mLaunchSmapiButton = nullptr;
+	wxButton* _mLaunchVanillaButton = nullptr;
+	wxButton* _mAddModButton = nullptr;
+	wxButton* _mVisitNexusButton = nullptr;
+	wxButton* _mVisitForumsButton = nullptr;
+	wxButton* _mRefreshModListButton = nullptr;
+	wxBoxSizer* _mLauncherButtonsSizer = nullptr;
 
 
 };

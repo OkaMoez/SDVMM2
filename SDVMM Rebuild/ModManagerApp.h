@@ -9,7 +9,7 @@ public:
 	ModManagerApp();
 
 private:
-	MainFrame* m_frame1 = nullptr;
+	MainFrame* _mMainFrame = nullptr;
 public:
 	virtual bool OnInit(); 
 };
