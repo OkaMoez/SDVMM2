@@ -19,13 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cApp.cpp" />
+    <ClCompile Include="ModManagerApp.cpp" />
     <ClCompile Include="cMain.cpp" />
     <ClCompile Include="cMod.cpp" />
     <ClCompile Include="ioFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cApp.h" />
+    <ClInclude Include="ModManagerApp.h" />
     <ClInclude Include="cMain.h" />
     <ClInclude Include="cMod.h" />
     <ClInclude Include="debugConstants.h" />

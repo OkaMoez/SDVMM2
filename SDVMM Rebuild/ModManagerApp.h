@@ -1,14 +1,12 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <algorithm>
 #include "cMain.h"
 
-class cApp : public wxApp
+class ModManagerApp : public wxApp
 {
 public:
-	cApp();
-	~cApp();
+	ModManagerApp();
 
 private:
 	cMain* m_frame1 = nullptr;

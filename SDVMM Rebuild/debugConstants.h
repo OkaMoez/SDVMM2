@@ -11,7 +11,7 @@
 
 
 // Individual Debug Toggles
-// cApp
+// ModManagerApp
 const bool report_mode = true;
 
 myREPORT(

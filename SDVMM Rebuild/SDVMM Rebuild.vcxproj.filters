@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cApp.cpp">
+    <ClCompile Include="ModManagerApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cMain.cpp">
@@ -29,7 +29,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cApp.h">
+    <ClInclude Include="ModManagerApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cMain.h">
