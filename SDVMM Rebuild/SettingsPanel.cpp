@@ -100,16 +100,19 @@ void SettingsPanel::SelfInitialize()
 	)
 
 	game_directory_ = std::string(config_ini->Read("GamePath", "directory not found"));
+	m_textctrl_game_directory->ChangeValue(game_directory_.string());
 	D(
 		OutputDebugString(_T("SelfInit - .ini Game Path Read\n"));
 	)
 
 	launch_with_steam_ = config_ini->ReadBool("SteamLauncher", true);
+	m_checkbox_launcher->SetValue(launch_with_steam_["on_refresh"]);
 	D(
 		OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
 	)
 
 	steam_directory_ = std::string(config_ini->Read("SteamPath", "directory not found"));
+	m_textctrl_steam_directory->ChangeValue(steam_directory_.string());
 	D(
 		OutputDebugString(_T("SelfInit - .ini Steam Path Read\n"));
 	)
