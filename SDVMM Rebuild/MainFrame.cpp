@@ -83,17 +83,11 @@ MainFrame::~MainFrame()
 
 void MainFrame::SelfInitialize()
 {
-	D(
-		OutputDebugString(_T("SelfInit - Begin\n"));
-	)
+	DPRINT("SelfInit - Begin\n");
 	wxFileName f(wxStandardPaths::Get().GetExecutablePath());
 	fs::path appPath = string(wxString(f.GetPath() + wxT("\\SDVMM2.ini")));
 
-	D(
-		OutputDebugString(_T("SelfInit - Checking for .ini at:\n"));
-		OutputDebugStringA(appPath.string().c_str());
-		OutputDebugString(_T("\n"));
-	)
+	DPRINT("SelfInit - Checking for .ini at:\n" + appPath.string() + "\n");
 	m_settings_panel->config_ini = new wxFileConfig(wxEmptyString, wxEmptyString, appPath.string());
 	m_settings_panel->config_ini->SetPath("/General");
 
@@ -103,9 +97,7 @@ void MainFrame::SelfInitialize()
 	}
 	else
 	{
-		D(
-			OutputDebugString(_T("SelfInit - No .ini Found\n"));
-		)
+		D("SelfInit - No .ini Found\n");
 	}
 }
 
@@ -130,9 +122,7 @@ void MainFrame::CleanManifest(json& manifest, fs::path error_path) // TODO move 
 		{
 			manifest["Name"] = temp;
 		}
-		D(
-			OutputDebugStringA((error_path.string() + " Manifest Error - Name\n").c_str());
-		)
+		DPRINT(error_path.string() + " Manifest Error - Name\n");
 	}
 	if (!manifest.contains("Author"))
 	{
@@ -150,9 +140,7 @@ void MainFrame::CleanManifest(json& manifest, fs::path error_path) // TODO move 
 		{
 			manifest["Author"] = temp;
 		}
-		D(
-			OutputDebugStringA((error_path.string() + " Manifest Error - Author\n").c_str());
-		)
+		DPRINT(error_path.string() + " Manifest Error - Author\n");
 	}
 	if (!manifest.contains("Version"))
 	{
@@ -170,9 +158,7 @@ void MainFrame::CleanManifest(json& manifest, fs::path error_path) // TODO move 
 		{
 			manifest["Version"] = temp;
 		}
-		D(
-			OutputDebugStringA((error_path.string() + " Manifest Error - Version\n").c_str());
-		)
+		DPRINT(error_path.string() + " Manifest Error - Version\n");
 	}
 	else if (manifest["Version"].is_object())
 	{
@@ -209,9 +195,7 @@ void MainFrame::CleanManifest(json& manifest, fs::path error_path) // TODO move 
 		{
 			manifest["Description"] = temp;
 		}
-		D(
-			OutputDebugStringA((error_path.string() + " Manifest Error - Description\n").c_str());
-		)
+		DPRINT(error_path.string() + " Manifest Error - Description\n");
 	}
 	if (!manifest.contains("UniqueID"))
 	{
@@ -227,9 +211,7 @@ void MainFrame::CleanManifest(json& manifest, fs::path error_path) // TODO move 
 		{
 			manifest["UniqueID"] = temp;
 		}
-		D(
-			OutputDebugStringA((error_path.string() + " Manifest Error - UniqueID\n").c_str());
-		)
+		DPRINT(error_path.string() + " Manifest Error - UniqueID\n");
 	}
 	if (error_check_[mod_errors::format_local] == true)
 	{
@@ -278,28 +260,17 @@ void MainFrame::LoadModsFromDir(string folder_name)
 	bool is_active = (folder_name == "\\Mods\\");
 	int error_json = 0; // 0 = no error, 1 = bad comma, 2 = other
 
-	D(
-		OutputDebugString(_T("LoadModsFromDir - Begin Iterator at:\n"));
-		OutputDebugStringA(m_settings_panel->game_directory().string().c_str());
-		OutputDebugString(_T("\n"));
-	)
+	DPRINT("LoadModsFromDir - Begin Iterator at:\n" + m_settings_panel->game_directory().string() + "\n");
 	for (auto& dir_iter : fs::recursive_directory_iterator(temp_dir))
 	{
 		error_check_[mod_errors::json] = false;
 		error_check_[mod_errors::format_local] = false;
 		error_path = dir_iter.path().filename();
 		temp_path = dir_iter.path();
-		D(
-			OutputDebugStringA(temp_path.string().c_str());
-		)
+		DPRINTIF(report_mod_directory, temp_path.string() + "\n");
 		if (fs::is_directory(temp_path))
 		{
-			D(
-				if (report_identify_directories)
-				{
-					OutputDebugString(_T(" - Is Directory\n"));
-				}
-			)
+			DPRINTIF(report_mod_directory & report_identify_directories, " - Is Directory\n");
 			temp_path += "\\manifest.json";
 			if (fs::exists(temp_path))
 			{
@@ -324,9 +295,7 @@ void MainFrame::LoadModsFromDir(string folder_name)
 							error_locations_ += "\n" + error_path.string() + " - JSON Unexpected Char";
 							// TODO clean commas and comments, then try again
 							///*
-							D(
-								OutputDebugString(_T("Json Fix Attempt\n"));
-							)
+							DPRINT("Json Fix Attempt\n");
 							//std::stringstream json_sstream;
 							//json_sstream << json_stream.rdbuf();
 							string json_string = "New\n";
@@ -338,11 +307,7 @@ void MainFrame::LoadModsFromDir(string folder_name)
 							json_stream2.read(&json_string[0], json_string.size());
 							json_stream2.close();
 
-							D(
-								OutputDebugString(_T("Json Fix RAW\n"));
-								OutputDebugStringA(json_string.c_str());
-								OutputDebugString(_T("\n"));
-							)
+							DPRINT("Json Fix RAW\n" + json_string + "\n");
 
 								try
 							{
@@ -350,16 +315,10 @@ void MainFrame::LoadModsFromDir(string folder_name)
 							}
 							catch (...)
 							{
-								D(
-									OutputDebugString(_T("Json Fix Comment Clean Failure\n"));
-								)
+								DPRINT("Json Fix Comment Clean Failure\n");
 							}
 
-							D(
-								OutputDebugString(_T("Json Fix Comment Cleaned\n"));
-								OutputDebugStringA(json_string.c_str());
-								OutputDebugString(_T("\n"));
-							)
+							DPRINT("Json Fix Comment Cleaned\n" + json_string + "\n");
 
 								try
 							{
@@ -368,19 +327,13 @@ void MainFrame::LoadModsFromDir(string folder_name)
 							catch (const std::regex_error & e)
 							{
 								string temp = e.what();
-								D(
-									OutputDebugString(_T("Json Fix Comma Clean Failure: " + temp + "\n"));
-								)
+								DPRINT("Json Fix Comma Clean Failure: " + temp + "\n");
 							}
 							//json_sstream.clear();
 							//json_sstream.str(string());
 							//json_sstream << json_string;
 
-							D(
-								OutputDebugString(_T("Json Fix Comma Cleaned\n"));
-								OutputDebugStringA(json_string.c_str());
-								OutputDebugString(_T("\n"));
-							)
+							DPRINT("Json Fix Comma Cleaned\n" + json_string + "\n");
 
 								try
 							{
@@ -388,16 +341,12 @@ void MainFrame::LoadModsFromDir(string folder_name)
 								// Handle some minor typos and missing fields in manifest
 								CleanManifest(json_manifest, error_path);
 								error_check_[mod_errors::json] = false;
-								D(
-									OutputDebugString(_T("Json Fix Reparse Success\n"));
-								)
+								DPRINT("Json Fix Reparse Success\n");
 							}
 							catch (...)
 							{
-								D(
-									OutputDebugString(_T("Json Fix Reparse Failure\n"));
-								)
-									continue;
+								DPRINT("Json Fix Reparse Failure\n");
+								continue;
 							}
 							//*/
 						}
@@ -409,15 +358,9 @@ void MainFrame::LoadModsFromDir(string folder_name)
 
 					if (fs::exists(temp_path) and (error_check_[mod_errors::json] == false)) // TODO Review
 					{
-						D(
-							if (report_parsed_mod_data) {
-								string temp_msg1 = "";
-								string temp_msg2 = "";
-								json_manifest["Name"].get_to(temp_msg1);
-								json_manifest["Version"].get_to(temp_msg2);
-								OutputDebugStringA((temp_msg1 + " exists, " + temp_msg2 + "\n").c_str());
-							}
-						)
+						DPRINTIF(report_on_mod_parsed, 
+							json_manifest["Name"].get<std::string>() + " exists, " 
+							+ json_manifest["Version"].get<std::string>() + "\n");
 
 						cMod aMod(json_manifest);
 						wxVector<wxVariant> thisMod;
@@ -439,12 +382,7 @@ void MainFrame::LoadModsFromDir(string folder_name)
 						wxString id = pStrData->GetData();
 						*/
 
-						D(
-							if (report_mod_object_data) {
-								OutputDebugStringA((aMod.infoString()).c_str());
-							}
-							else {}
-						)
+						DPRINTIF(report_verbose_mod_object_data, aMod.infoString());
 					}
 				}
 				catch (...)
@@ -455,12 +393,7 @@ void MainFrame::LoadModsFromDir(string folder_name)
 		}
 		else 
 		{
-		D(
-			if (report_identify_directories)
-			{
-				OutputDebugString(_T(" - Is NOT Directory\n"));
-			}
-		)
+			DPRINTIF(report_identify_directories, " - Is NOT Directory\n");
 		}
 	}
 }
@@ -474,61 +407,35 @@ bool MainFrame::ExistsModFolders()
 	mod_d_path += "\\Mods_disabled";
 	game_file_path += "\\Stardew Valley.exe"; // TODO Make crossplatform?
 
-	D(
-		OutputDebugString(_T("ExistsModFolders - Begin Checking Mod Folders\n"));
-	)
+	DPRINT("ExistsModFolders - Begin Checking Mod Folders\n");
 
 	if (!(fs::exists(game_file_path) and fs::is_regular_file(game_file_path)))
 	{
-		D(
-			OutputDebugString(_T("ExistsModFolders - Game Executable not Found on Path:\n"));
-			OutputDebugStringA(game_file_path.string().c_str());
-			OutputDebugString(_T("\n"));
-			OutputDebugString(_T("ExistsModFolders - Bad Game Directory\n"));
-		)
-			return false;
+		DPRINT("ExistsModFolders - Game Executable not Found on Path:\n"
+			+ game_file_path.string() + "\n" + "ExistsModFolders - Bad Game Directory\n");
+		return false;
 	}
 	else
 	{
 		if (!(fs::exists(mod_path) and fs::is_directory(mod_path)))
 		{
-			D(
-				OutputDebugString(_T("ExistsModFolders - Mods Folder not Found\n"));
-			)
+			DPRINT("ExistsModFolders - Mods Folder not Found\n");
 			fs::create_directory(mod_path);
-			D(
-				OutputDebugString(_T("ExistsModFolders - Mods Folder Created at:\n"));
-				OutputDebugStringA(mod_path.string().c_str());
-				OutputDebugString(_T("\n"));
-			)
+			DPRINT("ExistsModFolders - Mods Folder Created at:\n" + mod_path.string() + "\n");
 		}
 		else
 		{
-			D(
-				OutputDebugString(_T("ExistsModFolders - Mods Directory Found on Path:\n"));
-				OutputDebugStringA(mod_path.string().c_str());
-				OutputDebugString(_T("\n"));
-			)
+			DPRINT("ExistsModFolders - Mods Directory Found on Path:\n" + mod_path.string() + "\n");
 		}
 		if (!(fs::exists(mod_d_path) and fs::is_directory(mod_d_path)))
 		{
-			D(
-				OutputDebugString(_T("ExistsModFolders - Mods_disabled Folder not Found\n"));
-			)
+			DPRINT("ExistsModFolders - Mods_disabled Folder not Found\n");
 			fs::create_directory(mod_d_path);
-			D(
-				OutputDebugString(_T("ExistsModFolders - Mods_disabled Folder Created at:\n"));
-				OutputDebugStringA(mod_d_path.string().c_str());
-				OutputDebugString(_T("\n"));
-			)
+			DPRINT("ExistsModFolders - Mods_disabled Folder Created at:\n" + mod_d_path.string() + "\n");
 		}
 		else
 		{
-			D(
-				OutputDebugString(_T("ExistsModFolders - Mods Directory Found on Path:\n"));
-				OutputDebugStringA(mod_d_path.string().c_str());
-				OutputDebugString(_T("\n"));
-			)
+			DPRINT("ExistsModFolders - Mods Directory Found on Path:\n" + mod_d_path.string() + "\n");
 		}
 	}
 	return true;
@@ -541,26 +448,18 @@ void MainFrame::CheckSmapiVersion()
 	path_smapi_logs += "\\StardewValley\\ErrorLogs\\SMAPI-latest.txt";
 	if (fs::exists(path_smapi_logs) and fs::is_regular_file(path_smapi_logs))
 	{
-		D(
-			OutputDebugString(_T("CheckSmapiVersion - Logs Found\n"));
-		)
+		DPRINT("CheckSmapiVersion - Logs Found\n");
 		wxTextFile smapi_logs;
 		smapi_logs.Open(wxString(path_smapi_logs));
 		wxString temp_string = smapi_logs.GetFirstLine();
 		size_t temp_version_start = temp_string.Find("] ") + 8;
 		size_t temp_version_end = temp_string.Find(" with Stardew") - 1;
 		version = temp_string.SubString(temp_version_start, temp_version_end);
-		D(
-			OutputDebugString(_T("CheckSmapiVersion - Version: "));
-			OutputDebugStringA(version.c_str());
-			OutputDebugString(_T("\n"));
-		)
+		DPRINT("CheckSmapiVersion - Version: " + version + "\n");
 	}
 	else
 	{
-		D(
-			OutputDebugString(_T("CheckSmapiVersion - No Logs Found to Scrape\n"));
-		)
+		DPRINT("CheckSmapiVersion - No Logs Found to Scrape\n");
 		version = "not found";
 	}
 	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);

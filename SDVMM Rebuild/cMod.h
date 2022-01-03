@@ -1,11 +1,4 @@
 #pragma once
-#ifdef _DEBUG 
-#define D(x) x
-#include "debugConstants.h"
-#else 
-#define D(x)
-#endif
-
 #include <string>
 #include <wx/listctrl.h>
 #include "json.hpp"
@@ -42,8 +35,8 @@ public:
 	string mod_description() const { return mod_description_; }
 	string mod_unique_id() const { return mod_unique_id_; }
 	string infoString() const {
-		return (mod_name_ + " / " + mod_author_ + " / "
-			+ mod_version_ + " / " + mod_description_ + " / "
+		return (mod_name_ + ", " + mod_author_ + ", "
+			+ mod_version_ + ", " + mod_description_ + ", "
 			+ mod_unique_id_ + "\n"); }
 
 	void set_mod_name(string name);
