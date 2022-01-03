@@ -115,6 +115,7 @@ void SettingsPanel::SelfInitialize()
 	)
 
 	error_mute_["on_refresh"] = config_ini->ReadBool("MuteErrors", false);
+	m_checkbox_mute->SetValue(error_mute_["on_refresh"]);
 	D(
 		OutputDebugString(_T("SelfInit - .ini Launcher Preference Read\n"));
 	)
