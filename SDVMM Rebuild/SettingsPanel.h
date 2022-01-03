@@ -5,7 +5,7 @@
 #include <wx/dataview.h>
 #include <wx/fileconf.h>
 
-// TODO: Remove windows specific libraries
+// TODO? migrate this to wxFileSystem
 #include <filesystem>
 namespace fs = std::filesystem;
 
