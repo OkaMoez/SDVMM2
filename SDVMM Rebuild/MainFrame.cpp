@@ -459,7 +459,7 @@ void MainFrame::CheckSmapiVersion()
 	}
 	else
 	{
-		DPRINT("CheckSmapiVersion - No Logs Found to Scrape\n");
+		DPRINT("CheckSmapiVersion - No Logs Found\n");
 		version = "not found";
 	}
 	m_stext_smapi_version->SetLabel("SMAPI Version: " + version);

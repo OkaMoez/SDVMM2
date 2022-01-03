@@ -176,7 +176,7 @@ void SettingsPanel::OnGameDirectorySaveClick(wxCommandEvent& event)
 	else
 	{
 		wxMessageDialog* event_bad_game_directory = new wxMessageDialog(NULL,
-			wxT("Game files not found in: " + string(m_textctrl_game_directory->GetLineText(0))),
+			wxT("Game files not found in: " + std::string(m_textctrl_game_directory->GetLineText(0))),
 			wxT("Game Directory"), wxOK, wxDefaultPosition);
 		event_bad_game_directory->ShowModal();
 		delete event_bad_game_directory;
@@ -188,10 +188,14 @@ void SettingsPanel::OnGameDirectoryBrowseClick(wxCommandEvent& event)
 	event.Skip();
 	if (m_dirdialog_game_browse->ShowModal() == wxID_OK)
 	{
-		if (fs::exists(std::string(m_dirdialog_game_browse->GetPath()) + "\\Stardew Valley.exe"))
+		std::string browsed_game_path = m_dirdialog_game_browse->GetPath().ToStdString();
+		bool game_file_exists = fs::exists(browsed_game_path + "\\Stardew Valley.exe");
+
+		if (game_file_exists)
 		{
 			m_dirdialog_game_browse->SetPath(m_dirdialog_game_browse->GetPath());
-			game_directory_ = std::string(m_dirdialog_game_browse->GetPath());
+			m_textctrl_game_directory->ChangeValue(browsed_game_path);
+			game_directory_ = browsed_game_path;
 			config_ini->Write("GamePath", wxString(game_directory_.string()));
 			config_ini->Flush();
 			mainWindow->RefreshModLists();
@@ -212,14 +216,14 @@ void SettingsPanel::OnGameDirectoryBrowseClick(wxCommandEvent& event)
 void SettingsPanel::OnSteamDirectorySaveClick(wxCommandEvent& event)
 {
 	event.Skip();
-	steam_directory_ = string(m_textctrl_steam_directory->GetLineText(0));
+	steam_directory_ = std::string(m_textctrl_steam_directory->GetLineText(0));
 	config_ini->Write("SteamPath", wxString(steam_directory_.string()));
 	config_ini->Flush();
-	if (!fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe") and
-		!fs::exists(string(m_textctrl_steam_directory->GetLineText(0)) + "\\steam.exe"))
+	if (!fs::exists(std::string(m_textctrl_steam_directory->GetLineText(0)) + "\\Steam.exe") and
+		!fs::exists(std::string(m_textctrl_steam_directory->GetLineText(0)) + "\\steam.exe"))
 	{
 		wxMessageDialog* event_bad_steam_directory = new wxMessageDialog(NULL,
-			wxT("Steam files not found in: " + string(m_textctrl_steam_directory->GetLineText(0))),
+			wxT("Steam files not found in: " + std::string(m_textctrl_steam_directory->GetLineText(0))),
 			wxT("Steam Directory"), wxOK, wxDefaultPosition);
 		event_bad_steam_directory->ShowModal();
 		delete event_bad_steam_directory;
@@ -231,12 +235,19 @@ void SettingsPanel::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 	event.Skip();
 	if ((m_filedialog_steam_browse->ShowModal() == wxID_OK))
 	{
-		if ((fs::exists(std::string(m_filedialog_steam_browse->GetPath()))) and
-			((fs::path(std::string((m_filedialog_steam_browse->GetPath()))).filename() == fs::path("Steam.exe")) or
-				(fs::path(std::string((m_filedialog_steam_browse->GetPath()))).filename() == fs::path("steam.exe"))))
+		std::string browsed_steam_path = m_filedialog_steam_browse->GetPath().ToStdString();
+		fs::path browsed_steam_file = fs::path(browsed_steam_path).filename();
+		bool steam_file_exists = fs::exists(browsed_steam_path);
+		bool steam_executable_exists = (browsed_steam_file == fs::path("Steam.exe"))
+				or (browsed_steam_file == fs::path("steam.exe"));
+
+		if ( steam_file_exists and steam_executable_exists)
 		{
+			std::string browsed_steam_directory = fs::path(browsed_steam_path).parent_path().string();
 			m_filedialog_steam_browse->SetPath(m_filedialog_steam_browse->GetPath());
-			steam_directory_ = (fs::path(std::string(m_filedialog_steam_browse->GetPath())).parent_path()).string();
+			m_textctrl_steam_directory->ChangeValue(browsed_steam_directory);
+			steam_directory_ = (browsed_steam_directory);
+
 			config_ini->Write("SteamPath", wxString(steam_directory_.string()));
 			config_ini->Flush();
 		}
@@ -244,7 +255,7 @@ void SettingsPanel::OnSteamDirectoryBrowseClick(wxCommandEvent& event)
 		{
 			m_filedialog_steam_browse->SetPath(m_filedialog_steam_browse->GetPath());
 			wxMessageDialog* steam_directory_browse_fail = new wxMessageDialog(NULL,
-				("Steam executable not found:\n" + std::string(m_filedialog_steam_browse->GetPath())),
+				("Steam executable not found:\n" + browsed_steam_path),
 				wxT("Incorrect Directory"), wxOK, wxDefaultPosition);
 			steam_directory_browse_fail->ShowModal();
 			delete steam_directory_browse_fail;
