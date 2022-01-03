@@ -24,6 +24,7 @@ namespace fs = std::filesystem;
 using std::istream;
 using std::ifstream;
 
+class LauncherButtonPanel;
 class MenuBar;
 class ModBrowserPanel;
 class SettingsPanel;
@@ -44,7 +45,7 @@ enum class mod_status {
 
 class cMain : public wxFrame // TODO Organize privacy
 {
-private:
+public:
 	std::string error_locations_ = "Errors at: ";
 
 	std::unordered_map<mod_errors, bool> error_check_
@@ -70,10 +71,6 @@ private:
 		{mod_status::loaded, 0}
 	};
 
-	// TODO Rename?
-	int ID_BUTTON_NEXUS = wxNewId();
-	int ID_BUTTON_FORUMS = wxNewId();
-
 public:
 	cMain();
 	~cMain();
@@ -96,14 +93,7 @@ public:
 	MenuBar* m_menubar = nullptr;
 
 	// Right side buttons
-	wxButton* m_button_launch_smapi = nullptr;
-	wxButton* m_button_launch_vanilla = nullptr;
-	wxButton* m_button_add_mod = nullptr;
-	wxButton* m_button_nexus_download = nullptr;
-	wxButton* m_button_forums_download = nullptr;
-	wxButton* m_button_refresh_mods = nullptr;
-	wxBoxSizer* m_sizer_buttons_right = nullptr;
-	wxPanel* m_panel_buttons_right = nullptr;
+	LauncherButtonPanel* m_panel_buttons_right = nullptr;
 
 	// Other Layout
 	wxStaticBitmap* m_bitmap_banner = nullptr;
@@ -117,13 +107,6 @@ public:
 	// Main Layout Sizers
 	wxBoxSizer* m_sizer_main_horizontal = nullptr;
 	wxBoxSizer* m_sizer_main_vertical = nullptr;
-
-private:
-	// Top Level Buttons
-	void OnLaunchSMAPIClick(wxCommandEvent& event);
-	void OnLaunchVanillaClick(wxCommandEvent& event);
-	void OnLaunchModSiteClick(wxCommandEvent& event);
-	void OnRefreshClick(wxCommandEvent& event);
 	
 public:
 	void CleanManifest(json& manifest, fs::path error_path);

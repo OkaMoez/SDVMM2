@@ -19,6 +19,7 @@ private:
 	wxMenu* m_menubar_file = nullptr;
 	wxMenu* m_menubar_help = nullptr;
 
+	// TODO Rename?
 	int ID_MENU_MODS = wxNewId();
 	int ID_MENU_DMODS = wxNewId();
 	int ID_MENU_QUIT = wxNewId();

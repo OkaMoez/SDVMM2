@@ -1,5 +1,6 @@
 #include "cMain.h"
 
+#include "LauncherButtonPanel.h"
 #include "MenuBar.h"
 #include "ModBrowserPanel.h"
 #include "SettingsPanel.h"
@@ -61,36 +62,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	SetMenuBar(m_menubar);
 
 	// Right side buttons
-	m_panel_buttons_right = new wxPanel(this);
-	m_button_launch_smapi = new wxButton(m_panel_buttons_right, wxID_ANY, "Launch SMAPI with Mods");
-	m_button_launch_vanilla = new wxButton(m_panel_buttons_right, wxID_ANY, "Launch Stardew Valley");
-	m_button_add_mod = new wxButton(m_panel_buttons_right, wxID_ANY, ""); // TODO "Add Mod from File/Archive" // REMOVED FOR 0.5.0-ALPHA RELEASE
-	m_button_nexus_download = new wxButton(m_panel_buttons_right, ID_BUTTON_NEXUS, "Visit Nexus Mods");
-	m_button_forums_download = new wxButton(m_panel_buttons_right, ID_BUTTON_FORUMS, "Visit Mod Forums");
-	m_button_refresh_mods = new wxButton(m_panel_buttons_right, wxID_ANY, "Refresh Mod List");
-	m_button_launch_smapi->Bind(wxEVT_BUTTON, &cMain::OnLaunchSMAPIClick, this);
-	m_button_launch_vanilla->Bind(wxEVT_BUTTON, &cMain::OnLaunchVanillaClick, this);
-	m_button_nexus_download->Bind(wxEVT_BUTTON, &cMain::OnLaunchModSiteClick, this);
-	m_button_forums_download->Bind(wxEVT_BUTTON, &cMain::OnLaunchModSiteClick, this);
-	m_button_refresh_mods->Bind(wxEVT_BUTTON, &cMain::OnRefreshClick, this);
-
-	// Right side button - sizer
-	int proportion_button = 10;
-	int proportion_spacer = 1;
-	m_sizer_buttons_right = new wxBoxSizer(wxVERTICAL);
-	m_sizer_buttons_right->Add(m_button_launch_smapi, proportion_button, wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
-	m_sizer_buttons_right->Add(m_button_launch_vanilla, proportion_button, wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
-	m_sizer_buttons_right->Add(m_button_add_mod, (proportion_button / 2), wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
-	m_sizer_buttons_right->Add(m_button_nexus_download, (proportion_button / 2), wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
-	m_sizer_buttons_right->Add(m_button_forums_download, (proportion_button / 2), wxEXPAND, 0);
-	m_sizer_buttons_right->AddStretchSpacer(proportion_spacer);
-	m_sizer_buttons_right->Add(m_button_refresh_mods, proportion_button, wxEXPAND, 0);
-	m_panel_buttons_right->SetSizer(m_sizer_buttons_right);
-	m_panel_buttons_right->SetMaxSize(wxSize(250, 500));
+	m_panel_buttons_right = new LauncherButtonPanel(this, wxID_ANY, this);
 
 	// Window layout horizontal
 	m_sizer_main_horizontal = new wxBoxSizer(wxHORIZONTAL);
@@ -164,83 +136,6 @@ void cMain::SelfInitialize()
 			OutputDebugString(_T("SelfInit - No .ini Found\n"));
 		)
 	}
-}
-
-//-----------------------------
-// Buttons and Menu Functions
-//-----------------------------
-// Top Level Buttons
-void cMain::OnLaunchSMAPIClick(wxCommandEvent& event) // TODO Steam Launcher option
-{
-	event.Skip();
-	if (error_check_[mod_errors::smapi] == true) 
-	{
-		m_button_launch_smapi->Disable();
-		m_button_launch_smapi->SetLabel("SMAPI Not Found!");
-	}
-	else
-	{
-		if (m_settings_panel->launch_with_steam())
-		{
-			string test_str = ((this->m_settings_panel->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150" +
-				" \"" + m_settings_panel->game_directory().string() + "//StardewValleyAPI.exe\" %command%";
-			const char* open_command = (test_str.c_str());
-			wxExecute(open_command, wxEXEC_ASYNC, NULL);
-
-		}
-		else
-		{
-			wxString temp = wxGetCwd();
-			wxSetWorkingDirectory(this->m_settings_panel->game_directory().string());
-			string test_str = ((this->m_settings_panel->game_directory().string() + "\\StardewModdingAPI"));
-			const char* open_command = (test_str.c_str());
-			wxExecute(open_command, wxEXEC_ASYNC, NULL);
-			wxSetWorkingDirectory(temp);
-		}
-	}
-}
-
-void cMain::OnLaunchVanillaClick(wxCommandEvent& event) // TODO Steam Launcher option
-{
-	event.Skip();
-	if (m_settings_panel->launch_with_steam())
-	{
-		string test_str = ((m_settings_panel->steam_directory().string() + "\\Steam.exe")) + " -applaunch 413150";
-		const char* open_command = (test_str.c_str());
-		wxExecute(open_command, wxEXEC_ASYNC, NULL);
-		wxExecute(open_command , wxEXEC_ASYNC, NULL);
-	}
-	else 
-	{
-		wxString temp = wxGetCwd();
-		wxSetWorkingDirectory(m_settings_panel->game_directory().string());
-		string test_str = ((m_settings_panel->game_directory().string() + "\\Stardew Valley"));
-		const char* open_command = (test_str.c_str());
-		wxExecute(open_command, wxEXEC_ASYNC, NULL);
-		wxSetWorkingDirectory(temp);
-	}
-
-}
-
-void cMain::OnLaunchModSiteClick(wxCommandEvent& event)
-{
-
-	if (event.GetId() == ID_BUTTON_NEXUS)
-	{
-		wxLaunchDefaultBrowser("https://www.nexusmods.com/stardewvalley");
-	}
-	else if (event.GetId() == ID_BUTTON_FORUMS)
-	{
-		wxLaunchDefaultBrowser("https://community.playstarbound.com/forums/mods.215/");
-	}
-	else {}
-	event.Skip();
-}
-
-void cMain::OnRefreshClick(wxCommandEvent& event) // TODO give some indication of the refresh
-{
-	event.Skip();
-	this->RefreshModLists();
 }
 
 //--------------------

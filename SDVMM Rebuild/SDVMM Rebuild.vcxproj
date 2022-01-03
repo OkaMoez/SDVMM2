@@ -19,13 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LauncherButtonPanel.cpp" />
+    <ClCompile Include="MenuBar.cpp" />
     <ClCompile Include="ModManagerApp.cpp" />
     <ClCompile Include="cMain.cpp" />
     <ClCompile Include="cMod.cpp" />
     <ClCompile Include="ioFunctions.cpp" />
     <ClCompile Include="SettingsPanel.cpp" />
+    <ClCompile Include="ModBrowserPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LauncherButtonPanel.h" />
+    <ClInclude Include="MenuBar.h" />
+    <ClInclude Include="ModBrowserPanel.h" />
     <ClInclude Include="SettingsPanel.h" />
     <ClInclude Include="ModManagerApp.h" />
     <ClInclude Include="cMain.h" />
