@@ -96,7 +96,7 @@ void SettingsPanel::SelfInitialize()
 	)
 
 	D(
-			OutputDebugString(_T("SelfInit - Open .ini\n"));
+		OutputDebugString(_T("SelfInit - Open .ini\n"));
 	)
 
 	game_directory_ = std::string(config_ini->Read("GamePath", "directory not found"));
