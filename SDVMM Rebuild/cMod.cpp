@@ -46,7 +46,7 @@ void cMod::set_int_version() // TODO Handle Short Version Nums w/ minimal techni
 		temp_version = temp_version.erase(0, temp_pos+1);
 		patch_version_ = stoi(temp_version.substr(0, temp_version.size()));
 	}
-	else // Short version number "x.x"? kinda dumb
+	else // Short version number "x.x"? kinda silly
 	{
 		mod_version_ = (std::to_string(major_version_)
 			+ "." + std::to_string(minor_version_)
