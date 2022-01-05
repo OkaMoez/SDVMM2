@@ -1,10 +1,8 @@
 #pragma once
 #include "DebugTools.h"
+#include "nlohmann/json.hpp" // There is a way to forward declare this, but I couldn't get it working
 #include <string>
 #include <wx/listctrl.h>
-#include "json.hpp"
-using json = nlohmann::json;
-using std::stoi;
 
 class SmapiMod
 {
@@ -23,7 +21,7 @@ private:
 public:
 	SmapiMod();
 	SmapiMod(std::string name, std::string author, std::string version, std::string description, std::string uId);
-	SmapiMod(json& manifest);
+	SmapiMod(nlohmann::json& manifest);
 	~SmapiMod() {}
 
 	std::string name() const { return _mName; }

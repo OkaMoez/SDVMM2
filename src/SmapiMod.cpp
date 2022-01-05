@@ -1,7 +1,6 @@
 #include "SmapiMod.h"
 
-
-SmapiMod::SmapiMod() : SmapiMod("Empty Mod", "No authoror", "0.0.0", "An empty mod.", "No ID") {}
+SmapiMod::SmapiMod() : SmapiMod("Empty Mod", "No author", "0.0.0", "An empty mod.", "No ID") {}
 SmapiMod::SmapiMod(std::string name, std::string author, std::string version, std::string description, std::string uId)
 	: _mName(name)
 	, _mAuthor(author)
@@ -10,7 +9,7 @@ SmapiMod::SmapiMod(std::string name, std::string author, std::string version, st
 	, _mUniqueID(uId) {
 	_versionSplitSemvar();
 }
-SmapiMod::SmapiMod(json& manifest) {
+SmapiMod::SmapiMod(nlohmann::json& manifest) {
 	_mName = manifest["Name"].get<std::string>();
 	_mAuthor = manifest["Author"].get<std::string>();
 	_mVersion = manifest["Version"].get<std::string>();

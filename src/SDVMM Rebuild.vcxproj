@@ -27,19 +27,22 @@
     <ClCompile Include="IoFunctions.cpp" />
     <ClCompile Include="SettingsPanel.cpp" />
     <ClCompile Include="ModBrowserPanel.cpp" />
+    <ClCompile Include="StatusBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LauncherButtonPanel.h" />
     <ClInclude Include="MenuBar.h" />
     <ClInclude Include="ModBrowserPanel.h" />
+    <ClInclude Include="nlohmann\json.hpp" />
+    <ClInclude Include="nlohmann\json_fwd.hpp" />
     <ClInclude Include="SettingsPanel.h" />
     <ClInclude Include="ModManagerApp.h" />
     <ClInclude Include="MainFrame.h" />
     <ClInclude Include="SmapiMod.h" />
     <ClInclude Include="DebugTools.h" />
     <ClInclude Include="IoFunctions.h" />
-    <ClInclude Include="json.hpp" />
     <ClInclude Include="JsonCleaner.h" />
+    <ClInclude Include="StatusBar.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="E:\Image Edits\SDVMM\SDVMM2.png">
@@ -58,7 +61,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SDVMMRebuild</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>SDVMM Rebuild</ProjectName>
+    <ProjectName>SDVMM2</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -187,6 +190,7 @@
       <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>-DJSON_MultipleHeaders=ON %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -194,6 +198,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_x64_lib;</AdditionalLibraryDirectories>
+      <AdditionalOptions>-DJSON_MultipleHeaders=ON %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

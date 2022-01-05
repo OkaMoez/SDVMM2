@@ -1,11 +1,11 @@
 #include "MainFrame.h"
 
+#include "JsonCleaner.h"
 #include "LauncherButtonPanel.h"
 #include "MenuBar.h"
 #include "ModBrowserPanel.h"
 #include "SettingsPanel.h"
 
-#include "JsonCleaner.h"
 
 MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
 	wxDefaultPosition, wxSize(750, 500),
@@ -47,24 +47,35 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 
 	mHorizontalBannerSizer->Add(mBitmapBanner, 0, wxEXPAND, 0);
 	mHorizontalBannerSizer->AddStretchSpacer(1);
 
-	// Status Bar - Version Info & Mod Count
-	mVersionSmapiStext = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + mSettingsPanel->versionSmapi()); // TODO getters/setters
-	mModManagerStext = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + mSettingsPanel->versionModManager());
-	mModCountStext = new wxStaticText(this, wxID_ANY,
-		std::to_string(mModCount[ModStatus::loaded]) + "/" + std::to_string(mModCount[ModStatus::total]) + " Mods Loaded");
-	mModCountSizer = new wxBoxSizer(wxVERTICAL);
-	mModCountSizer->Add(mModCountStext, 0, wxALIGN_RIGHT, 0);
-	mVersionSizer = new wxBoxSizer(wxHORIZONTAL);
-	mVersionSizer->Add(mModManagerStext, 10, wxEXPAND | wxLEFT, 15);
-	mVersionSizer->Add(mVersionSmapiStext, 10, wxEXPAND | wxLEFT, 5);
-	mVersionSizer->AddStretchSpacer(10);
-	mVersionSizer->Add(mModCountSizer, 5, wxEXPAND | wxRIGHT, 10);
+	//// Status Bar - Version Info & Mod Count
+	//mVersionSmapiStext = new wxStaticText(this, wxID_ANY, "SMAPI Version: " + mSettingsPanel->versionSmapi()); // TODO getters/setters
+	//mModManagerStext = new wxStaticText(this, wxID_ANY, "SDVMM2 Version: " + mSettingsPanel->versionModManager());
+	//mModCountStext = new wxStaticText(this, wxID_ANY,
+	//	std::to_string(mModCount[ModStatus::loaded]) + "/" + std::to_string(mModCount[ModStatus::total]) + " Mods Loaded");
+	//mModCountSizer = new wxBoxSizer(wxVERTICAL);
+	//mModCountSizer->Add(mModCountStext, 0, wxALIGN_RIGHT, 0);
+	//mVersionSizer = new wxBoxSizer(wxHORIZONTAL);
+	//mVersionSizer->Add(mModManagerStext, 10, wxEXPAND | wxLEFT, 15);
+	//mVersionSizer->Add(mVersionSmapiStext, 10, wxEXPAND | wxLEFT, 5);
+	//mVersionSizer->AddStretchSpacer(10);
+	//mVersionSizer->Add(mModCountSizer, 5, wxEXPAND | wxRIGHT, 10);
+
+	_mStatusBar = new wxStatusBar(this, wxID_ANY, wxSB_SUNKEN);
+	std::string SmapiVersionText = "SMAPI Version: " + mSettingsPanel->versionSmapi();
+	std::string ModManagerVersionText = "SDVMM2 Version: " + mSettingsPanel->versionModManager();
+	std::string ModsLoadedText = std::to_string(mModCount[ModStatus::loaded]) + "/" + std::to_string(mModCount[ModStatus::total]) + " Mods Loaded";
+
+	_mStatusBar->SetFieldsCount(3);
+	_mStatusBar->SetStatusText(SmapiVersionText, 0);
+	_mStatusBar->SetStatusText(ModManagerVersionText, 1);
+	_mStatusBar->SetStatusText(ModsLoadedText, 2);
+	SetStatusBar(_mStatusBar);
 
 	// Vertical layout
 	mMainFrameVerticalSizer = new wxBoxSizer(wxVERTICAL);
 	mMainFrameVerticalSizer->Add(mHorizontalBannerSizer, 0, wxEXPAND | wxALL , 10);
 	mMainFrameVerticalSizer->Add(mMainFrameHorizontalSizer, 40, wxEXPAND, 0);
-	mMainFrameVerticalSizer->Add(mVersionSizer, 0, wxEXPAND, 0); // for static text
+	//mMainFrameVerticalSizer->Add(mVersionSizer, 0, wxEXPAND, 0); // for static text
 	SetSizer(mMainFrameVerticalSizer);
 
 	// Setting background colour as needed
@@ -100,7 +111,7 @@ void MainFrame::tryLoadSettings() {
 //--------------------
 // Backend Functions
 //--------------------
-void MainFrame::mCleanManifest(json& manifest, fs::path errorPath) { // TODO move check to refresh and make flag
+void MainFrame::mCleanManifest(nlohmann::json& manifest, fs::path errorPath) { // TODO move check to refresh and make flag
 
 	if (!manifest.contains("Name")) {
 		mErrorChecks[ModErrors::format] = true;
@@ -224,7 +235,8 @@ void MainFrame::mRefreshModLists() {
 	// Pull out this from the main contructor
 	std::string tempMod = std::to_string(mModCount[ModStatus::loaded]) + "/" +
 		std::to_string(mModCount[ModStatus::total]) + " Mods Successfully Loaded";
-	mModCountStext->SetLabel(tempMod);
+	//mModCountStext->SetLabel(tempMod);
+	_mStatusBar->SetStatusText(tempMod, 2);
 	mShowRefreshErrors();
 }
 
@@ -258,16 +270,16 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 
 		mModCount[ModStatus::total]++;
 		ifstream jsonStream(tempPath.c_str());
-		json jsonManifest;
+		nlohmann::json jsonManifest;
 		try
 		{
 			try
 			{ // Parse json
-				jsonManifest = json::parse(jsonStream); // TODO handle trailing commas
+				jsonManifest = nlohmann::json::parse(jsonStream); // TODO handle trailing commas
 				// Handle some minor typos and missing fields in manifest
 				mCleanManifest(jsonManifest, errorPath);
 			}
-			catch (json::parse_error & e) { // On fail, output error and skip to next mod
+			catch (nlohmann::json::parse_error & e) { // On fail, output error and skip to next mod
 				mErrorChecks[ModErrors::json] = true;
 				mErrorCount[ModErrors::json]++;
 				mModCount[ModStatus::errored]++;
@@ -314,7 +326,7 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 				DPRINT("Json Fix Comma Cleaned\n" + jsonString + "\n");
 
 				try	{
-					jsonManifest = json::parse(jsonString); // TODO handle trailing commas
+					jsonManifest = nlohmann::json::parse(jsonString); // TODO handle trailing commas
 					// Handle some minor typos and missing fields in manifest
 					mCleanManifest(jsonManifest, errorPath);
 					mErrorChecks[ModErrors::json] = false;
@@ -409,7 +421,8 @@ void MainFrame::mCheckSmapiVersion() {
 	{
 		DPRINT("mCheckSmapiVersion - No Logs Found\n");
 	}
-	mVersionSmapiStext->SetLabel("SMAPI Version: " + version);
+	//mVersionSmapiStext->SetLabel("SMAPI Version: " + version);
+	_mStatusBar->SetStatusText("SMAPI Version: " + version, 0);
 }
 
 void MainFrame::mResetRefreshErrors() {

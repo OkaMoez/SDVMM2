@@ -19,15 +19,15 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{24084dd1-5aa7-40d9-8d2d-17ced639d2e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\3rdParty">
+      <UniqueIdentifier>{3d95b47d-a1df-4d1b-bccf-a9ec1e190602}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModManagerApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IoFunctions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SmapiMod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainFrame.cpp">
@@ -45,6 +45,12 @@
     <ClCompile Include="LauncherButtonPanel.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="StatusBar.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SmapiMod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModManagerApp.h">
@@ -53,16 +59,10 @@
     <ClInclude Include="SmapiMod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IoFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DebugTools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="JsonCleaner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ModBrowserPanel.h">
@@ -79,6 +79,18 @@
     </ClInclude>
     <ClInclude Include="LauncherButtonPanel.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusBar.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonCleaner.h">
+      <Filter>Header Files\3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="nlohmann\json_fwd.hpp">
+      <Filter>Header Files\3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="nlohmann\json.hpp">
+      <Filter>Header Files\3rdParty</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

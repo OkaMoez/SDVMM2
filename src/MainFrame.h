@@ -1,5 +1,11 @@
 #pragma once
 
+#include <windows.h>
+#include <fstream>
+#include <iomanip>
+#include "nlohmann/json.hpp" // There is a way to forward declare this, but I couldn't get it working
+#include <sstream> 
+#include "SmapiMod.h"
 #include <wx/wx.h>
 #include <wx/menu.h>
 #include <wx/event.h>
@@ -13,11 +19,6 @@
 #include <wx/filedlg.h>
 #include <wx/stdpaths.h>
 #include <wx/filefn.h>
-#include <fileapi.h>
-#include <fstream>
-#include <iomanip>
-#include <sstream> 
-#include "SmapiMod.h"
 
 // TODO? migrate this to wxFileSystem
 #include <filesystem>
@@ -87,6 +88,7 @@ public:
 
 	// mMenubar
 	MenuBar* mMenubar = nullptr;
+	wxStatusBar* _mStatusBar = nullptr;
 
 	// Right side buttons
 	LauncherButtonPanel* mLauncherPanel = nullptr;
@@ -94,18 +96,18 @@ public:
 	// Other Layout
 	wxStaticBitmap* mBitmapBanner = nullptr;
 	wxBoxSizer* mHorizontalBannerSizer = nullptr;
-	wxStaticText* mVersionSmapiStext = nullptr;
-	wxStaticText* mModManagerStext = nullptr;
-	wxStaticText* mModCountStext = nullptr;
-	wxBoxSizer* mModCountSizer = nullptr;
-	wxBoxSizer* mVersionSizer = nullptr;
+	//wxStaticText* mVersionSmapiStext = nullptr;
+	//wxStaticText* mModManagerStext = nullptr;
+	//wxStaticText* mModCountStext = nullptr;
+	//wxBoxSizer* mModCountSizer = nullptr;
+	//wxBoxSizer* mVersionSizer = nullptr;
 
 	// Main Layout Sizers
 	wxBoxSizer* mMainFrameHorizontalSizer = nullptr;
 	wxBoxSizer* mMainFrameVerticalSizer = nullptr;
 	
 public:
-	void mCleanManifest(json& manifest, fs::path error_path);
+	void mCleanManifest(nlohmann::json& manifest, fs::path error_path);
 	void mCleanJson(); // TODO tranfer code to function
 	void mRefreshModLists(); // TODO give some indication of the refresh
 	void mLoadModsFromDir(std::string folderName);
