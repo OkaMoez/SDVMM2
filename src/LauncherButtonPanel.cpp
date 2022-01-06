@@ -3,9 +3,9 @@
 #include "MainFrame.h"
 #include "SettingsPanel.h"
 
-LauncherButtonPanel::LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
+LauncherButtonPanel::LauncherButtonPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID)
 	: wxPanel(parent, windowID)
-	, _mMainWindow(parentWindow) {
+	, _mMainWindow(main) {
 	_mLaunchSmapiButton = new wxButton(this, wxID_ANY, "Launch SMAPI with Mods");
 	_mLaunchVanillaButton = new wxButton(this, wxID_ANY, "Launch Stardew Valley");
 	_mAddModButton = new wxButton(this, wxID_ANY, ""); // TODO "Add Mod from File/Archive" // REMOVED FOR 0.5.0-ALPHA RELEASE

@@ -1,12 +1,12 @@
 #pragma once
+#include <wx/wx.h>
 
-#include <windows.h>
 #include <fstream>
 #include <iomanip>
 #include "nlohmann/json.hpp" // There is a way to forward declare this, but I couldn't get it working
 #include <sstream> 
 #include "SmapiMod.h"
-#include <wx/wx.h>
+#include <windows.h>
 #include <wx/menu.h>
 #include <wx/event.h>
 #include <wx/notebook.h>
@@ -30,6 +30,7 @@ class LauncherButtonPanel;
 class MenuBar;
 class ModBrowserPanel;
 class SettingsPanel;
+class StatusBar;
 
 enum class ModErrors {
 	json,
@@ -88,7 +89,7 @@ public:
 
 	// mMenubar
 	MenuBar* mMenubar = nullptr;
-	wxStatusBar* _mStatusBar = nullptr;
+	StatusBar* _mStatusBar = nullptr;
 
 	// Right side buttons
 	LauncherButtonPanel* mLauncherPanel = nullptr;

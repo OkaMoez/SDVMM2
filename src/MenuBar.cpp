@@ -3,8 +3,8 @@
 #include "MainFrame.h"
 #include "SettingsPanel.h"
 
-MenuBar::MenuBar(MainFrame* parentWindow)
-	: _mMainWindow(parentWindow) {
+MenuBar::MenuBar(MainFrame* parent)
+	: _mMainWindow(parent) {
 	// Menubar - File, Help, etc
 	mMenubar_file = new wxMenu;
 	//mMenubar_help = new wxMenu; // REMOVED FOR 0.5.0-ALPHA RELEASE

@@ -7,7 +7,7 @@ class MainFrame;
 class ModBrowserPanel : public wxPanel
 {
 public:
-	ModBrowserPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
+	ModBrowserPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID);
 
 	wxDataViewListCtrl* mModBrowserDataviewlistctrl = nullptr;
 

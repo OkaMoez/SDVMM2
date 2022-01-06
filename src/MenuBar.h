@@ -5,7 +5,7 @@ class MainFrame;
 
 class MenuBar : public wxMenuBar {
 public:
-	MenuBar(MainFrame* parentWindow);
+	MenuBar(MainFrame* parent);
 
 private:
 	MainFrame* _mMainWindow = nullptr;

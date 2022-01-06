@@ -1,26 +1,34 @@
 #pragma once
 #include <wx/wx.h>
 
+#include "neargye/semver.hpp"
+
 class MainFrame;
 
 class StatusBar : public wxStatusBar {
 public:
-	StatusBar(MainFrame* parentWindow);
+	StatusBar(MainFrame* parent
+		, wxWindowID windowID
+		, semver::version smapiVersion = semver::version{}
+		, semver::version modManagerVersion = semver::version{}
+		, long style = 65840L);
+	
+	void setSmapiVersion(semver::version version);
+	void setModManagerVersion(semver::version version);
+	void setModLoadingStatus(int total, int loaded);
 
 private:
+
+	enum FieldIndex {
+		smapiVersion,
+		modManagerVersion,
+		modLoadingStatus
+	};
+
 	MainFrame* _mMainWindow = nullptr;
 
-	// Menu Bar Buttons
-	void OnMenuClick(wxCommandEvent& event); // TODO complete
-	void OnMenuModsClick(wxCommandEvent& event); // TODO Make cross platform
-	void OnMenuModsDisabledClick(wxCommandEvent& event);  // TODO Make cross platform
-	void OnMenuQuitClick(wxCommandEvent& event);
-
-	wxMenu* mMenubar_file = nullptr;
-	wxMenu* mMenubar_help = nullptr;
-
-	// TODO Rename?
-	int ID_MENU_MODS = wxNewId();
-	int ID_MENU_DMODS = wxNewId();
-	int ID_MENU_QUIT = wxNewId();
+	semver::version _mSmapiVersion;
+	semver::version _mModManagerVersion;
+	int _mModsTotal = 0;
+	int _mModsLoaded = 0;
 };

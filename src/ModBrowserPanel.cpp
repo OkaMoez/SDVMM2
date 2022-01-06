@@ -3,9 +3,9 @@
 #include "MainFrame.h"
 #include "SettingsPanel.h"
 
-ModBrowserPanel::ModBrowserPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
+ModBrowserPanel::ModBrowserPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID)
 	: wxPanel(parent, windowID)
-	, _mMainWindow(parentWindow) {
+	, _mMainWindow(main) {
 	// Tab 1 - List Control - Creation w/ Columns
 	mModBrowserDataviewlistctrl = new wxDataViewListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(465, 200), wxLC_REPORT);
 	mModBrowserDataviewlistctrl->AppendToggleColumn("Active", wxDATAVIEW_CELL_ACTIVATABLE, 50, wxALIGN_LEFT, wxDATAVIEW_COL_SORTABLE);

@@ -14,7 +14,7 @@ class MainFrame;
 class SettingsPanel : public wxPanel {
 
 public:
-	SettingsPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
+	SettingsPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID);
 	~SettingsPanel();
 
 	void tryLoadSettings();

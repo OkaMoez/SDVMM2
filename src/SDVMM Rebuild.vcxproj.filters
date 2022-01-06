@@ -92,6 +92,9 @@
     <ClInclude Include="nlohmann\json.hpp">
       <Filter>Header Files\3rdParty</Filter>
     </ClInclude>
+    <ClInclude Include="neargye\semver.hpp">
+      <Filter>Header Files\3rdParty</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="E:\Image Edits\SDVMM\SDVMM2.png">

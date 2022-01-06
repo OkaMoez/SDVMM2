@@ -5,6 +5,7 @@
 #include "MenuBar.h"
 #include "ModBrowserPanel.h"
 #include "SettingsPanel.h"
+#include "StatusBar.h"
 
 
 MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 2",
@@ -17,8 +18,8 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 
 	//---------------------------
 	mTabbedNotebook = new wxNotebook(this, -1);
 
-	mModBrowserPanel = new ModBrowserPanel(mTabbedNotebook, wxID_ANY, this);
-	mSettingsPanel = new SettingsPanel(mTabbedNotebook, wxID_ANY, this);
+	mModBrowserPanel = new ModBrowserPanel(this, mTabbedNotebook, wxID_ANY);
+	mSettingsPanel = new SettingsPanel(this, mTabbedNotebook, wxID_ANY);
 
 	mTabbedNotebook->AddPage(mModBrowserPanel, "SMAPI Mods", true);
 	mTabbedNotebook->AddPage(mSettingsPanel, "Settings", false);
@@ -28,7 +29,7 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 
 	//---------------------------------
 
 	// Launcher buttons
-	mLauncherPanel = new LauncherButtonPanel(this, wxID_ANY, this);
+	mLauncherPanel = new LauncherButtonPanel(this, this, wxID_ANY);
 
 	// Horizontal layout
 	mMainFrameHorizontalSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -60,22 +61,14 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 
 	//mVersionSizer->AddStretchSpacer(10);
 	//mVersionSizer->Add(mModCountSizer, 5, wxEXPAND | wxRIGHT, 10);
 
-	_mStatusBar = new wxStatusBar(this, wxID_ANY, wxSB_SUNKEN);
-	std::string SmapiVersionText = "SMAPI Version: " + mSettingsPanel->versionSmapi();
-	std::string ModManagerVersionText = "SDVMM2 Version: " + mSettingsPanel->versionModManager();
-	std::string ModsLoadedText = std::to_string(mModCount[ModStatus::loaded]) + "/" + std::to_string(mModCount[ModStatus::total]) + " Mods Loaded";
-
-	_mStatusBar->SetFieldsCount(3);
-	_mStatusBar->SetStatusText(SmapiVersionText, 0);
-	_mStatusBar->SetStatusText(ModManagerVersionText, 1);
-	_mStatusBar->SetStatusText(ModsLoadedText, 2);
+	constexpr semver::version v_default;
+	_mStatusBar = new StatusBar(this, wxID_ANY, v_default, v_default, wxSB_SUNKEN);
 	SetStatusBar(_mStatusBar);
 
 	// Vertical layout
 	mMainFrameVerticalSizer = new wxBoxSizer(wxVERTICAL);
 	mMainFrameVerticalSizer->Add(mHorizontalBannerSizer, 0, wxEXPAND | wxALL , 10);
 	mMainFrameVerticalSizer->Add(mMainFrameHorizontalSizer, 40, wxEXPAND, 0);
-	//mMainFrameVerticalSizer->Add(mVersionSizer, 0, wxEXPAND, 0); // for static text
 	SetSizer(mMainFrameVerticalSizer);
 
 	// Setting background colour as needed

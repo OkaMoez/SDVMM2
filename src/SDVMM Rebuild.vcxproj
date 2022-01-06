@@ -33,6 +33,7 @@
     <ClInclude Include="LauncherButtonPanel.h" />
     <ClInclude Include="MenuBar.h" />
     <ClInclude Include="ModBrowserPanel.h" />
+    <ClInclude Include="neargye\semver.hpp" />
     <ClInclude Include="nlohmann\json.hpp" />
     <ClInclude Include="nlohmann\json_fwd.hpp" />
     <ClInclude Include="SettingsPanel.h" />

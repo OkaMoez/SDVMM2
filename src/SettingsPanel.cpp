@@ -3,9 +3,9 @@
 #include "MainFrame.h"
 #include "ModBrowserPanel.h"
 
-SettingsPanel::SettingsPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow)
+SettingsPanel::SettingsPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID)
 	: wxPanel(parent, windowID)
-	, _mMainWindow(parentWindow) {
+	, _mMainWindow(main) {
 	// Tab 3 - Launcher Sizer
 	_mLauncherChoiceStext = new wxStaticText(this, wxID_ANY, "Launch w/ Steam: ");
 	_mLauncherChoiceCheckbox = new wxCheckBox(this, wxID_ANY, "  (uncheck if you have the GOG version)");

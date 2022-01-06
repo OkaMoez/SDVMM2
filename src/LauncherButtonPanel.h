@@ -6,7 +6,7 @@ class MainFrame;
 class LauncherButtonPanel : public wxPanel
 {
 public:
-	LauncherButtonPanel(wxWindow* parent, wxWindowID windowID, MainFrame* parentWindow);
+	LauncherButtonPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID);
 
 private:
 	MainFrame* _mMainWindow = nullptr;
