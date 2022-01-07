@@ -33,6 +33,7 @@ myREPORT(
 
 	const bool REPORT_MOD_DIRECTORY = false;
 	const bool REPORT_IDENTIFY_DIRECTORIES = false;
+	const bool REPORT_JSON_FIX = false;
 	const bool REPORT_ON_MOD_PARSED = true;
 	const bool REPORT_VERBOSE_MOD_OBJECTS = false;
 	const bool REPORT_MOD_DIRECTORIES = true;
@@ -54,6 +55,7 @@ myQUIET(
 
 	const bool REPORT_MOD_DIRECTORY = true;
 	const bool REPORT_IDENTIFY_DIRECTORIES = false;
+	const bool REPORT_JSON_FIX = false;
 	const bool REPORT_ON_MOD_PARSED = false;
 	const bool REPORT_VERBOSE_MOD_OBJECTS = false;
 	const bool REPORT_MOD_DIRECTORIES = false;

@@ -34,7 +34,7 @@ class StatusBar;
 
 enum class ModErrors {
 	json,
-	semvar,
+	semver,
 	format,
 	formatLocal,
 	smapi
@@ -54,7 +54,7 @@ public:
 	std::unordered_map<ModErrors, bool> mErrorChecks
 	{
 		{ModErrors::json, false},
-		{ModErrors::semvar, false},
+		{ModErrors::semver, false},
 		{ModErrors::format, false},
 		{ModErrors::formatLocal, false},
 		{ModErrors::smapi, false}
@@ -63,7 +63,7 @@ public:
 	std::unordered_map<ModErrors, int> mErrorCount
 	{
 		{ModErrors::json, 0},
-		{ModErrors::semvar, 0},
+		{ModErrors::semver, 0},
 		{ModErrors::format, 0}
 	};
 

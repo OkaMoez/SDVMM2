@@ -36,6 +36,7 @@ semver::version SmapiMod::_tryParseVersion(std::string versionString) {
 	}
 	catch (std::invalid_argument const& ex) {
 		DPRINT(ex.what());
+		_mUsingSemver = false;
 	}
 	return version;
 }

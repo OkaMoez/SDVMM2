@@ -8,6 +8,7 @@
 class SmapiMod
 {
 private:
+	bool _mUsingSemver = true;
 	std::string _mName;
 	std::string _mAuthor;
 	semver::version _mVersion;
@@ -23,6 +24,7 @@ public:
 	SmapiMod(nlohmann::json& manifest);
 	~SmapiMod() {}
 
+	bool isSemver() const { return _mUsingSemver; };
 	std::string name() const { return _mName; }
 	std::string author() const { return _mAuthor; }
 	semver::version version() const { return _mVersion; }

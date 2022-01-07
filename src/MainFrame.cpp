@@ -155,8 +155,8 @@ void MainFrame::mCleanManifest(nlohmann::json& manifest, fs::path errorPath) { /
 	}
 	else if (manifest["Version"].is_object()) {
 		// flag outdated version object and make readable
-		mErrorChecks[ModErrors::semvar] = true;
-		mErrorCount[ModErrors::semvar]++;
+		mErrorChecks[ModErrors::semver] = true;
+		mErrorCount[ModErrors::semver]++;
 		mErrorLocations += "\n" + errorPath.string() + " - Depreciated Versioning";
 		std::string versionString = "";
 		int majorVersion = manifest["Version"]["MajorVersion"].get<int>();
@@ -276,8 +276,8 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 			}
 			catch (nlohmann::json::parse_error & e) { // On fail, output error and skip to next mod
 				mErrorChecks[ModErrors::json] = true;
-				mErrorCount[ModErrors::json]++;
-				mModCount[ModStatus::errored]++;
+				++mErrorCount[ModErrors::json];
+				++mModCount[ModStatus::errored];
 				if (e.id != 101) {
 					mErrorLocations += "\n" + errorPath.string() + " - JSON Formatting";
 					continue;
@@ -285,7 +285,7 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 				mErrorLocations += "\n" + errorPath.string() + " - JSON Unexpected Char";
 				// TODO clean commas and comments, then try again
 				///*
-				DPRINT("Json Fix Attempt\n");
+				DPRINTIF(REPORT_JSON_FIX, "Json Fix Attempt\n");
 				std::string jsonString = "New\n";
 				ifstream jsonStream2(tempPath.c_str(), std::ios::in | std::ios::binary);
 				jsonStream2.seekg(0, std::ios::end);
@@ -294,37 +294,37 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 				jsonStream2.read(&jsonString[0], jsonString.size());
 				jsonStream2.close();
 
-				DPRINT("Json Fix RAW\n" + jsonString + "\n");
+				DPRINTIF(REPORT_JSON_FIX, "Json Fix RAW\n" + jsonString + "\n");
 
 				// REVIEW: Can these thow exceptions?
 				try {
 					jsonString = stripComments(jsonString, true);
 				}
 				catch (...) {
-					DPRINT("Json Fix Comment Clean Failure\n");
+					DPRINTIF(REPORT_JSON_FIX, "Json Fix Comment Clean Failure\n");
 				}
 
-				DPRINT("Json Fix Comment Cleaned\n" + jsonString + "\n");
+				DPRINTIF(REPORT_JSON_FIX, "Json Fix Comment Cleaned\n" + jsonString + "\n");
 
 				try {
 					jsonString = stripTrailingCommas(jsonString, true);
 				}
 				catch (const std::regex_error & e) {
 					std::string temp = e.what();
-					DPRINT("Json Fix Comma Clean Failure: " + temp + "\n");
+					DPRINTIF(REPORT_JSON_FIX, "Json Fix Comma Clean Failure: " + temp + "\n");
 				}
 
-				DPRINT("Json Fix Comma Cleaned\n" + jsonString + "\n");
+				DPRINTIF(REPORT_JSON_FIX, "Json Fix Comma Cleaned\n" + jsonString + "\n");
 
 				try	{
 					jsonManifest = nlohmann::json::parse(jsonString); // TODO handle trailing commas
 					// Handle some minor typos and missing fields in manifest
 					mCleanManifest(jsonManifest, errorPath);
 					mErrorChecks[ModErrors::json] = false;
-					DPRINT("Json Fix Reparse Success\n");
+					DPRINTIF(REPORT_JSON_FIX, "Json Fix Reparse Success\n");
 				}
 				catch (nlohmann::json::parse_error& e) {
-					DPRINT("Json Fix Reparse Failure\n" + std::string(e.what()));
+					DPRINTIF(REPORT_JSON_FIX, "Json Fix Reparse Failure\n" + std::string(e.what()));
 					continue;
 				}
 				//*/
@@ -338,6 +338,12 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 				+ jsonManifest["Version"].get<std::string>() + "\n");
 
 			SmapiMod aMod(jsonManifest);
+			if (!aMod.isSemver()) {
+				++mErrorCount[ModErrors::semver];
+				++mModCount[ModStatus::errored];
+				mErrorLocations += "\n" + errorPath.string() + " - Unexpected Version Format";
+			}
+
 			wxVector<wxVariant> thisMod;
 			thisMod.push_back(wxVariant(isActive));
 			thisMod.push_back(wxVariant(aMod.name()));
@@ -345,7 +351,7 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 			thisMod.push_back(wxVariant(aMod.version().to_string()));
 			thisMod.push_back(wxVariant((directoryIterator.path()).string()));
 			mModBrowserPanel->mModBrowserDataviewlistctrl->AppendItem(thisMod);
-			mModCount[ModStatus::loaded]++;
+			++mModCount[ModStatus::loaded];
 			thisMod.clear();
 			DPRINTIF(REPORT_VERBOSE_MOD_OBJECTS, aMod.infoString());
 		}
@@ -419,11 +425,11 @@ void MainFrame::mCheckSmapiVersion() {
 void MainFrame::mResetRefreshErrors() {
 	mErrorLocations = "Errors at: ";
 	mErrorChecks[ModErrors::json] = false;
-	mErrorChecks[ModErrors::semvar] = false;
+	mErrorChecks[ModErrors::semver] = false;
 	mErrorChecks[ModErrors::format] = false;
 	mErrorChecks[ModErrors::formatLocal] = false;
 	mErrorCount[ModErrors::json] = 0;
-	mErrorCount[ModErrors::semvar] = 0;
+	mErrorCount[ModErrors::semver] = 0;
 	mErrorCount[ModErrors::format] = 0;
 	mModCount[ModStatus::total] = 0;
 	mModCount[ModStatus::errored] = 0;
@@ -432,7 +438,7 @@ void MainFrame::mResetRefreshErrors() {
 
 void MainFrame::mShowRefreshErrors() {
 	bool errorsExist = ((mErrorCount[ModErrors::json] != 0) 
-			or (mErrorCount[ModErrors::semvar] != 0) 
+			or (mErrorCount[ModErrors::semver] != 0) 
 			or (mErrorCount[ModErrors::format] != 0));
 	if (!errorsExist or (mSettingsPanel->mMuteErrors["on_refresh"] == true) ) {
 		return;
@@ -441,7 +447,7 @@ void MainFrame::mShowRefreshErrors() {
 	std::string errorModLoopTitle = "Errors in Mods";
 	std::string errorModLoopMessage =
 		("Manifests with incorrect .json format: " + std::to_string(mErrorCount[ModErrors::json]) 
-			+ "\nManifests with depreciated versioning: " + std::to_string(mErrorCount[ModErrors::semvar]) 
+			+ "\nManifests with depreciated versioning: " + std::to_string(mErrorCount[ModErrors::semver]) 
 			+ "\nManifests with other formatting errors: " + std::to_string(mErrorCount[ModErrors::format]));
 	// if (!isActive) { final_error_title += "_disabled"; };
 	// Error counter dialogue
@@ -449,7 +455,7 @@ void MainFrame::mShowRefreshErrors() {
 		errorModLoopMessage, errorModLoopTitle, wxOK, wxDefaultPosition);
 	errorModLoop->ShowModal();
 	delete errorModLoop;
-	if (mErrorChecks[ModErrors::semvar]) {
+	if (mErrorChecks[ModErrors::semver]) {
 		mErrorLocations += ("\n\nNOTE:\nSMAPI does not load mods with depreciated versioning.\nSee SMAPI logs or console for more details.");
 	}
 	wxMessageDialog* errorModLoopDetailed = new wxMessageDialog(NULL,
