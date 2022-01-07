@@ -26,5 +26,5 @@ void StatusBar::setModManagerVersion(semver::version version) {
 
 void StatusBar::setModLoadingStatus(int total, int loaded) {
 	std::string modLoadingStatusText = std::to_string(loaded) + "/" + std::to_string(total) + " Mods Loaded";
-	SetStatusText(modLoadingStatusText, FieldIndex::modManagerVersion);
+	SetStatusText(modLoadingStatusText, FieldIndex::modLoadingStatus);
 }

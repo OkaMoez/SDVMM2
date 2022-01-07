@@ -1,7 +1,9 @@
 #include "ModBrowserPanel.h"
 
 #include "MainFrame.h"
+#include "ManifestParser.h"
 #include "SettingsPanel.h"
+#include <wx/listctrl.h>
 
 ModBrowserPanel::ModBrowserPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID)
 	: wxPanel(parent, windowID)
@@ -120,7 +122,7 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 			}
 		);
 	}
-	_mMainWindow->mRefreshModLists();
+	_mMainWindow->mManifestParser->refreshModLists();
 }
 
 void ModBrowserPanel::OnSortClick(wxDataViewEvent& event) {

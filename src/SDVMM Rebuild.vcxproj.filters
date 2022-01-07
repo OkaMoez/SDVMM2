@@ -51,6 +51,9 @@
     <ClCompile Include="SmapiMod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ManifestParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModManagerApp.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="neargye\semver.hpp">
       <Filter>Header Files\3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="ManifestParser.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

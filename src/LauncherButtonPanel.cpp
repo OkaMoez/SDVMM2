@@ -1,6 +1,7 @@
 #include "LauncherButtonPanel.h"
 
 #include "MainFrame.h"
+#include "ManifestParser.h"
 #include "SettingsPanel.h"
 
 LauncherButtonPanel::LauncherButtonPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID)
@@ -41,7 +42,7 @@ LauncherButtonPanel::LauncherButtonPanel(MainFrame* main, wxWindow* parent, wxWi
 // Top Level Buttons
 void LauncherButtonPanel::OnLaunchSMAPIClick(wxCommandEvent& event) { // TODO Steam Launcher option
 	event.Skip();
-	if (_mMainWindow->mErrorChecks[ModErrors::smapi] == true) {
+	if (_mMainWindow->mManifestParser->mErrorChecks[ModErrors::smapi] == true) {
 		_mLaunchSmapiButton->Disable();
 		_mLaunchSmapiButton->SetLabel("SMAPI Not Found!");
 	}
@@ -96,6 +97,6 @@ void LauncherButtonPanel::OnLaunchModSiteClick(wxCommandEvent& event) {
 
 void LauncherButtonPanel::OnRefreshClick(wxCommandEvent& event) { // TODO give some indication of the refresh
 	event.Skip();
-	_mMainWindow->mRefreshModLists();
+	_mMainWindow->mManifestParser->refreshModLists();
 }
 

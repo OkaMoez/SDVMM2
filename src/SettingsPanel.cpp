@@ -1,6 +1,7 @@
 #include "SettingsPanel.h"
 
 #include "MainFrame.h"
+#include "ManifestParser.h"
 #include "ModBrowserPanel.h"
 
 SettingsPanel::SettingsPanel(MainFrame* main, wxWindow* parent, wxWindowID windowID)
@@ -114,17 +115,17 @@ void SettingsPanel::tryLoadSettings() {
 	_mmMuteErrorsCheckbox->SetValue(mMuteErrors["on_refresh"]);
 	DPRINT("SelfInit - .ini Launcher Preference Read\n");
 
-	if (_mMainWindow->mExistsModFolders()) {
+	if (_mMainWindow->mManifestParser->existsModFolders()) {
 		DPRINT("SelfInit - Refreshing Mod List\n");
 		_mMainWindow->mModBrowserPanel->mModBrowserDataviewlistctrl->GetColumn(1)->SetSortOrder(true);
-		_mMainWindow->mRefreshModLists();
+		_mMainWindow->mManifestParser->refreshModLists();
 		DPRINT("Refreshed Mod List\n");
 	}
 	else {
 		DPRINT("SelfInit - No Mod Folders Found\n");
 	}
 	DPRINT("SelfInit - Game Directory\n" + gameDirectory().string() + "\n" + "SelfInit - Checking SMAPI Version\n");
-	_mMainWindow->mCheckSmapiVersion();
+	_mMainWindow->checkSmapiVersion();
 	DPRINT("SelfInit - Checked SMAPI Version\n");
 }
 
@@ -163,7 +164,7 @@ void SettingsPanel::onGameDirectorySaveClick(wxCommandEvent& event) {
 		_mGameDirectory = std::string(_mGameDirectoryTextctrl->GetLineText(0));
 		mConfigIni->Write("GamePath", wxString(_mGameDirectory.string()));
 		mConfigIni->Flush();
-		_mMainWindow->mRefreshModLists();
+		_mMainWindow->mManifestParser->refreshModLists();
 	}
 	else {
 		wxMessageDialog* eventBadGameDirectory = new wxMessageDialog(NULL,
@@ -186,7 +187,7 @@ void SettingsPanel::onGameDirectoryBrowseClick(wxCommandEvent& event) {
 			_mGameDirectory = browsedGamePath;
 			mConfigIni->Write("GamePath", wxString(_mGameDirectory.string()));
 			mConfigIni->Flush();
-			_mMainWindow->mRefreshModLists();
+			_mMainWindow->mManifestParser->refreshModLists();
 		}
 		else {
 			_mGameDirectoryDirdialog->SetPath(_mGameDirectoryDirdialog->GetPath());
