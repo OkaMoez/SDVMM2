@@ -28,7 +28,7 @@ private:
 	MainFrame* _mMainWindow = nullptr;
 
 	semver::version _mSmapiVersion;
-	semver::version _mModManagerVersion; // TODO: not being set? fix it
+	semver::version _mModManagerVersion;
 	int _mModsTotal = 0;
 	int _mModsLoaded = 0;
 };

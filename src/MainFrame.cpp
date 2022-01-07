@@ -87,7 +87,7 @@ MainFrame::~MainFrame() {
 
 void MainFrame::tryLoadSettings() {
 	DPRINT("SelfInit - Begin\n");
-	wxFileName f(wxStandardPaths::Get().GetExecutablePath());
+	wxFileName f(wxStandardPaths::Get().GetExecutablePath()); // TODO: change to data path maybe?
 	fs::path appPath = std::string(wxString(f.GetPath() + wxT("\\SDVMM2.ini")));
 
 	DPRINT("SelfInit - Checking for .ini at:\n" + appPath.string() + "\n");
@@ -106,7 +106,7 @@ void MainFrame::tryLoadSettings() {
 //--------------------
 // Backend Functions
 //--------------------
-void MainFrame::checkSmapiVersion() {
+void MainFrame::checkSmapiVersion() { // TODO: improve performace PLZ
 	semver::version version;
 	fs::path pathSmapiLogs = std::string(wxStandardPaths::Get().GetUserConfigDir());
 	pathSmapiLogs += "\\StardewValley\\ErrorLogs\\SMAPI-latest.txt";
@@ -131,5 +131,5 @@ void MainFrame::checkSmapiVersion() {
 		DPRINT("checkSmapiVersion - No Logs Found\n");
 	}
 	//mVersionSmapiStext->SetLabel("SMAPI Version: " + version);
-	mStatusBar->SetStatusText("SMAPI Version: " + version.to_string(), 0);
+	mStatusBar->setSmapiVersion(version);
 }

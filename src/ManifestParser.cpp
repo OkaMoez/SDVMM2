@@ -173,13 +173,11 @@ void ManifestParser::_loadModsFromDir(std::string folderName) {
 		//DPRINTIF(???, " - Manifest found.\n");
 
 		mModCount[ModStatus::total]++;
-		std::ifstream jsonStream(tempPath.c_str());
+		std::ifstream jsonStream(tempPath.c_str(), std::ios::in | std::ios::binary);
 		nlohmann::json jsonManifest;
-		try
-		{
-			try
-			{ // Parse json
-				jsonManifest = nlohmann::json::parse(jsonStream); // TODO handle trailing commas
+		try	{
+			try	{ // Parse json
+				jsonManifest = nlohmann::json::parse(jsonStream, nullptr, true, true); // TODO handle trailing commas
 				// Handle some minor typos and missing fields in manifest
 				_cleanManifest(jsonManifest, errorPath);
 			}
@@ -195,13 +193,9 @@ void ManifestParser::_loadModsFromDir(std::string folderName) {
 				// TODO clean commas and comments, then try again
 				///*
 				DPRINTIF(REPORT_JSON_FIX, "Json Fix Attempt\n");
-				std::string jsonString = "New\n";
-				std::ifstream jsonStream2(tempPath.c_str(), std::ios::in | std::ios::binary);
-				jsonStream2.seekg(0, std::ios::end);
-				jsonString.resize(jsonStream2.tellg());
-				jsonStream2.seekg(0, std::ios::beg);
-				jsonStream2.read(&jsonString[0], jsonString.size());
-				jsonStream2.close();
+				uintmax_t manifestSize = std::filesystem::file_size(tempPath);
+				std::string jsonString(manifestSize, '\0');
+				jsonStream.read(&jsonString[0], manifestSize);
 
 				DPRINTIF(REPORT_JSON_FIX, "Json Fix RAW\n" + jsonString + "\n");
 
@@ -270,7 +264,7 @@ void ManifestParser::_loadModsFromDir(std::string folderName) {
 	}
 }
 
-bool ManifestParser::existsModFolders() {
+bool ManifestParser::existsModFolders() { // TODO: change disable to use '.'
 	std::filesystem::path modPath = _mMainWindow->mSettingsPanel->gameDirectory();
 	std::filesystem::path modPathDisabled = _mMainWindow->mSettingsPanel->gameDirectory();
 	std::filesystem::path gamePath = _mMainWindow->mSettingsPanel->gameDirectory();
