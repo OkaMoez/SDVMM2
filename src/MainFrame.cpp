@@ -252,14 +252,16 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 		DPRINTIF(REPORT_MOD_DIRECTORY, tempPath.string() + "\n");
 
 		if (!fs::is_directory(tempPath)) {
+			DPRINTIF(REPORT_MOD_DIRECTORY & REPORT_IDENTIFY_DIRECTORIES, " - Is NOT Directory\n");
 			continue;
 		}
 		DPRINTIF(REPORT_MOD_DIRECTORY & REPORT_IDENTIFY_DIRECTORIES, " - Is Directory\n");
 
 		tempPath += "\\manifest.json";
 		if (!fs::exists(tempPath)) {
-			DPRINTIF(REPORT_IDENTIFY_DIRECTORIES, " - Is NOT Directory\n");
+			continue;
 		}
+		//DPRINTIF(???, " - Manifest found.\n");
 
 		mModCount[ModStatus::total]++;
 		ifstream jsonStream(tempPath.c_str());
@@ -276,8 +278,7 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 				mErrorChecks[ModErrors::json] = true;
 				mErrorCount[ModErrors::json]++;
 				mModCount[ModStatus::errored]++;
-				//std::string temp_exc = e.what();
-				if (e.id == 101) {
+				if (e.id != 101) {
 					mErrorLocations += "\n" + errorPath.string() + " - JSON Formatting";
 					continue;
 				}
@@ -285,10 +286,7 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 				// TODO clean commas and comments, then try again
 				///*
 				DPRINT("Json Fix Attempt\n");
-				//std::stringstream json_sstream;
-				//json_sstream << jsonStream.rdbuf();
 				std::string jsonString = "New\n";
-				//jsonString = json_sstream.str();
 				ifstream jsonStream2(tempPath.c_str(), std::ios::in | std::ios::binary);
 				jsonStream2.seekg(0, std::ios::end);
 				jsonString.resize(jsonStream2.tellg());
@@ -325,14 +323,14 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 					mErrorChecks[ModErrors::json] = false;
 					DPRINT("Json Fix Reparse Success\n");
 				}
-				catch (...) {
-					DPRINT("Json Fix Reparse Failure\n");
+				catch (nlohmann::json::parse_error& e) {
+					DPRINT("Json Fix Reparse Failure\n" + std::string(e.what()));
 					continue;
 				}
 				//*/
 			}
 
-			if (fs::exists(tempPath) and (mErrorChecks[ModErrors::json] == false)) { // TODO Review
+			if (mErrorChecks[ModErrors::json] == true) { // TODO Review
 				continue;
 			}
 			DPRINTIF(REPORT_ON_MOD_PARSED, 
@@ -344,7 +342,7 @@ void MainFrame::mLoadModsFromDir(std::string folderName) {
 			thisMod.push_back(wxVariant(isActive));
 			thisMod.push_back(wxVariant(aMod.name()));
 			thisMod.push_back(wxVariant(aMod.author()));
-			thisMod.push_back(wxVariant(aMod.version()));
+			thisMod.push_back(wxVariant(aMod.version().to_string()));
 			thisMod.push_back(wxVariant((directoryIterator.path()).string()));
 			mModBrowserPanel->mModBrowserDataviewlistctrl->AppendItem(thisMod);
 			mModCount[ModStatus::loaded]++;

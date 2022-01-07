@@ -153,9 +153,9 @@ std::string stripCommentsImpl(const std::string& str, StripFunc strip) {
 }
 
 std::string stripTrailingCommas(const std::string& str, bool whitespace) {
-	std::regex regexTrailingCommas("((\\}|\\])|\")(\\s*),(\\s*)(?=(\\}|\\]))",
-		std::regex_constants::ECMAScript);
-	return std::regex_replace(str, regexTrailingCommas, "$1");
+	// This regular expession targets any comma followed by a ']', '}', or EOF (after skipping whitespace)
+	std::regex regexTrailingCommas(",(?=\\s+(\\}|\\]|\\$))", std::regex_constants::ECMAScript);
+	return std::regex_replace(str, regexTrailingCommas, "");
 }
 
 std::string stripComments(const std::string& str, bool whitespace) {
