@@ -138,7 +138,7 @@ void ManifestParser::refreshModLists() {
 	}
 
 	_mMainWindow->mModBrowserPanel->mModBrowserDataviewlistctrl->GetModel()->Resort();
-	_mMainWindow->mStatusBar->setModLoadingStatus(mModCount[ModStatus::loaded], mModCount[ModStatus::total]); // TODO: swap to proper accessor
+	_mMainWindow->mStatusBar->setModLoadingStatus(mModCount[ModStatus::total], mModCount[ModStatus::loaded]);
 	_showRefreshErrors();
 }
 
@@ -172,7 +172,7 @@ void ManifestParser::_loadModsFromDir(std::string folderName) {
 		}
 		//DPRINTIF(???, " - Manifest found.\n");
 
-		mModCount[ModStatus::total]++;
+		++mModCount[ModStatus::total];
 		std::ifstream jsonStream(tempPath.c_str(), std::ios::in | std::ios::binary);
 		nlohmann::json jsonManifest;
 		try	{
@@ -194,8 +194,12 @@ void ManifestParser::_loadModsFromDir(std::string folderName) {
 				///*
 				DPRINTIF(REPORT_JSON_FIX, "Json Fix Attempt\n");
 				uintmax_t manifestSize = std::filesystem::file_size(tempPath);
-				std::string jsonString(manifestSize, '\0');
-				jsonStream.read(&jsonString[0], manifestSize);
+				std::string jsonString(manifestSize, '\0'); 
+
+				// Reset file stream position, nlohmann::json::parse would have moved it
+				jsonStream.clear();
+				jsonStream.seekg(0, std::ios::beg);
+				jsonStream.read(jsonString.data(), manifestSize);
 
 				DPRINTIF(REPORT_JSON_FIX, "Json Fix RAW\n" + jsonString + "\n");
 
@@ -336,9 +340,6 @@ void ManifestParser::_showRefreshErrors() {
 		errorModLoopMessage, errorModLoopTitle, wxOK, wxDefaultPosition);
 	errorModLoop->ShowModal();
 	delete errorModLoop;
-	if (mErrorChecks[ModErrors::semver]) {
-		mErrorLocations += ("\n\nNOTE:\nSMAPI does not load mods with depreciated versioning.\nSee SMAPI logs or console for more details.");
-	}
 	wxMessageDialog* errorModLoopDetailed = new wxMessageDialog(NULL,
 		mErrorLocations, errorModLoopTitle, wxOK, wxDefaultPosition);
 	errorModLoopDetailed->ShowModal();
