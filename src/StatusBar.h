@@ -11,7 +11,7 @@ public:
 		, wxWindowID windowID
 		, semver::version smapiVersion = semver::version{}
 		, semver::version modManagerVersion = semver::version{}
-		, long style = 65840L);
+		, long style = wxSTB_DEFAULT_STYLE);
 	
 	void setSmapiVersion(semver::version version);
 	void setModManagerVersion(semver::version version);
@@ -28,7 +28,7 @@ private:
 	MainFrame* _mMainWindow = nullptr;
 
 	semver::version _mSmapiVersion;
-	semver::version _mModManagerVersion;
+	semver::version _mModManagerVersion; // TODO: not being set? fix it
 	int _mModsTotal = 0;
 	int _mModsLoaded = 0;
 };

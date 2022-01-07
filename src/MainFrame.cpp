@@ -59,17 +59,16 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 
 	//mVersionSizer = new wxBoxSizer(wxHORIZONTAL);
 	//mVersionSizer->Add(mModManagerStext, 10, wxEXPAND | wxLEFT, 15);
 	//mVersionSizer->Add(mVersionSmapiStext, 10, wxEXPAND | wxLEFT, 5);
-	//mVersionSizer->AddStretchSpacer(10);
 	//mVersionSizer->Add(mModCountSizer, 5, wxEXPAND | wxRIGHT, 10);
 
-	constexpr semver::version v_default;
-	mStatusBar = new StatusBar(this, wxID_ANY, v_default, v_default, wxSB_SUNKEN);
+	mStatusBar = new StatusBar(this, wxID_ANY, semver::version(), mSettingsPanel->versionModManager());
 	SetStatusBar(mStatusBar);
 
 	// Vertical layout
 	mMainFrameVerticalSizer = new wxBoxSizer(wxVERTICAL);
-	mMainFrameVerticalSizer->Add(mHorizontalBannerSizer, 0, wxEXPAND | wxALL , 10);
+	mMainFrameVerticalSizer->Add(mHorizontalBannerSizer, 1, wxEXPAND | wxALL , 10);
 	mMainFrameVerticalSizer->Add(mMainFrameHorizontalSizer, 40, wxEXPAND, 0);
+	mMainFrameVerticalSizer->AddSpacer(10);
 	SetSizer(mMainFrameVerticalSizer);
 
 	// Setting background colour as needed
@@ -108,7 +107,7 @@ void MainFrame::tryLoadSettings() {
 // Backend Functions
 //--------------------
 void MainFrame::checkSmapiVersion() {
-	std::string version = "not found";
+	semver::version version;
 	fs::path pathSmapiLogs = std::string(wxStandardPaths::Get().GetUserConfigDir());
 	pathSmapiLogs += "\\StardewValley\\ErrorLogs\\SMAPI-latest.txt";
 	if (fs::exists(pathSmapiLogs) and fs::is_regular_file(pathSmapiLogs)) {
@@ -118,13 +117,19 @@ void MainFrame::checkSmapiVersion() {
 		wxString tempString = smapiLogs.GetFirstLine();
 		size_t tempVersionStart = tempString.Find("] ") + 8;
 		size_t tempVersionEnd = tempString.Find(" with Stardew") - 1;
-		version = tempString.SubString(tempVersionStart, tempVersionEnd);
-		DPRINT("checkSmapiVersion - Version: " + version + "\n");
+		tempString = tempString.SubString(tempVersionStart, tempVersionEnd);
+		try {
+			version = semver::from_string(tempString.ToStdString());
+		}
+		catch (...) {
+			DPRINT("Bad Smapi Version" + tempString.ToStdString() + "\n");
+		}
+		DPRINT("checkSmapiVersion - Version: " + version.to_string() + "\n");
 	}
 	else
 	{
 		DPRINT("checkSmapiVersion - No Logs Found\n");
 	}
 	//mVersionSmapiStext->SetLabel("SMAPI Version: " + version);
-	mStatusBar->SetStatusText("SMAPI Version: " + version, 0);
+	mStatusBar->SetStatusText("SMAPI Version: " + version.to_string(), 0);
 }

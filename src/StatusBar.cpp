@@ -6,7 +6,7 @@ StatusBar::StatusBar(MainFrame* parent
 	, wxWindowID windowID
 	, semver::version smapiVersion /* = semver::version{} */
 	, semver::version modManagerVersion /* = semver::version{} */
-	, long style /* = 65840L */)
+	, long style /* = wxSTB_DEFAULT_STYLE */)
 	: wxStatusBar(parent, windowID, style)
 	, _mMainWindow(parent) {
 	SetFieldsCount(3);

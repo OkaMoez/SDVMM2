@@ -1,9 +1,10 @@
 #pragma once
 #include "DebugTools.h"
 
-#include <wx/wx.h>
+#include "neargye/semver.hpp"
 #include <wx/dataview.h>
 #include <wx/fileconf.h>
+#include <wx/wx.h>
 
 // TODO? migrate this to wxFileSystem
 #include <filesystem>
@@ -22,8 +23,8 @@ public:
 	bool shouldLaunchWithSteam() { return _mLaunchWithSteam; }
 	fs::path gameDirectory() { return _mGameDirectory; }
 	fs::path steamDirectory() { return _mSteamDirectory; }
-	std::string versionSmapi() { return _mVersionSmapi; }
-	std::string versionModManager() { return _mVersionModManager; }
+	semver::version versionSmapi() { return _mVersionSmapi; }
+	semver::version versionModManager() { return _mVersionModManager; }
 
 	// Settings Buttons
 	void onLauncherToggleClick(wxCommandEvent& event);
@@ -44,8 +45,8 @@ private:
 	bool _mLaunchWithSteam = false;
 	fs::path _mGameDirectory = "";
 	fs::path _mSteamDirectory = "";
-	std::string _mVersionSmapi = "not found";
-	std::string _mVersionModManager = "0.6";
+	semver::version _mVersionSmapi = semver::version();
+	semver::version _mVersionModManager = semver::from_string("0.7.0"); // as of 07/01/22
 
 	MainFrame* _mMainWindow = nullptr;
 
