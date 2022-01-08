@@ -63,8 +63,5 @@ public:
 	wxBoxSizer* mMainFrameVerticalSizer = nullptr;
 	
 	ManifestParser* mManifestParser = nullptr;
-
-public:
-	void checkSmapiVersion();
 };
 

@@ -125,7 +125,7 @@ void SettingsPanel::tryLoadSettings() {
 		DPRINT("SelfInit - No Mod Folders Found\n");
 	}
 	DPRINT("SelfInit - Game Directory\n" + gameDirectory().string() + "\n" + "SelfInit - Checking SMAPI Version\n");
-	_mMainWindow->checkSmapiVersion();
+	_mMainWindow->mManifestParser->checkSmapiVersion();
 	DPRINT("SelfInit - Checked SMAPI Version\n");
 }
 

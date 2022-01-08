@@ -51,6 +51,7 @@ public:
 	~ManifestParser() = default;
 	bool existsModFolders();
 	void refreshModLists(); // TODO give some indication of the refresh
+	void checkSmapiVersion();
 
 private:
 	MainFrame* _mMainWindow = nullptr;
@@ -58,7 +59,6 @@ private:
 	void _cleanManifest(nlohmann::json& manifest, std::filesystem::path error_path);
 	void _cleanJson(); // TODO tranfer code to function
 	void _loadModsFromDir(std::string folderName);
-	void _checkSmapiVersion();
 	void _resetRefreshErrors(); // TODO format and move to getters/setters?
 	void _showRefreshErrors();
 };

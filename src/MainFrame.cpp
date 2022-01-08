@@ -101,34 +101,3 @@ void MainFrame::tryLoadSettings() {
 		D("SelfInit - No .ini Found\n");
 	}
 }
-
-//--------------------
-// Backend Functions
-//--------------------
-void MainFrame::checkSmapiVersion() { // TODO: improve performace PLZ
-	semver::version version;
-	fs::path pathSmapiLogs = std::string(wxStandardPaths::Get().GetUserConfigDir());
-	pathSmapiLogs += "\\StardewValley\\ErrorLogs\\SMAPI-latest.txt";
-	if (fs::exists(pathSmapiLogs) and fs::is_regular_file(pathSmapiLogs)) {
-		DPRINT("checkSmapiVersion - Logs Found\n");
-		wxTextFile smapiLogs;
-		smapiLogs.Open(wxString(pathSmapiLogs));
-		wxString tempString = smapiLogs.GetFirstLine();
-		size_t tempVersionStart = tempString.Find("] ") + 8;
-		size_t tempVersionEnd = tempString.Find(" with Stardew") - 1;
-		tempString = tempString.SubString(tempVersionStart, tempVersionEnd);
-		try {
-			version = semver::from_string(tempString.ToStdString());
-		}
-		catch (...) {
-			DPRINT("Bad Smapi Version" + tempString.ToStdString() + "\n");
-		}
-		DPRINT("checkSmapiVersion - Version: " + version.to_string() + "\n");
-	}
-	else
-	{
-		DPRINT("checkSmapiVersion - No Logs Found\n");
-	}
-	//mVersionSmapiStext->SetLabel("SMAPI Version: " + version);
-	mStatusBar->setSmapiVersion(version);
-}
