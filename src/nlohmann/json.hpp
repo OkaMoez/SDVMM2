@@ -94,6 +94,25 @@ SOFTWARE.
 #include <cstdint> // uint8_t
 #include <string> // string
 
+namespace Manifest {
+
+    enum class Index {
+        name,
+        author,
+        version,
+        description,
+        uniqueId
+    };
+
+    static std::unordered_map<Index, const char*> key = {
+        {Index::name, "Name"},
+        {Index::author, "Author" },
+        {Index::version, "Version"},
+        {Index::description, "Description"},
+        {Index::uniqueId, "UniqueID"}
+    };
+}
+
 namespace nlohmann
 {
 namespace detail

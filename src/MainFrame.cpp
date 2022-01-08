@@ -76,7 +76,6 @@ MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "Stardew Valley Mod Manager 
 
 	mManifestParser = new ManifestParser(this);
 	tryLoadSettings();
-	//mManifestParser->refreshModLists();
 }
 
 //-------------------

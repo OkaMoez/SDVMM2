@@ -15,23 +15,24 @@ ManifestParser::ManifestParser(MainFrame* main)
 }
 
 void ManifestParser::_cleanManifest(nlohmann::json& manifest, std::filesystem::path errorPath) { // TODO move check to refresh and make flag
+	using Index = Manifest::Index;
+	const std::unordered_map<Manifest::Index, const char*>& key = Manifest::key;
 
-	if (!manifest.contains("Name")) {
+	if (!manifest.contains(key.at(Index::name))) {
 		mErrorChecks[ModErrors::format] = true;
 		mErrorChecks[ModErrors::formatLocal] = true;
 		mErrorCount[ModErrors::format]++;
 		std::string temp = "";
 		if (manifest.contains("name")) {
-			manifest["name"].get_to(temp);
-			manifest["Name"] = temp;
+			manifest[key.at(Index::name)] = manifest["name"].get<std::string>();
 			manifest.erase("name");
 		}
 		else {
-			manifest["Name"] = temp;
+			manifest[key.at(Index::name)] = "";
 		}
 		DPRINT(errorPath.string() + " Manifest Error - Name\n");
 	}
-	if (!manifest.contains("Author")) {
+	if (!manifest.contains(key.at(Index::author))) {
 		mErrorChecks[ModErrors::format] = true;
 		mErrorChecks[ModErrors::formatLocal] = true;
 		mErrorCount[ModErrors::format]++;
@@ -41,13 +42,12 @@ void ManifestParser::_cleanManifest(nlohmann::json& manifest, std::filesystem::p
 			manifest["Author"] = temp;
 			manifest.erase("author");
 		}
-		else
-		{
+		else {
 			manifest["Author"] = temp;
 		}
 		DPRINT(errorPath.string() + " Manifest Error - Author\n");
 	}
-	if (!manifest.contains("Version")) {
+	if (!manifest.contains(key.at(Index::version))) {
 		mErrorChecks[ModErrors::format] = true;
 		mErrorChecks[ModErrors::formatLocal] = true;
 		mErrorCount[ModErrors::format]++;
@@ -57,8 +57,7 @@ void ManifestParser::_cleanManifest(nlohmann::json& manifest, std::filesystem::p
 			manifest["Version"] = temp;
 			manifest.erase("version");
 		}
-		else
-		{
+		else {
 			manifest["Version"] = temp;
 		}
 		DPRINT(errorPath.string() + " Manifest Error - Version\n");
@@ -78,7 +77,7 @@ void ManifestParser::_cleanManifest(nlohmann::json& manifest, std::filesystem::p
 		manifest.erase("Version");
 		manifest["Version"] = versionString;
 	}
-	if (!manifest.contains("Description")) {
+	if (!manifest.contains(key.at(Index::description))) {
 		mErrorChecks[ModErrors::format] = true;
 		mErrorChecks[ModErrors::formatLocal] = true;
 		mErrorCount[ModErrors::format]++;
@@ -88,13 +87,12 @@ void ManifestParser::_cleanManifest(nlohmann::json& manifest, std::filesystem::p
 			manifest["Description"] = temp;
 			manifest.erase("description");
 		}
-		else
-		{
+		else {
 			manifest["Description"] = temp;
 		}
 		DPRINT(errorPath.string() + " Manifest Error - Description\n");
 	}
-	if (!manifest.contains("UniqueID")) {
+	if (!manifest.contains(key.at(Index::uniqueId))) {
 		mErrorChecks[ModErrors::format] = true;
 		mErrorChecks[ModErrors::formatLocal] = true;
 		mErrorCount[ModErrors::format]++;
@@ -102,8 +100,7 @@ void ManifestParser::_cleanManifest(nlohmann::json& manifest, std::filesystem::p
 		if (manifest.contains("uniqueID")) {
 			// if bad case, fix case (more work needed)
 		}
-		else
-		{
+		else {
 			manifest["UniqueID"] = temp;
 		}
 		DPRINT(errorPath.string() + " Manifest Error - UniqueID\n");
@@ -170,7 +167,6 @@ void ManifestParser::_loadModsFromDir(std::string folderName) {
 		if (!std::filesystem::exists(tempPath)) {
 			continue;
 		}
-		//DPRINTIF(???, " - Manifest found.\n");
 
 		++mModCount[ModStatus::total];
 		std::ifstream jsonStream(tempPath.c_str(), std::ios::in | std::ios::binary);
@@ -274,7 +270,7 @@ bool ManifestParser::existsModFolders() { // TODO: change disable to use '.'
 	std::filesystem::path gamePath = _mMainWindow->mSettingsPanel->gameDirectory();
 	modPath += "\\Mods";
 	modPathDisabled += "\\Mods_disabled";
-	gamePath += "\\Stardew Valley.exe"; // TODO Make crossplatform?
+	gamePath += "\\Stardew Valley.exe"; // TODO: Make crossplatform?
 
 	DPRINT("mExistsModFolders - Begin Checking Mod Folders\n");
 

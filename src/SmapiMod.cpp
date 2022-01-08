@@ -15,11 +15,14 @@ SmapiMod::SmapiMod(std::string name, std::string author, semver::version version
 }
 
 SmapiMod::SmapiMod(nlohmann::json& manifest) {
-	_mName = manifest["Name"].get<std::string>();
-	_mAuthor = manifest["Author"].get<std::string>();
-	_mVersion = _tryParseVersion(manifest["Version"].get<std::string>());
-	_mDescription = manifest["Description"].get<std::string>();
-	_mUniqueID = manifest["UniqueID"].get<std::string>();
+	using Index = Manifest::Index;
+	const std::unordered_map<Manifest::Index, const char*>& key = Manifest::key;
+
+	_mName = manifest[key.at(Index::name)].get<std::string>();
+	_mAuthor = manifest[key.at(Index::author)].get<std::string>();
+	_mVersion = _tryParseVersion(manifest[key.at(Index::version)].get<std::string>());
+	_mDescription = manifest[key.at(Index::description)].get<std::string>();
+	_mUniqueID = manifest[key.at(Index::uniqueId)].get<std::string>();
 }
 
 void SmapiMod::setName(std::string name) { _mName = name; }

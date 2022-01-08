@@ -26,8 +26,7 @@ class ManifestParser {
 public:
 	std::string mErrorLocations = "Errors at: ";
 
-	std::unordered_map<ModErrors, bool> mErrorChecks
-	{
+	std::unordered_map<ModErrors, bool> mErrorChecks {
 		{ModErrors::json, false},
 		{ModErrors::semver, false},
 		{ModErrors::format, false},
@@ -35,15 +34,13 @@ public:
 		{ModErrors::smapi, false}
 	};
 
-	std::unordered_map<ModErrors, int> mErrorCount
-	{
+	std::unordered_map<ModErrors, int> mErrorCount {
 		{ModErrors::json, 0},
 		{ModErrors::semver, 0},
 		{ModErrors::format, 0}
 	};
 
-	std::unordered_map<ModStatus, int> mModCount
-	{
+	std::unordered_map<ModStatus, int> mModCount {
 		{ModStatus::total, 0},
 		{ModStatus::errored, 0},
 		{ModStatus::loaded, 0}
