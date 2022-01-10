@@ -66,4 +66,6 @@ myQUIET(
 
 #else 
 #define D(x)
+#define DPRINT(x, ...)
+#define DPRINTIF(x, y)
 #endif
