@@ -145,17 +145,8 @@ void SettingsPanel::onLauncherToggleClick(wxCommandEvent& event) {
 			_mLaunchWithSteam = false;
 		}
 	}
-	if (_mLaunchWithSteam) {
-		D(
-			if (REPORT_LAUNCHER_CBOX_EVENT) {
-				wxMessageDialog* eventLauncherToggleBox1 = new wxMessageDialog(NULL,
-					wxT("Launcher toggled on."), wxT("Launcher Option"),
-					wxOK, wxDefaultPosition);
-				eventLauncherToggleBox1->ShowModal();
-				delete eventLauncherToggleBox1;
-			}
-		)
-	}
+	DPRINTIF(_mLaunchWithSteam & REPORT_LAUNCHER_CBOX_EVENT, "Launcher Option - Launcher toggled on.\n");
+	DPRINTIF(!_mLaunchWithSteam & REPORT_LAUNCHER_CBOX_EVENT, "Launcher Option - Launcher toggled off.\n");
 }
 
 void SettingsPanel::onGameDirectorySaveClick(wxCommandEvent& event) {
