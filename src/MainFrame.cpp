@@ -98,6 +98,6 @@ void MainFrame::tryLoadSettings() {
 	}
 	else
 	{
-		D("SelfInit - No .ini Found\n");
+		DPRINT("SelfInit - No .ini Found\n");
 	}
 }

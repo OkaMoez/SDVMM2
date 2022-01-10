@@ -39,17 +39,9 @@ ModBrowserPanel::ModBrowserPanel(MainFrame* main, wxWindow* parent, wxWindowID w
 }
 // Mod List Buttons
 void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
+	DPRINTIF(REPORT_CBOX_EVENTS, "Event captured - Mod toggled.\n");
 	event.Skip();
 
-	D(
-		if (REPORT_CBOX_EVENTS) {
-			wxMessageDialog* eventToggleBox1 = new wxMessageDialog(NULL,
-				wxT("Mod toggled."), wxT("Event captured"),
-				wxOK, wxDefaultPosition);
-			eventToggleBox1->ShowModal();
-			delete eventToggleBox1;
-		}
-	);
 	wxVariant tempPath("");
 	mModBrowserDataviewlistctrl->GetValue(tempPath, mModBrowserDataviewlistctrl->GetSelectedRow(), 4);
 	fs::path modPath = std::string(tempPath);
@@ -61,7 +53,6 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 		folderName = (parentPath.filename() += ("\\" + folderName.string()));
 		parentPath = parentPath.parent_path();
 	}
-
 
 	DPRINT("Mod toggle called.\n" + parentPath.string() + "\n" + folderName.string() + "\n");
 
@@ -112,15 +103,7 @@ void ModBrowserPanel::OnToggleClick(wxDataViewEvent& event) {
 		}
 	}
 	else {
-		D(
-			if (REPORT_FILE_MOVE_EVENT) {
-				wxMessageDialog* eventToggleEbox1 = new wxMessageDialog(NULL,
-					wxT("Bad path"), wxT("Event item info"),
-					wxOK, wxDefaultPosition);
-				eventToggleEbox1->ShowModal();
-				delete eventToggleEbox1;
-			}
-		);
+		DPRINTIF(REPORT_FILE_MOVE_EVENT, "Event item info - Bad path.\n");
 	}
 	_mMainWindow->mManifestParser->refreshModLists();
 }
